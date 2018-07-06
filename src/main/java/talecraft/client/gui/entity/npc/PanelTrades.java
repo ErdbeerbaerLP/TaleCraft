@@ -218,7 +218,7 @@ public class PanelTrades extends NPCPanel{
 			filtered.clear();
 			for(ListModelItem lmi : items){
 				ItemItem ii = (ItemItem) lmi;
-				if(ii.stack != null && (ii.stack.getItem().getItemStackDisplayName(ii.stack).toLowerCase().contains(filterString.toLowerCase()))){
+				if(!ii.stack.isEmpty() && (ii.stack.getItem().getItemStackDisplayName(ii.stack).toLowerCase().contains(filterString.toLowerCase()))){
 					filtered.add(lmi);
 				}
 			}
@@ -236,7 +236,7 @@ public class PanelTrades extends NPCPanel{
 
 		@Override
 		public void drawIcon(VCUIRenderer renderer, float partialTicks, boolean light, ListModelItem item) {
-			if(((ItemItem)item).stack != null)renderer.drawItemStack(((ItemItem)item).stack, 2, 2);
+			if(!((ItemItem)item).stack.isEmpty())renderer.drawItemStack(((ItemItem)item).stack, 2, 2);
 		}
 		
 		@Override
