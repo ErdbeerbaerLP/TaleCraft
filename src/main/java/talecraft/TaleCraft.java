@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import talecraft.client.gui.worlddesc.WorldSelectorInjector;
+import talecraft.client.gui.replaced_guis.GuiReplacer;
 import talecraft.managers.TCWorldsManager;
 import talecraft.network.TaleCraftNetwork;
 import talecraft.proxy.ClientProxy;
@@ -97,7 +97,7 @@ public class TaleCraft {
 		MinecraftForge.EVENT_BUS.register(eventHandler);
 		MinecraftForge.EVENT_BUS.register(new SendMessage());
 		
-		if(ConfigurationManager.USE_VERSION_CHECKER && event.getSide() == Side.CLIENT)MinecraftForge.EVENT_BUS.register(new WorldSelectorInjector());
+		if(ConfigurationManager.USE_VERSION_CHECKER && event.getSide() == Side.CLIENT)MinecraftForge.EVENT_BUS.register(new GuiReplacer());
 		logger.info("TaleCraft Event Handler @" + eventHandler.hashCode());
 		// Initialize all the Tabs/Blocks/Items/Commands etc.
 		logger.info("Loading Tabs, Blocks, Items, Entities and Commands");

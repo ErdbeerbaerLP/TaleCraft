@@ -18,7 +18,7 @@ public class QADScrollPanel extends QADRectangularComponent implements QADCompon
 	private int y;
 	private int width;
 	private int height;
-	private List<QADComponent> components;
+	public List<QADComponent> components;
 	private QADLayoutManager layout;
 	private boolean shouldRebuildLayout;
 	

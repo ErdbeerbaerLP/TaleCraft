@@ -30,7 +30,12 @@ public class CustomPaintingRender implements IMetadataRender{
 	
 	@Override
 	public void render(Item item, ItemStack stack, Tessellator tessellator, BufferBuilder buffer, double partialTick, BlockPos playerPos, EntityPlayerSP player, WorldClient world) {
-		EnumArt painting = EnumArt.valueOf(stack.getTagCompound().getString("art"));
+		EnumArt painting;
+		try{
+			painting = EnumArt.valueOf(stack.getTagCompound().getString("art"));
+		}catch (Exception e) {
+			painting = EnumArt.BOMB;
+		}
 		RayTraceResult result = player.rayTrace(5, (float)partialTick);
 		if(result.typeOfHit == Type.BLOCK){
 			BlockPos pos = result.getBlockPos();

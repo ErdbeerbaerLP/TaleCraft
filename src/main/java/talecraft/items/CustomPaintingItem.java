@@ -2,6 +2,7 @@ package talecraft.items;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityPainting;
@@ -30,12 +31,22 @@ public class CustomPaintingItem extends TCItem implements TCITriggerableItem{
 			if (painting != null && painting.onValidSurface()){
 				if (!worldIn.isRemote){
 					painting.playPlaceSound();
-					painting.art = EnumArt.valueOf(stack.getTagCompound().getString("art"));
+					try{
+						painting.art = EnumArt.valueOf(stack.getTagCompound().getString("art"));
+					}catch (Exception e) {
+						e.printStackTrace();
+						painting.art = EnumArt.BOMB;
+					}
 					worldIn.spawnEntity(painting);
 				}
+			}else if(!painting.onValidSurface()) {
+				Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "Paintings cannot be placed on this block!"));
 			}
 
 			return EnumActionResult.SUCCESS;
+		}else if(facing == EnumFacing.DOWN || facing == EnumFacing.UP) {
+			Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "Paintings cannot be placed here!"));
+			return EnumActionResult.FAIL;
 		}
 		else{
 			return EnumActionResult.FAIL;
@@ -45,7 +56,12 @@ public class CustomPaintingItem extends TCItem implements TCITriggerableItem{
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		if(!stack.hasTagCompound())return;
-		EnumArt painting = EnumArt.valueOf(stack.getTagCompound().getString("art"));
+		EnumArt painting;
+		try{
+			painting = EnumArt.valueOf(stack.getTagCompound().getString("art"));
+		}catch (Exception e) {
+			painting = EnumArt.BOMB;
+		}
 		tooltip.add("Painting: " + painting.title);
 		tooltip.add("Size: " + painting.sizeX/16 + "x" + painting.sizeY/16);
 	}
@@ -53,7 +69,7 @@ public class CustomPaintingItem extends TCItem implements TCITriggerableItem{
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entityIn, int itemSlot, boolean isSelected) {
 		if(world.isRemote)return;
-		if(stack.hasTagCompound())return;
+		if(stack.hasTagCompound()) return;
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString("art", EnumArt.KEBAB.name());
 		stack.setTagCompound(tag);

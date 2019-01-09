@@ -13,7 +13,6 @@ import talecraft.client.gui.vcui.VCUIRenderer;
 public abstract class QADComponent {
 	private String componentName;
 	private List<String> tooltip;
-
 	public QADComponent setTooltip(String...strings) {
 		tooltip = Lists.newArrayList(strings);
 		return this;

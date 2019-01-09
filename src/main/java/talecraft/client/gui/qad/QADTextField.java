@@ -20,7 +20,7 @@ import talecraft.client.gui.qad.model.DefaultTextFieldModel;
 import talecraft.client.gui.vcui.VCUIRenderer;
 
 /**
- * This entire class is simply a full-on copy of GuiTextField from the decompiled Minecraft Sourcecode.
+ * This entire class is simply a full-on copy of {@link GuiTextField} from the decompiled Minecraft Sourcecode.
  * There is no other way to replicate the behavior of the GuiTextField then to copy it.
  */
 public class QADTextField extends QADRectangularComponent {

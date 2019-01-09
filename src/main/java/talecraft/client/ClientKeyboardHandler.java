@@ -5,6 +5,8 @@ import org.lwjgl.input.Keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
@@ -14,6 +16,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import talecraft.Reference;
 import talecraft.TaleCraft;
+import talecraft.client.gui.misc.GuiMapControl;
 import talecraft.client.gui.nbt.GuiNBTEditor;
 import talecraft.items.weapon.TCGunItem;
 import talecraft.network.packets.GunReloadPacket;
@@ -26,7 +29,7 @@ public class ClientKeyboardHandler {
 	private static final String category = "key.categories." + Reference.MOD_ID;
 	
 	private KeyBinding mapSettingsBinding;
-	private KeyBinding buildModeBinding;
+	public static KeyBinding buildModeBinding;
 	private KeyBinding visualizationBinding;
 	private KeyBinding nbt;
 	private KeyBinding reload;
@@ -47,7 +50,7 @@ public class ClientKeyboardHandler {
 		ClientRegistry.registerKeyBinding(mapSettingsBinding);
 		ClientRegistry.registerKeyBinding(buildModeBinding);
 		ClientRegistry.registerKeyBinding(visualizationBinding);
-		//ClientRegistry.registerKeyBinding(nbt);
+		ClientRegistry.registerKeyBinding(nbt);
 		ClientRegistry.registerKeyBinding(reload);
 		ClientRegistry.registerKeyBinding(triggerItem);
 	}
@@ -56,7 +59,11 @@ public class ClientKeyboardHandler {
 		//opens the NBT editor
 		if(nbt.isPressed() && nbt.isKeyDown() && mc.player != null && mc.player != null && !mc.isGamePaused()){
 			InventoryPlayer player = mc.player.inventory;
-			if(player.getCurrentItem() != null) FMLCommonHandler.instance().showGuiScreen(new GuiNBTEditor(player.getCurrentItem().getTagCompound()));
+			System.out.println(player.getCurrentItem());
+			if(!player.getCurrentItem().isEmpty()) {
+				if(player.getCurrentItem().hasTagCompound()) FMLCommonHandler.instance().showGuiScreen(new GuiNBTEditor(player.getCurrentItem().getTagCompound()));
+				else mc.player.sendMessage(new TextComponentString(TextFormatting.RED + "This item does not have NBT data..."));
+			}
 			else mc.player.sendMessage(new TextComponentString(TextFormatting.RED + "You must be holding something to use the NBT Editor"));
 			return;
 		}
@@ -85,6 +92,7 @@ public class ClientKeyboardHandler {
 		if(buildModeBinding.isPressed() && buildModeBinding.isKeyDown() && mc.world != null && mc.player != null && !mc.isGamePaused()) {
 			TaleCraft.logger.info("Switching GameMode using the buildmode-key.");
 			mc.player.sendChatMessage("/gamemode " + (proxy.isBuildMode() ? "2" : "1"));
+		}
 		if(
 				mapSettingsBinding.isPressed() &&
 				mapSettingsBinding.isKeyDown() &&
@@ -93,9 +101,9 @@ public class ClientKeyboardHandler {
 				mc.world != null
 				) {
 			// XXX: Disabled functionality.
-			// mc.displayGuiScreen(new GuiMapControl());
+			mc.displayGuiScreen(new GuiMapControl());
 		}
 
-	}
+	
 	}
 }

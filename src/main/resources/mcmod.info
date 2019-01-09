@@ -5,7 +5,7 @@
 	"description": "The TaleCraft Mod.",
 	"mcversion": "1.12.2",
 	"updateUrl": "",
-	"authorList": ["Longor1996", "tiffit"],
+	"authorList": ["Longor1996", "tiffit", "ErdbeerbaerLP"],
 	"logoFile": "tclogo.png",
 	"screenshots": [],
 	"dependencies": []

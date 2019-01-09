@@ -1,46 +1,82 @@
 package talecraft.client.gui.misc;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
-import talecraft.client.gui.qad.QADComponent;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import talecraft.client.gui.qad.QADButton;
+import talecraft.client.gui.qad.QADColorTextField;
+import talecraft.client.gui.qad.QADFACTORY;
 import talecraft.client.gui.qad.QADGuiScreen;
 import talecraft.client.gui.qad.QADLabel;
-
+import talecraft.client.gui.qad.QADPanel;
+import talecraft.client.gui.qad.QADTextField;
+import talecraft.util.WorldFileDataHelper;
+/**
+ * This GUI allows you to edit the world´s description and author
+ *
+ */
 public class GuiMapControl extends QADGuiScreen {
+	QADButton btnSave;
+	QADTextField authorNameField;
+	QADColorTextField descField;
+	QADLabel authorLabel;
+	String author = "";
+	MinecraftServer mp;
+	NBTTagCompound tag;
+	@Override
+	public void buildGui() {
+		mp = FMLCommonHandler.instance().getMinecraftServerInstance();
+		tag = WorldFileDataHelper.getTagFromFile(mp.getEntityWorld(), "info");
+		{
 
-	public void buildGui(ArrayList<QADComponent> components) {
+			QADPanel panel = new QADPanel();
+			panel.setPosition(0, 0);
+			panel.setSize(9999, 32);
+			panel.setBackgroundColor(0);
+			addComponent(panel);
 
-		addComponent(new QADLabel("World: " + mc.world.getClass().getSimpleName(), 2, 2));
-		addComponent(new QADLabel("Player: " + mc.player.getName(), 2, 12));
+			addComponent(new QADLabel("World: " + mp.getEntityWorld().getWorldInfo().getWorldName(), 100, 2));
+			addComponent(new QADLabel("Player: " + mc.player.getDisplayNameString(), 100, 12));
+			addComponent(authorLabel = new QADLabel("Map Author: " + (tag.hasKey("author")?tag.getString("author"):"unknown"), 100, 22));
+			// Header
+			addComponent(QADFACTORY.createLabel("Map Editor", 2, 2)).setFontHeight(fontRenderer.FONT_HEIGHT*2);
+			// addComponent(QADFACTORY.createLabel("", 2, 2+10));
 
-		//		QADTextField field = new QADTextField(fontRendererObj, 32, 32, 120, 20);
-		//		field.autoCompleteOptions = new String[]{"This","Is","Text","Great!","abcdefghijklmnopqrstuvwxyz"};
-		//		components.add(field);
-
-		/*
-		QADButtonBox box = new QADButtonBox(
-				new QADButton(0, 0, 160-4, "Weather, Clear"),
-				new QADButton(0, 0, 160-4, "Weather, Rain"),
-				new QADButton(0, 0, 160-4, "Weather, Thunder")
-		);
-		box.setPosition(2, 24);
-		box.setSize(160, 20*8);
-		components.add(box);
-		//*/
-
-		//		QADScrollPanel scroll = new QADScrollPanel();
-		//		scroll.setPosition(2, 32);
-		//		scroll.setSize(100, 100);
-		//		scroll.components.add(new QADLabel("Text Text Text", 2, 2));
-		//		scroll.components.add(new QADLabel("Text Text Text", 2, 300 - 14));
-		//		scroll.components.add(new QADButton(0, 200, 50, "HERP"));
-		//		scroll.components.add(new QADButton(0+50, 200, 50, "DERP"));
-		//		components.add(scroll);
+		}
+		
+		author = tag.hasKey("author")?tag.getString("author"):"";
+		String desc = tag.hasKey("description") ? tag.getString("description"):"";
+		addComponent(descField = new QADColorTextField(100, 100, 100, 30,desc));
+		addComponent(QADFACTORY.createLabel("World description", descField.xPosition, descField.yPosition-20));
+		addComponent(btnSave = new QADButton(width/2,height-100, 60, "SAVE"));
+		addComponent(authorNameField = new QADTextField(100,60, 60, 10,author));
+		addComponent(QADFACTORY.createLabel("World Author", authorNameField.xPosition, authorNameField.yPosition-10));
+		btnSave.setAction(new Runnable() {
+			@Override public void run() {
+				NBTTagCompound tag = WorldFileDataHelper.getTagFromFile(mp.getEntityWorld(), "info");
+				tag.setString("author", authorNameField.getText());
+				tag.setString("description", descField.getText());
+				WorldFileDataHelper.saveNBTToWorld(FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld(), "info", tag);
+				mc.displayGuiScreen(null);
+			}
+		});
+		authorNameField.setMaxStringLength(30);
+		descField.setMaxStringLength(800);
 	}
 
 	@Override
-	public void layoutGui() {
-
+	public void updateGui() {
+		// TODO Auto-generated method stub
+		super.updateGui();
+		btnSave.setX(width/2);
+		btnSave.setY(height-30);
+//		if(descField.getText().length() > 6) {
+//			descField.setWidth(100+(descField.getText().length()-6)*5);
+//		}else {
+//			descField.setWidth(100);
+//		}
 	}
-
 }

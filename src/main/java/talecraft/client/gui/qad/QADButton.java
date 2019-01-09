@@ -2,6 +2,8 @@ package talecraft.client.gui.qad;
 
 import java.util.List;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import talecraft.client.gui.qad.model.DefaultButtonModel;
@@ -50,6 +52,7 @@ public class QADButton extends QADRectangularComponent {
 	public int textAlignment = 1;
 	/** Simplified rendering for buttons. **/
 	public boolean simplified = true;
+
 
 	public QADButton(String text) {
 		this.model = new DefaultButtonModel(text);
@@ -292,14 +295,9 @@ public class QADButton extends QADRectangularComponent {
 			}
 		}
 	}
-
+	
 	@Override
-	public void onMouseClicked(int i, int j, int mouseButton) {
-
-	}
-
-	@Override
-	public void onMouseReleased(int localMouseX, int localMouseY, int state) {
+	public void onMouseClicked(int localMouseX, int localMouseY, int state) {
 		boolean hit = localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
 
 		if(state != 0 || !hit)
@@ -309,10 +307,14 @@ public class QADButton extends QADRectangularComponent {
 
 		model.onClick();
 
-		if(clickRunnable != null)
+		if(clickRunnable != null && this.enabled)
 			clickRunnable.run();
 	}
-
+	@Override
+	public void onMouseReleased(int localMouseX, int localMouseY, int state) {
+		//Moved to onMouseClicked to prevent instant click when this button was on the same position as one in the previous GUI
+	}
+	
 	@Override
 	public void onMouseClickMove(int i, int j, int clickedMouseButton, long timeSinceLastClick) {}
 
@@ -382,6 +384,24 @@ public class QADButton extends QADRectangularComponent {
 	@Override
 	public void removeFocus() {
 		focused = false;
+	}
+
+	public String getText() {
+		// TODO Auto-generated method stub
+		return this.model.getText();
+	}
+
+	public Runnable getAction() {
+		// TODO Auto-generated method stub
+		return clickRunnable;
+	}
+	public boolean isMouserOver() {
+		return this.hovered;
+	}
+
+	public boolean isEnabeld() {
+		// TODO Auto-generated method stub
+		return this.enabled;
 	}
 
 }

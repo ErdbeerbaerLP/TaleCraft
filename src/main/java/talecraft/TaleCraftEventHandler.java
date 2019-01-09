@@ -6,6 +6,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -63,6 +65,7 @@ public class TaleCraftEventHandler {
 			ServerHandler.getServerMirror(null).playerList().playerJoin((EntityPlayerMP) event.player);
 			TaleCraft.network.sendTo(new StringNBTCommandPacketClient("client.network.join"), (EntityPlayerMP) event.player);
 			TaleCraft.network.sendTo(new GameruleSyncPacket(event.player.getEntityWorld().getGameRules().writeToNBT()), (EntityPlayerMP) event.player);
+		
 		}
 		
 	}
@@ -123,6 +126,9 @@ public class TaleCraftEventHandler {
 		if(event.getWorld().isRemote)return;
 		WorkbenchBlock.recipes = WorkbenchManager.fromNBT(WorldFileDataHelper.getTagFromFile(event.getWorld(), "workbench"));
 		UndoTask.loadFromNBT(WorldFileDataHelper.getTagFromFile(event.getWorld(), "undo"));
+		NBTTagCompound c = WorldFileDataHelper.getTagFromFile(event.getWorld(), "info");
+		c.setString("version", Reference.MOD_VERSION);
+		WorldFileDataHelper.saveNBTToWorld(event.getWorld(), "info", c);
 	}
 
 	@SubscribeEvent
