@@ -325,7 +325,7 @@ public class QADColorTextField extends QADRectangularComponent {
 
 	@Override
 	public void onKeyTyped(char p_146201_1_, int p_146201_2_) {
-		if (!this.isFocused)
+		if (!this.isFocused || (!(model.getTextLength()+1 < this.maxStringLength) && p_146201_2_ != 14))
 		{
 			return;
 		}
@@ -479,7 +479,9 @@ public class QADColorTextField extends QADRectangularComponent {
 				{
 					return;
 				}
+				
 			}
+			
 		}
 	}
 
@@ -819,10 +821,7 @@ public class QADColorTextField extends QADRectangularComponent {
 	{
 		this.maxStringLength = p_146203_1_;
 
-		if (model.getTextLength() > p_146203_1_)
-		{
-			model.setText(model.getText().substring(0, p_146203_1_));
-		}
+		
 	}
 
 	public int getMaxStringLength()

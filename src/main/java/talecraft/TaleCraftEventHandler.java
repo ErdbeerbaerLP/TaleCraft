@@ -1,5 +1,6 @@
 package talecraft;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandResultStats.Type;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -128,6 +129,7 @@ public class TaleCraftEventHandler {
 		UndoTask.loadFromNBT(WorldFileDataHelper.getTagFromFile(event.getWorld(), "undo"));
 		NBTTagCompound c = WorldFileDataHelper.getTagFromFile(event.getWorld(), "info");
 		c.setString("version", Reference.MOD_VERSION);
+
 		WorldFileDataHelper.saveNBTToWorld(event.getWorld(), "info", c);
 	}
 
@@ -137,6 +139,17 @@ public class TaleCraftEventHandler {
 		if(event.getWorld().isRemote)return;
 		WorldFileDataHelper.saveNBTToWorld(event.getWorld(), "workbench", WorkbenchBlock.recipes.toNBT());
 		WorldFileDataHelper.saveNBTToWorld(event.getWorld(), "undo", UndoTask.toNBT());
+
+		NBTTagCompound c = WorldFileDataHelper.getTagFromFile(event.getWorld(), "info");
+		try {
+			if(!c.hasKey("allowedUUIDs")) c.setString("allowedUUIDs", Minecraft.getMinecraft().getSession().getPlayerID()+";");
+		System.out.println("ok");
+		}catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Errored");
+		}
+
+		WorldFileDataHelper.saveNBTToWorld(event.getWorld(), "info", c);
 	}
 
 	/*

@@ -1,4 +1,4 @@
-package talecraft.client.gui.replaced_guis;
+package talecraft.client.gui.replaced_guis.save;
 
 import java.io.IOException;
 
@@ -14,27 +14,30 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
+import talecraft.client.gui.replaced_guis.save.GuiListSaveSelectionEntry;
 /**
  * Modified version of GuiWorldSelection<br>
  * this was required because of reflection not working<br>
  * TODO: Finish {@linkplain talecraft.client.gui.misc.GuiWorldInfo GuiWorldInfo}
  * @author ErdbeerbaerLP
  */
-public class NewWorldSelector extends GuiScreen{
+public class SaveCreator extends GuiScreen{
 
 	private static final Logger LOGGER = LogManager.getLogger();
     /** The screen to return to when this closes (always Main Menu). */
     protected GuiScreen prevScreen;
-    protected String title = "Select world";
+    protected String title = "Select Map";
     /** Tooltip displayed a world whose version is different from this client's */
     private String worldVersTooltip;
-    private GuiButton deleteButton;
-    private GuiButton selectButton;
-    private GuiButton renameButton;
-    private GuiButton copyButton;
-    private NewGuiListWorldSelection selectionList;
-
-    public NewWorldSelector(GuiScreen screenIn)
+    private GuiButtonExt selectButton;
+    private GuiListSaveCreator selectionList;
+    /**
+     * Used to determine the world´s folder
+     */
+    private String worldPathName = "saves/.TC_MAPS";
+    
+    public SaveCreator(GuiScreen screenIn)
     {
         this.prevScreen = screenIn;
     }
@@ -46,7 +49,7 @@ public class NewWorldSelector extends GuiScreen{
     public void initGui()
     {
         this.title = I18n.format("Select Map");
-        this.selectionList = new NewGuiListWorldSelection(this, this.mc, this.width, this.height, 32, this.height - 64, 36);
+        this.selectionList = new GuiListSaveCreator(this, this.mc, this.width, this.height, 32, this.height - 64, 36, this.worldPathName);
         this.postInit();
     }
 
@@ -61,17 +64,10 @@ public class NewWorldSelector extends GuiScreen{
 
     public void postInit()
     {
-        this.selectButton = this.addButton(new GuiButton(1, this.width / 2 - 154, this.height - 52, 150, 20, I18n.format("Open selected Map")));
-        this.addButton(new GuiButton(3, this.width / 2 + 4, this.height - 52, 150, 20, I18n.format("Build new Map")));
-        this.renameButton = this.addButton(new GuiButton(4, this.width / 2 - 154, this.height - 28, 72, 20, I18n.format("selectWorld.edit")));
-        this.deleteButton = this.addButton(new GuiButton(2, this.width / 2 - 76, this.height - 28, 72, 20, I18n.format("selectWorld.delete")));
-        this.copyButton = this.addButton(new GuiButton(5, this.width / 2 + 4, this.height - 28, 72, 20, I18n.format("Info")));
-        this.addButton(new GuiButton(0, this.width / 2 + 82, this.height - 28, 72, 20, I18n.format("gui.cancel")));
+        this.selectButton = this.addButton(new GuiButtonExt(1, this.width / 2 - 154, this.height - 52, 150, 20, I18n.format("Play selected Map")));
+        this.addButton(new GuiButtonExt(0, this.width / 2 +4, this.height - 52, 150, 20, I18n.format("gui.cancel")));
         this.selectButton.enabled = false;
         
-        this.deleteButton.enabled = false;
-        this.renameButton.enabled = false;
-        this.copyButton.enabled = false;
     }
 
     /**
@@ -81,40 +77,18 @@ public class NewWorldSelector extends GuiScreen{
     {
         if (button.enabled)
         {
-            NewGuiListWorldSelectionEntry guilistworldselectionentry = this.selectionList.getSelectedWorld();
+            GuiListSaveCreatorEntry guilistworldselectionentry = this.selectionList.getSelectedWorld();
 
-            if (button.id == 2)
-            {
-                if (guilistworldselectionentry != null)
-                {
-                    guilistworldselectionentry.deleteWorld();
-                }
-            }
-            else if (button.id == 1)
+            if (button.id == 1)
             {
                 if (guilistworldselectionentry != null)
                 {
                     guilistworldselectionentry.joinWorld();
                 }
             }
-            else if (button.id == 3)
-            {
-                this.mc.displayGuiScreen(new GuiCreateWorld(this));
-            }
-            else if (button.id == 4)
-            {
-                if (guilistworldselectionentry != null)
-                {
-                    guilistworldselectionentry.editWorld();
-                }
-            }
             else if (button.id == 0)
             {
                 this.mc.displayGuiScreen(this.prevScreen);
-            }
-            else if (button.id == 5 && guilistworldselectionentry != null)
-            {
-                guilistworldselectionentry.showWorldInfo();
             }
         }
     }
@@ -162,13 +136,10 @@ public class NewWorldSelector extends GuiScreen{
         this.worldVersTooltip = p_184861_1_;
     }
 
-    public void selectWorld(@Nullable NewGuiListWorldSelectionEntry newGuiListWorldSelectionEntry)
+    public void selectWorld(@Nullable GuiListSaveCreatorEntry newGuiListWorldSelectionEntry)
     {
         boolean flag = newGuiListWorldSelectionEntry != null;
         this.selectButton.enabled = flag;
-        this.deleteButton.enabled = flag;
-        this.renameButton.enabled = flag;
-        this.copyButton.enabled = false;
     }
 	
 

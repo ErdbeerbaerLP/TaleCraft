@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -76,7 +77,6 @@ public class TaleCraft {
 		config.save();
 		logger.info("Configuration loaded!");
 		MinecraftForge.EVENT_BUS.register(this);
-		
 		TaleCraftNetwork.preInit();
 		random = new Random(42);
 

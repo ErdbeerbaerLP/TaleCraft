@@ -1,5 +1,6 @@
-package talecraft.client.gui.replaced_guis;
+package talecraft.client.gui.replaced_guis.map;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,29 +16,32 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiErrorScreen;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
-public class NewGuiListWorldSelection extends GuiListExtended
+public class GuiListMapSelection extends GuiListExtended
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final NewWorldSelector worldSelection;
-    private final List<NewGuiListWorldSelectionEntry> entries = Lists.<NewGuiListWorldSelectionEntry>newArrayList();
+    private final MapSelector worldSelection;
+    private final List<GuiListMapSelectionEntry> entries = Lists.<GuiListMapSelectionEntry>newArrayList();
     /** Index to the currently selected world */
     private int selectedIdx = -1;
+	public String worldPathName;
 
-    public NewGuiListWorldSelection(NewWorldSelector p_i46590_1_, Minecraft clientIn, int widthIn, int heightIn, int topIn, int bottomIn, int slotHeightIn)
+    public GuiListMapSelection(MapSelector p_i46590_1_, Minecraft clientIn, int widthIn, int heightIn, int topIn, int bottomIn, int slotHeightIn, String worldPathName)
     {
         super(clientIn, widthIn, heightIn, topIn, bottomIn, slotHeightIn);
         this.worldSelection = p_i46590_1_;
+        this.worldPathName = worldPathName;
         this.refreshList();
     }
 
     public void refreshList()
     {
-        ISaveFormat isaveformat = this.mc.getSaveLoader();
+        ISaveFormat isaveformat = new AnvilSaveConverter(new File(this.mc.mcDataDir, this.worldPathName ), this.mc.getDataFixer());
         List<WorldSummary> list;
 
         try
@@ -55,14 +59,14 @@ public class NewGuiListWorldSelection extends GuiListExtended
 
         for (WorldSummary worldsummary : list)
         {
-            this.entries.add(new NewGuiListWorldSelectionEntry(this, worldsummary, this.mc.getSaveLoader()));
+            this.entries.add(new GuiListMapSelectionEntry(this, worldsummary, new AnvilSaveConverter(new File(this.mc.mcDataDir, this.worldPathName ), this.mc.getDataFixer())));
         }
     }
 
     /**
      * Gets the IGuiListEntry object for the given index
      */
-    public NewGuiListWorldSelectionEntry getListEntry(int index)
+    public GuiListMapSelectionEntry getListEntry(int index)
     {
         return this.entries.get(index);
     }
@@ -100,12 +104,12 @@ public class NewGuiListWorldSelection extends GuiListExtended
     }
 
     @Nullable
-    public NewGuiListWorldSelectionEntry getSelectedWorld()
+    public GuiListMapSelectionEntry getSelectedWorld()
     {
         return this.selectedIdx >= 0 && this.selectedIdx < this.getSize() ? this.getListEntry(this.selectedIdx) : null;
     }
 
-    public NewWorldSelector getGuiWorldSelection()
+    public MapSelector getGuiWorldSelection()
     {
         return this.worldSelection;
     }

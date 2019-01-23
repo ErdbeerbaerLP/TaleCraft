@@ -1,4 +1,4 @@
-package talecraft.client.gui.replaced_guis;
+package talecraft.client.gui.replaced_guis.map;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -17,9 +17,11 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.commons.io.FileUtils;
 import org.lwjgl.input.Keyboard;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldInfo;
 import talecraft.client.gui.qad.QADButton;
@@ -30,7 +32,7 @@ import talecraft.client.gui.qad.QADGuiScreen;
  * It now has an color-text-field and a "Set Icon" button
  * @author ErdbeerbaerLP
  */
-public class NewWorldEditor extends QADGuiScreen{
+public class MapEditor extends QADGuiScreen{
 	private final GuiScreen lastScreen;
     private QADColorTextField nameEdit;
     private QADButton btnCancel;
@@ -40,13 +42,14 @@ public class NewWorldEditor extends QADGuiScreen{
     private BufferedImage newImage = null;
 	private QADButton btnResetIcon;
 	private QADButton btnSetIcon;
+	private String path;
 	@Override
 	public void buildGui() {
 		this.drawCursorLines = false;
 		this.nameEdit = new QADColorTextField(this.fontRenderer, this.width / 2 - 100, 60, 200, 20);
         
 		addComponent(this.nameEdit);
-		ISaveFormat isaveformat = this.mc.getSaveLoader();
+		ISaveFormat isaveformat = new AnvilSaveConverter(new File(mc.mcDataDir, path ), mc.getDataFixer());
         WorldInfo worldinfo = isaveformat.getWorldInfo(this.worldId);
         String s = worldinfo == null ? "" : worldinfo.getWorldName();
         this.nameEdit.setText(s);
@@ -54,7 +57,7 @@ public class NewWorldEditor extends QADGuiScreen{
         btnOpenFolder = this.addComponent(new QADButton(this.width / 2 - 100, this.height / 4 + 48 + 12,120, I18n.format("selectWorld.edit.openFolder")));
         this.addComponent(btnSave = new QADButton(this.width / 2 - 100, this.height / 4 + 96 + 12,200, I18n.format("selectWorld.edit.save")));
         this.addComponent(btnCancel = new QADButton(this.width / 2 - 100, this.height / 4 + 120 + 12,200, I18n.format("gui.cancel")));
-        btnResetIcon.setEnabled(this.mc.getSaveLoader().getFile(this.worldId, "icon.png").isFile());
+        btnResetIcon.setEnabled(new AnvilSaveConverter(new File(mc.mcDataDir, path ), mc.getDataFixer()).getFile(this.worldId, "icon.png").isFile());
         btnSetIcon = addComponent(new QADButton(btnResetIcon.getX()+btnResetIcon.getButtonWidth(), btnResetIcon.getY(), 80, "Set Icon"));
         btnSetIcon.setAction(new Runnable() {
 			
@@ -62,8 +65,6 @@ public class NewWorldEditor extends QADGuiScreen{
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-//					ISaveFormat isaveformat = mc.getSaveLoader();
-//					File world = isaveformat.getFile(worldId, "level.dat").getParentFile();
 					JFileChooser fc = new JFileChooser();
 
 					fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -126,7 +127,7 @@ public class NewWorldEditor extends QADGuiScreen{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				ISaveFormat isaveformat = mc.getSaveLoader();
+				ISaveFormat isaveformat = new AnvilSaveConverter(new File(mc.mcDataDir, path ), mc.getDataFixer());
                 isaveformat.renameWorld(worldId, nameEdit.getText().trim());
                 if(newImage != null) {
 					File world = isaveformat.getFile(worldId, "level.dat").getParentFile();
@@ -151,7 +152,7 @@ public class NewWorldEditor extends QADGuiScreen{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				ISaveFormat isaveformat1 = mc.getSaveLoader();
+				ISaveFormat isaveformat1 = new AnvilSaveConverter(new File(mc.mcDataDir, path ), mc.getDataFixer());
                 FileUtils.deleteQuietly(isaveformat1.getFile(worldId, "icon.png"));
                 btnResetIcon.setEnabled(false);
 			}
@@ -161,7 +162,7 @@ public class NewWorldEditor extends QADGuiScreen{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				ISaveFormat isaveformat2 = mc.getSaveLoader();
+				ISaveFormat isaveformat2 = new AnvilSaveConverter(new File(mc.mcDataDir, path ), mc.getDataFixer());
                 OpenGlHelper.openFile(isaveformat2.getFile(worldId, "level.dat").getParentFile());
             
 			}
@@ -170,10 +171,11 @@ public class NewWorldEditor extends QADGuiScreen{
 	}
 
 
-	    public NewWorldEditor(GuiScreen p_i46593_1_, String p_i46593_2_)
+	    public MapEditor(GuiScreen p_i46593_1_, String p_i46593_2_, String path)
 	    {
 	        this.lastScreen = p_i46593_1_;
 	        this.worldId = p_i46593_2_;
+	        this.path = path;
 	    }
 
 	    
@@ -181,10 +183,6 @@ public class NewWorldEditor extends QADGuiScreen{
 	    
 
 	   
-	    /**
-	     * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
-	     */
-	    
 
 	    /**
 	     * Fired when a key is typed (except F11 which toggles full screen). This is the equivalent of
@@ -214,22 +212,6 @@ public class NewWorldEditor extends QADGuiScreen{
 	    	super.drawScreen(mouseX, mouseY, partialTicks);
 	        this.drawCenteredString(this.fontRenderer, I18n.format("selectWorld.edit.title"), this.width / 2, 20, 16777215);
 	        this.drawString(this.fontRenderer, I18n.format("selectWorld.enterName"), this.width / 2 - 100, 47, 10526880);
-	        /*
-	         this.nameEdit = new QADColorTextField(this.fontRenderer, this.width / 2 - 100, 60, 200, 20);
-        
-		addComponent(this.nameEdit);
-		ISaveFormat isaveformat = this.mc.getSaveLoader();
-        WorldInfo worldinfo = isaveformat.getWorldInfo(this.worldId);
-        String s = worldinfo == null ? "" : worldinfo.getWorldName();
-        this.nameEdit.setText(s);
-        btnResetIcon = this.addComponent(new QADButton(this.width / 2 - 100, this.height / 4 + 24 + 12,120, I18n.format("selectWorld.edit.resetIcon")));
-        btnOpenFolder = this.addComponent(new QADButton(this.width / 2 - 100, this.height / 4 + 48 + 12,120, I18n.format("selectWorld.edit.openFolder")));
-        this.addComponent(btnSave = new QADButton(this.width / 2 - 100, this.height / 4 + 96 + 12,200, I18n.format("selectWorld.edit.save")));
-        this.addComponent(btnCancel = new QADButton(this.width / 2 - 100, this.height / 4 + 120 + 12,200, I18n.format("gui.cancel")));
-        btnResetIcon.setEnabled(this.mc.getSaveLoader().getFile(this.worldId, "icon.png").isFile());
-        btnSetIcon = addComponent(new QADButton(btnResetIcon.getX()+btnResetIcon.getButtonWidth(), btnResetIcon.getY(), 80, "Set Icon"));
-        
-	         */
 	        this.nameEdit.setPosition(this.width / 2 - 100, 60);
 	        this.btnResetIcon.setPosition(this.width / 2 - 100, this.height / 4 + 24 + 12);
 	        this.btnOpenFolder.setPosition(this.width / 2 - 100, this.height / 4 + 48 + 12);

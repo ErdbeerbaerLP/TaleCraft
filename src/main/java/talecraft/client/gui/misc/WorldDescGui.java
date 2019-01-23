@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.gui.GuiScreen;
-import talecraft.client.gui.replaced_guis.NewWorldSelector;
+import talecraft.client.gui.replaced_guis.map.MapSelector;
 
 public class WorldDescGui extends GuiScreen {
 	
@@ -40,7 +40,7 @@ public class WorldDescGui extends GuiScreen {
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		System.out.println(keyCode);
 		if (keyCode == 1) {
-			this.mc.displayGuiScreen(new NewWorldSelector(null));
+			this.mc.displayGuiScreen(new MapSelector(null));
 		}
 	}
 	

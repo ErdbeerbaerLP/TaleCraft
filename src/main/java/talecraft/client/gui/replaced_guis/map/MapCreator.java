@@ -1,4 +1,4 @@
-package talecraft.client.gui.replaced_guis;
+package talecraft.client.gui.replaced_guis.map;
 
 import java.io.IOException;
 import java.util.Random;
@@ -25,7 +25,7 @@ import talecraft.client.gui.qad.QADTextField;
  * (used gamemode is creative)
  * @author ErdbeerbaerLP
  */
-public class NewWorldCreator extends QADGuiScreen {
+public class MapCreator extends QADGuiScreen {
 
     private QADColorTextField worldNameField;
     private QADTextField worldSeedField;
@@ -50,11 +50,11 @@ public class NewWorldCreator extends QADGuiScreen {
     private int selectedIndex;
     public String chunkProviderSettingsJson = "";
 	private QADButton btnBack;
-	private final NewWorldCreator newgui;
+	private final MapCreator newgui;
     /** These filenames are known to be restricted on one or more OS's. */
     private static final String[] DISALLOWED_FILENAMES = new String[] {"CON", "COM", "PRN", "AUX", "CLOCK$", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
 
-    public NewWorldCreator()
+    public MapCreator()
     {
     	newgui = this;
         this.worldSeed = "";
@@ -84,6 +84,7 @@ public class NewWorldCreator extends QADGuiScreen {
         this.worldNameField = this.addComponent(new QADColorTextField(this.fontRenderer, this.width / 2 - 100, 60, 200, 10));
         this.worldNameField.setFocused(true);
         this.worldNameField.setText(this.worldName);
+        this.worldNameField.setMaxStringLength(30);
         this.worldSeedField = this.addComponent(new QADTextField(this.fontRenderer, this.width / 2 - 100, 80, 200, 10));
         this.worldSeedField.setText(this.worldSeed);
         this.lblName = addComponent(new QADLabel(I18n.format("selectWorld.enterName")));
@@ -98,7 +99,7 @@ public class NewWorldCreator extends QADGuiScreen {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				mc.displayGuiScreen(new NewWorldSelector(null));
+				mc.displayGuiScreen(new MapSelector(null));
 			}
 		});
         btnCreate.setAction(new Runnable() {
@@ -201,7 +202,9 @@ public class NewWorldCreator extends QADGuiScreen {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				WorldType.WORLD_TYPES[selectedIndex].onCustomizeButton(mc, new GuiCreateWorld(newgui));
+				GuiCreateWorld dummy = new GuiCreateWorld(newgui);
+				dummy.chunkProviderSettingsJson = MapCreator.this.chunkProviderSettingsJson;
+				WorldType.WORLD_TYPES[selectedIndex].onCustomizeButton(mc, dummy);
 			}
 		});
         
