@@ -58,7 +58,7 @@ public class GuiMapListSelection extends GuiListExtended
 	{
 		this.setAmountScrolled(0);
 		this.entries.clear();
-		addMapsToList(0, 10);
+		addMapsToList(0, 15);
 	}
 
 	private boolean errorToastShown = false;
@@ -141,7 +141,7 @@ public class GuiMapListSelection extends GuiListExtended
 		// Lazy loading
 		if(loadReady && getMaxScroll() <= getAmountScrolled()-3) {
 			loadReady = false;
-			addMapsToList(this.entries.size(), 5);
+			addMapsToList(this.entries.size(), 10);
 		}
 
 		super.drawScreen(mouseXIn, mouseYIn, partialTicks);

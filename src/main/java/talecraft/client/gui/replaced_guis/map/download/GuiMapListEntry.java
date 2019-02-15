@@ -14,14 +14,9 @@ public class GuiMapListEntry implements GuiListExtended.IGuiListEntry
 	private static final Logger LOGGER = LogManager.getLogger();
 	private final Minecraft client;
 	private final GuiMapList worldSelScreen;
-//	private final WorldSummary worldSummary;
-//	private final ResourceLocation iconLocation;
 	private final GuiMapListSelection containingListSel;
-//	private File iconFile;
-//	private DynamicTexture icon;
 	private long lastClickTime;
 private DownloadableMap map;
-//	private String worldPathName;
 	public GuiMapListEntry(GuiMapListSelection newGuiListWorldSelection, DownloadableMap map)
 	{
 		this.containingListSel = newGuiListWorldSelection;
@@ -78,7 +73,6 @@ private DownloadableMap map;
 	}
 
 	public void showWorldInfo() {
-//		Minecraft.getMinecraft().displayGuiScreen(new GuiDownloading(worldSelScreen, new DownloadZip(map.dlURL)));
 		Minecraft.getMinecraft().displayGuiScreen(new GuiDLMapInfo(this.worldSelScreen, map));
 	}
 }

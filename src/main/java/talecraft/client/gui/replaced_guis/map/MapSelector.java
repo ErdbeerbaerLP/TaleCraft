@@ -174,7 +174,7 @@ public class MapSelector extends GuiScreen{
         this.selectButton.enabled = flag;
         this.deleteButton.enabled = flag;
         this.renameButton.enabled = flag;
-        this.copyButton.enabled = false;
+        this.copyButton.enabled = flag;
     }
 	
 

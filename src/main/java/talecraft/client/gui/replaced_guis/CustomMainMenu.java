@@ -19,6 +19,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
+import talecraft.TaleCraft;
 import talecraft.client.gui.misc.CrashQuestion;
 import talecraft.client.gui.replaced_guis.map.MapSelector;
 import talecraft.client.gui.replaced_guis.map.download.DownloadZip;
@@ -46,17 +47,18 @@ public class CustomMainMenu extends GuiScreen {
     /** Texture allocated for the current viewport of the main menu's panorama background. */
     private DynamicTexture viewportTexture;
     
+    public CustomMainMenu() {
+
+		this.viewportTexture = new DynamicTexture(256, 256);
+		this.backgroundTexture = Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("background", this.viewportTexture);
+        TaleCraft.lastVisitedWorld = null;
+    }
     
-	//TODO Write this
-	
 	//GuiMainMenu
 	@Override
 	public void initGui() {
-		// TODO Auto-generated method stub GuiMainMenu
-		this.viewportTexture = new DynamicTexture(256, 256);
-		this.backgroundTexture = this.mc.getTextureManager().getDynamicTextureLocation("background", this.viewportTexture);
-        
-        File savesDir = new File(this.mc.mcDataDir, "saves");
+    	TaleCraft.setPresence("In Main Menu", "talecraft");
+		File savesDir = new File(this.mc.mcDataDir, "saves");
 		final String[] savesList = savesDir.list();
         for(String s : savesList){
         	if(s.startsWith(".TC")) continue;

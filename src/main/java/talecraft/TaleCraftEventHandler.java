@@ -1,6 +1,7 @@
 package talecraft;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandResultStats.Type;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,11 +52,36 @@ public class TaleCraftEventHandler {
 		}
 	}
 
+
 	@SubscribeEvent
 	public void tick(TickEvent event) {
 		TaleCraft.proxy.tick(event);
-	}
 
+
+	}
+	private int ticks = 120;
+	@SubscribeEvent
+	public void playerTick(PlayerTickEvent event) {
+		//Update Discord RichPresence every 120 ticks:
+		if(ticks >= 120) {
+			try {
+				boolean building = TaleCraft.asClient().isBuildMode();
+				boolean testWorld = TaleCraft.lastVisitedWorld.getWorldInfo().getWorldName().equals("TC_TEST");
+				if(testWorld) TaleCraft.setPresence("Testing Map", "talecraft");
+				else {
+					EntityPlayerSP player = Minecraft.getMinecraft().player;
+					int posX = Double.valueOf(player.posX).intValue();
+					int posY = Double.valueOf(player.posY).intValue();
+					int posZ = Double.valueOf(player.posZ).intValue();
+					TaleCraft.setPresence((building?"Building Map \"":"Playing Map \"")+TaleCraft.lastVisitedWorld.getWorldInfo().getWorldName()+"\"", "X: "+posX+" Y: "+posY+" Z: " + posZ + " | Item: " + player.getHeldItemMainhand().getDisplayName()+" | "+(!player.isDead?("Health: "+player.getHealth()):"Dead :("), "talecraft");
+				}
+				ticks = 0;
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+
+		}else ticks++;
+	}
 	@SubscribeEvent
 	public void tickWorld(WorldTickEvent event) {
 		TaleCraft.proxy.tickWorld(event);
@@ -66,42 +93,42 @@ public class TaleCraftEventHandler {
 			ServerHandler.getServerMirror(null).playerList().playerJoin((EntityPlayerMP) event.player);
 			TaleCraft.network.sendTo(new StringNBTCommandPacketClient("client.network.join"), (EntityPlayerMP) event.player);
 			TaleCraft.network.sendTo(new GameruleSyncPacket(event.player.getEntityWorld().getGameRules().writeToNBT()), (EntityPlayerMP) event.player);
-		
-		}
-		
-	}
-	
-	//CAN BE USED TO FIND CERTAIN EVENTS
-//	@SubscribeEvent
-//	public void event(Event event){
-//      \/ FILTER SPAM EVENTS \/
-//		if(event instanceof BiomeEvent) return;
-//		if(event instanceof RenderGameOverlayEvent) return;
-//		if(event instanceof GuiScreenEvent) return;
-//		if(event instanceof EntityEvent.EnteringChunk) return;
-//		if(event instanceof LivingEvent.LivingUpdateEvent) return;
-//		if(event instanceof EntityViewRenderEvent) return;
-//		if(event instanceof RenderLivingEvent) return;
-//		if(event instanceof DrawBlockHighlightEvent) return;
-//		if(event instanceof RenderWorldLastEvent) return;
-//		if(event instanceof RenderHandEvent) return;
-//		if(event instanceof TickEvent) return;
-//		if(event instanceof InputEvent) return;
-//		if(event instanceof MouseEvent) return;
-//		if(event instanceof ChunkDataEvent) return;
-//		if(event instanceof WorldEvent) return;
-//		if(event instanceof FOVUpdateEvent) return;
-//		if(event instanceof PlaySoundEvent) return;
-//		if(event instanceof PlaySoundSourceEvent) return;
-//		if(event instanceof BlockEvent) return;
-//		if(event instanceof AttachCapabilitiesEvent) return;
-//		if(event instanceof GuiOpenEvent) return;
-//      /\ FILTER SPAM EVENTS /\
-	
-//		System.out.println(event.getClass().toString());
-//	}
 
-	
+		}
+
+	}
+
+	//CAN BE USED TO FIND CERTAIN EVENTS
+	//	@SubscribeEvent
+	//	public void event(Event event){
+	//      \/ FILTER SPAM EVENTS \/
+	//		if(event instanceof BiomeEvent) return;
+	//		if(event instanceof RenderGameOverlayEvent) return;
+	//		if(event instanceof GuiScreenEvent) return;
+	//		if(event instanceof EntityEvent.EnteringChunk) return;
+	//		if(event instanceof LivingEvent.LivingUpdateEvent) return;
+	//		if(event instanceof EntityViewRenderEvent) return;
+	//		if(event instanceof RenderLivingEvent) return;
+	//		if(event instanceof DrawBlockHighlightEvent) return;
+	//		if(event instanceof RenderWorldLastEvent) return;
+	//		if(event instanceof RenderHandEvent) return;
+	//		if(event instanceof TickEvent) return;
+	//		if(event instanceof InputEvent) return;
+	//		if(event instanceof MouseEvent) return;
+	//		if(event instanceof ChunkDataEvent) return;
+	//		if(event instanceof WorldEvent) return;
+	//		if(event instanceof FOVUpdateEvent) return;
+	//		if(event instanceof PlaySoundEvent) return;
+	//		if(event instanceof PlaySoundSourceEvent) return;
+	//		if(event instanceof BlockEvent) return;
+	//		if(event instanceof AttachCapabilitiesEvent) return;
+	//		if(event instanceof GuiOpenEvent) return;
+	//      /\ FILTER SPAM EVENTS /\
+
+	//		System.out.println(event.getClass().toString());
+	//	}
+
+
 	@SubscribeEvent
 	public void villagerInteract(EntityInteractSpecific e){
 		/* XXX: Commented out because disabling features is NOT okay.
@@ -120,15 +147,16 @@ public class TaleCraftEventHandler {
 			ServerHandler.getServerMirror(null).playerList().playerLeave((EntityPlayerMP) event.player);
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void worldLoad(WorldEvent.Load event) {
 		TaleCraft.worldsManager.registerWorld(event.getWorld());
 		if(event.getWorld().isRemote)return;
+		TaleCraft.lastVisitedWorld = event.getWorld();
 		WorkbenchBlock.recipes = WorkbenchManager.fromNBT(WorldFileDataHelper.getTagFromFile(event.getWorld(), "workbench"));
 		UndoTask.loadFromNBT(WorldFileDataHelper.getTagFromFile(event.getWorld(), "undo"));
 		NBTTagCompound c = WorldFileDataHelper.getTagFromFile(event.getWorld(), "info");
-		c.setString("version", Reference.MOD_VERSION);
+		if((c.hasKey("version") && c.getString("version") != "vanilla") || !c.hasKey("version")) c.setString("version", Reference.MOD_VERSION);
 
 		WorldFileDataHelper.saveNBTToWorld(event.getWorld(), "info", c);
 	}
@@ -139,11 +167,10 @@ public class TaleCraftEventHandler {
 		if(event.getWorld().isRemote)return;
 		WorldFileDataHelper.saveNBTToWorld(event.getWorld(), "workbench", WorkbenchBlock.recipes.toNBT());
 		WorldFileDataHelper.saveNBTToWorld(event.getWorld(), "undo", UndoTask.toNBT());
-
 		NBTTagCompound c = WorldFileDataHelper.getTagFromFile(event.getWorld(), "info");
 		try {
 			if(!c.hasKey("allowedUUIDs")) c.setString("allowedUUIDs", Minecraft.getMinecraft().getSession().getPlayerID()+";");
-		System.out.println("ok");
+			System.out.println("ok");
 		}catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("Errored");
@@ -235,22 +262,22 @@ public class TaleCraftEventHandler {
 				public Vec3d getPositionVector() {
 					return player.getPositionVector();
 				}
-				
+
 				@Override
 				public BlockPos getPosition() {
 					return player.getPosition();
 				}
-				
+
 				@Override
 				public String getName() {
 					return player.getName();
 				}
-				
+
 				@Override
 				public World getEntityWorld() {
 					return player.getEntityWorld();
 				}
-				
+
 				@Override
 				public ITextComponent getDisplayName() {
 					return player.getDisplayName();
@@ -270,6 +297,6 @@ public class TaleCraftEventHandler {
 			}, command);
 		}
 	}
-	
+
 
 }

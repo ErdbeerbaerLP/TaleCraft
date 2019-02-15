@@ -1,8 +1,10 @@
 package talecraft.proxy;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -49,6 +51,11 @@ public class ServerProxy extends CommonProxy
 	@Override
 	public NBTTagCompound getSettings(EntityPlayer playerIn) {
 		return ServerHandler.getServerMirror(null).playerList().getPlayer((EntityPlayerMP) playerIn).settings;
+	}
+
+	public WorldInfo getWorldInfo() {
+		// TODO Auto-generated method stub
+		return Minecraft.getMinecraft().world.getWorldInfo();
 	}
 
 }

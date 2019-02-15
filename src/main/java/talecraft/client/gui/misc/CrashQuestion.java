@@ -3,7 +3,7 @@ package talecraft.client.gui.misc;
 import java.io.File;
 import java.io.IOException;
 
-import org.codehaus.plexus.util.FileUtils;
+import org.apache.commons.io.FileUtils;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -34,7 +34,7 @@ public class CrashQuestion extends GuiScreen{
 	        drawCenteredString(fontRenderer, TextFormatting.UNDERLINE+"Crash?", width/2, 30, 16777215);
 	        drawCenteredString(fontRenderer, "There is still a temporary world in you saves folder...", width/2, 50, 16777215);
 	        drawCenteredString(fontRenderer, "If it was an crash you could attempt to reload the world", width/2, 60, 16777215);
-	        drawCenteredString(fontRenderer, "If not it may be just not deletet properly, try joining and leaving it again", width/2, 70, 16777215);
+	        drawCenteredString(fontRenderer, "If not it may be just not deleted properly, try joining and leaving it again", width/2, 70, 16777215);
 	        drawCenteredString(fontRenderer, "By clicking \"Delete Folder(s)\" you remove all folders ", width/2, 90, 16777215);
 	        drawCenteredString(fontRenderer, "from the saves folder if they are not created by TaleCraft", width/2, 100, 16777215);
 	        drawCenteredString(fontRenderer, "If you did just update, click the Update button!", width/2, 110, 16777215);
@@ -55,7 +55,6 @@ public class CrashQuestion extends GuiScreen{
 		        for(String s : savesList){
 		        	if(s.startsWith(".TC")) continue;
 		        	FileUtils.deleteDirectory(new File(savesDir, s));
-		        	
 		        }
 				break;
 			case 2:

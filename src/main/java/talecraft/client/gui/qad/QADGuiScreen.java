@@ -102,13 +102,15 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
 			this.behindScreen.height = this.height;
 			this.behindScreen.initGui();
 		}
-
 		onLayout();
 		
 		
 		initializing = false;
 	}
-	
+	/**
+	 * Called when the screen gets resized<br>Called after onUpdate
+	 */
+	public void onScreenResized() {}
 	private final void onLayout() {
 		if(components != null && !components.isEmpty() && lastUpdateComponents != null) {
 			layoutGui();
@@ -205,11 +207,15 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
 			component.onKeyTyped(typedChar, typedCode);
 		}
 	}
-
+	/**
+	 * Used for onResize()
+	 */
+	private int lastWidth,lastHeigth = 0;
 	@Override
 	public final void updateScreen() {
 		if(initializing) return;
-		
+				
+				
 		if(lastUpdateComponents == null || components == null) {
 			initGui();
 			return;
@@ -225,6 +231,15 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
 		for(QADComponent component : lastUpdateComponents) {
 			if(component != null) component.onTickUpdate();
 		}
+		//Check for lastWidth and lastHeigth changes and run onScreenResized if required
+		if(lastHeigth  == 0 && lastWidth == 0) {
+			lastHeigth = this.height;
+			lastWidth = this.width;
+		}else if(lastHeigth != this.height || lastWidth != this.width) {
+			lastHeigth = this.height;
+			lastWidth = this.width;
+			onScreenResized();
+		}
 		
 	}
 	/**
@@ -234,6 +249,7 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		if(initializing) return;
+		
 		// If there is a 'behind' screen, draw it first so it appears in the background.
 		if(behindScreen != null) {
 			behindScreen.drawScreen(-9999, -9999, partialTicks);

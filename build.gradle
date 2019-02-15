@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "0.3.2"
+version = "0.3.4"
 group = "talecraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "talecraft"
 
@@ -50,13 +50,19 @@ dependencies {
     // except that these dependencies get remapped to your current MCP mappings
     //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
     //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
+    
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    
+    
+    
+    compile files("E:\\Desktop\\DRPC Mod\\build\\libs\\discordrpc-1.2.2.jar")
 
 }
-
+javadoc { 
+    source sourceSets.api.allJava 
+} 
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
@@ -40,7 +41,11 @@ import net.minecraft.world.storage.WorldInfo;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import talecraft.Reference;
+import talecraft.client.gui.misc.GuiCopyingWorld;
 import talecraft.client.gui.misc.GuiWorldInfo;
+import talecraft.client.gui.replaced_guis.CustomMainMenu;
+import talecraft.client.gui.replaced_guis.NewIngameMenu;
+import talecraft.client.gui.replaced_guis.map.download.GuiMapListEntry;
 /**
  * Modified version of GuiListWorldSelectionEntry
  * Changed to show world description, talecraft version and author
@@ -107,8 +112,6 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 			else
 			{
 				s2 = "";
-
-				String s3 = "<VERSION>";
 				try {
 					final NBTTagCompound worldComp = CompressedStreamTools.read(worldDat);
 					if(worldComp.hasKey("author") && !worldComp.getString("author").trim().isEmpty()) {
@@ -117,13 +120,13 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 				}catch (Exception e) {
 					// TODO: handle exception
 				}
-				s2 = s2 + "Talecraft Version: ";
 				try {
 					final NBTTagCompound worldComp = CompressedStreamTools.read(worldDat);
 					if(worldComp.hasKey("version")) {
-						s2 = s2 + (Reference.MOD_VERSION.equals(worldComp.getString("version"))?"":TextFormatting.RED) + worldComp.getString("version");
-					}else {
-						s2 = s2 + TextFormatting.RED+ "Unknown";
+						if(worldComp.getString("version").equals("vanilla")) s2 = s2+ TextFormatting.GOLD+"Vanilla";
+						else s2 = s2 + "Talecraft Version: "+(Reference.MOD_VERSION.equals(worldComp.getString("version"))?"":TextFormatting.RED) + worldComp.getString("version");
+						}else {
+						s2 = s2 + "Talecraft Version: "+TextFormatting.RED+ "Unknown";
 					}
 
 				} catch (Exception e) {
@@ -131,9 +134,6 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 					e.printStackTrace();
 					s2 = s2 +TextFormatting.RED+"ERROR";
 				}
-				//        	s2 = s2 + ", Talecraft Version: " + s3;
-
-
 			}
 
 		}else {
@@ -156,7 +156,6 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 		GlStateManager.enableBlend();
 		Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0F, 0.0F, 32, 32, 32.0F, 32.0F);
 		GlStateManager.disableBlend();
-		//x + 32 + 3, y + this.client.fontRenderer.FONT_HEIGHT + 3
 
 		if (this.client.gameSettings.touchscreen || isSelected)
 		{
@@ -248,7 +247,7 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 				}
 			}, I18n.format("selectWorld.versionQuestion"), I18n.format("selectWorld.versionWarning", this.worldSummary.getVersionName()), I18n.format("selectWorld.versionJoinButton"), I18n.format("gui.cancel"), 0));
 		}
-		else if(worldComp != null && worldComp.hasKey("version") && !worldComp.getString("version").equals(Reference.MOD_VERSION)) {
+		else if(worldComp != null && worldComp.hasKey("version") && (!worldComp.getString("version").equals(Reference.MOD_VERSION)) && !worldComp.getString("version").equals("vanilla")) {
 			this.client.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback()
 			{
 				public void confirmClicked(boolean result, int id)
@@ -262,7 +261,7 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 						GuiListMapSelectionEntry.this.client.displayGuiScreen(GuiListMapSelectionEntry.this.worldSelScreen);
 					}
 				}
-			}, I18n.format("selectWorld.versionQuestion"), "Thiw world was loaded in Talecraft version "+worldComp.getString("version")+ " and loading it in this version could cause corruption!" , I18n.format("selectWorld.versionJoinButton"), I18n.format("gui.cancel"), 0));
+			}, I18n.format("selectWorld.versionQuestion"), "This world was loaded in Talecraft version "+worldComp.getString("version")+ " and loading it in this version could cause corruption!" , I18n.format("selectWorld.versionJoinButton"), I18n.format("gui.cancel"), 0));
 
 		}
 		else if(worldComp != null && worldComp.hasKey("allowedUUIDs") && !worldComp.getString("allowedUUIDs").trim().equals("*")) {
@@ -313,15 +312,31 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 
 		if (new AnvilSaveConverter(new File(this.client.mcDataDir, this.worldPathName ), this.client.getDataFixer()).canLoadWorld(this.worldSummary.getFileName()))
 		{
-			try {
-				final File outDir = new File(new File(this.client.mcDataDir, "saves"),this.worldSummary.getFileName());
-				FileUtils.copyDirectory(new File(new File(this.client.mcDataDir, this.worldPathName ),this.worldSummary.getFileName()), outDir);
-				net.minecraftforge.fml.client.FMLClientHandler.instance().tryLoadExistingWorld(new GuiWorldSelection(worldSelScreen), this.worldSummary);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Thread t = new Thread() {
+            	@Override
+            	public void run() {
+            		try {
+            			Minecraft.getMinecraft().displayGuiScreen(new GuiCopyingWorld("Loading...."));
+						sleep(TimeUnit.SECONDS.toMillis(1));
+						
+						final File outDir = new File(new File(client.mcDataDir, "saves"),worldSummary.getFileName());
+						FileUtils.copyDirectory(new File(new File(client.mcDataDir, worldPathName ),worldSummary.getFileName()), outDir);
+						Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+							
+							@Override
+							public void run() {
+								net.minecraftforge.fml.client.FMLClientHandler.instance().tryLoadExistingWorld(new GuiWorldSelection(worldSelScreen), worldSummary);
+							}
+						});
+            		} catch (InterruptedException | IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+            	}
+            };
+            t.start();
+            
 			}
-		}
 	}
 
 	private void loadServerIcon()
@@ -374,6 +389,6 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 	}
 
 	public void showWorldInfo() {
-		Minecraft.getMinecraft().displayGuiScreen(new GuiWorldInfo(this.worldSummary, worldSelScreen));
+		Minecraft.getMinecraft().displayGuiScreen(new GuiWorldInfo(this.worldSummary, worldSelScreen, this.worldPathName));
 	}
 }

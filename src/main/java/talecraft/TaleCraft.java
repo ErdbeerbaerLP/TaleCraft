@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import de.erdbeerbaerlp.discordrpc.DRPCEventHandler;
+import de.erdbeerbaerlp.discordrpc.Discord;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommandManager;
@@ -15,14 +17,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.datafix.FixTypes;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -60,12 +65,25 @@ public class TaleCraft {
 	public static Logger logger;
 	public static Random random;
 	public static Gson gson;
-
+	public static World lastVisitedWorld = null;
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.SERVER_PROXY, modId = Reference.MOD_ID)
 	public static CommonProxy proxy;
-
+//	public TaleCraft() {
+//		// TODO Auto-generated constructor stub
+//		System.out.println(System.getProperty("java.class.path"));
+//		System.exit(0);
+//	}
+	@Mod.EventHandler
+	public void modConstructing(FMLConstructionEvent event) {
+		if(Loader.isModLoaded("discordrpc")) {
+		Discord.disableModDefault(true);
+		Discord.customDiscordInit("544959465020063777");
+		Discord.setPresence("Starting Game", "", "starting_1", false);
+		}
+	}
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		
 		logger = event.getModLog();
 		container = FMLCommonHandler.instance().findContainerFor(instance);
 		logger.info("TaleCraft initialization...");
@@ -116,7 +134,7 @@ public class TaleCraft {
 	public void init(FMLInitializationEvent event) {
 		proxy.init(event);
 		NetworkRegistry.INSTANCE.registerGuiHandler(TaleCraft.instance, new GuiHandler());
-		
+		setPresence("Starting Game", "starting_2");
 		// Convert tile entity IDs
 		CompoundDataFixer compoundDataFixer = FMLCommonHandler.instance().getDataFixer();
 		ModFixs dataFixer = compoundDataFixer.init(Reference.MOD_ID, 1);
@@ -169,6 +187,15 @@ public class TaleCraft {
 
 	public static NBTTagCompound getSettings(EntityPlayer player) {
 		return proxy.getSettings(player);
+	}
+	
+	public static void setPresence(String title, String iconKey) {
+		setPresence(title, "", iconKey);
+	}
+	public static void setPresence(String title, String subtitle, String iconKey) {
+		if(Loader.isModLoaded("discordrpc")) {
+			Discord.setPresence( DRPCEventHandler.removeFormatting(title), DRPCEventHandler.removeFormatting(subtitle), iconKey);
+		}
 	}
 
 }

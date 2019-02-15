@@ -21,6 +21,7 @@ import net.minecraft.client.gui.GuiScreenDemo;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
+import talecraft.TaleCraft;
 public class GuiMapList extends GuiScreen{
 
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -36,6 +37,7 @@ public class GuiMapList extends GuiScreen{
 	public GuiMapList(GuiScreen screenIn)
 	{
 		this.prevScreen = screenIn;
+		
 	}
 
 	/**
@@ -44,6 +46,7 @@ public class GuiMapList extends GuiScreen{
 	 */
 	public void initGui()
 	{
+		TaleCraft.setPresence("Looking at the Map list", "talecraft");
 		Keyboard.enableRepeatEvents(true);
 		this.searchField = new GuiTextField(2, fontRenderer, this.width / 2+40, 15, 100, 20);
 		this.selectionList = new GuiMapListSelection(this, this.mc, this.width, this.height, 42, this.height - 64, 36, this.searchField);

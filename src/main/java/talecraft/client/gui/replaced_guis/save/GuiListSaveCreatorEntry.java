@@ -124,21 +124,20 @@ public class GuiListSaveCreatorEntry implements GuiListExtended.IGuiListEntry
 				}catch (Exception e) {
 					// TODO: handle exception
 				}
-				s2 = s2 + "Talecraft Version: ";
 				try {
 					final NBTTagCompound worldComp = CompressedStreamTools.read(worldDat);
 					if(worldComp.hasKey("version")) {
-						s2 = s2 + (Reference.MOD_VERSION.equals(worldComp.getString("version"))?"":TextFormatting.RED) + worldComp.getString("version");
-					}else {
-						s2 = s2 + TextFormatting.RED+ "Unknown";
+						if(worldComp.getString("version").equals("vanilla")) s2 = s2+ TextFormatting.GOLD+"Vanilla";
+						else s2 = s2 + "Talecraft Version: "+(Reference.MOD_VERSION.equals(worldComp.getString("version"))?"":TextFormatting.RED) + worldComp.getString("version");
+						}else {
+						s2 = s2 + "Talecraft Version: "+TextFormatting.RED+ "Unknown";
 					}
 
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					s2 = s2 +TextFormatting.RED+"ERROR";
+					s2 = s2+"Talecraft Version: "+TextFormatting.RED+"ERROR";
 				}
-				//        	s2 = s2 + ", Talecraft Version: " + s3;
 
 
 			}
@@ -255,7 +254,7 @@ public class GuiListSaveCreatorEntry implements GuiListExtended.IGuiListEntry
 				}
 			}, I18n.format("selectWorld.versionQuestion"), I18n.format("selectWorld.versionWarning", this.worldSummary.getVersionName()), I18n.format("selectWorld.versionJoinButton"), I18n.format("gui.cancel"), 0));
 		}
-		else if(worldComp != null && worldComp.hasKey("version") && !worldComp.getString("version").equals(Reference.MOD_VERSION)) {
+		else if(worldComp != null && worldComp.hasKey("version") && !worldComp.getString("version").equals(Reference.MOD_VERSION)&&!worldComp.getString("version").equals("vanilla")) {
 			this.client.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback()
 			{
 				public void confirmClicked(boolean result, int id)

@@ -19,6 +19,9 @@ public class DownloadableMap {
 	public boolean hasScripts;
 	public boolean additionalModsRequired = false;
 	public List<DownloadableMod> additionalMods = new ArrayList<DownloadableMod>();
+	public String mapURL = "";
+	public String mapVersion = "";
+	public String mapUUIDs = "-";
 	public DownloadableMap(Entry<String, JsonElement> mapJson) {
 		// TODO Auto-generated constructor stub
 		this.name = mapJson.getKey();
@@ -28,7 +31,9 @@ public class DownloadableMap {
 			this.author = mapobj.get("author").getAsString();
 			
 		}
+		if(mapobj.has("mapurl")) this.mapURL = mapobj.get("mapurl").getAsString();
 		this.hasScripts = (mapobj.has("scripts") && mapobj.get("scripts").getAsBoolean());
+		if(mapobj.has("tc-version")) this.mapVersion = mapobj.get("tc-version").getAsString();
 		if(mapobj.has("dlurl")) 
 			try {
 				this.dlURL = new URL(mapobj.get("dlurl").getAsString());

@@ -5,6 +5,8 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -49,6 +51,7 @@ public class EntityBomb extends EntityThrowable{
 	protected void onImpact(RayTraceResult result){
 		if (result.entityHit != null){
 			explode(); //explode on impact
+			if(result.entityHit instanceof EntityCreeper) ((EntityCreeper)result.entityHit).ignite();
 			updateMovementLogic = false;
 			return;
 		}
@@ -61,31 +64,41 @@ public class EntityBomb extends EntityThrowable{
 					case NORTH:
 					case SOUTH:
 					case EAST:
-					case WEST: {
+					case WEST:
 						rotationPitch = 90;
 						setVelocityNew(0, 0, 0);
-					} break;
-					case UP: {
+					return;
+					case UP:
 						rotationPitch = -rotationPitch;
 						setVelocityNew(motionX*0.5f, 0, motionZ*0.5f);
-					} break;
-					case DOWN: {
+					break;
+					case DOWN:
 						updateMovementLogic = false;
 						rotationPitch = -rotationPitch;
 						setVelocityNew(0, 0, 0);
-					} break;
+					break;
 				}
 			} else {
-				/*if(world.getBlockState(getPosition()).isFullBlock()) {
-					setPositionAndUpdate(posX, posY + 1f/16f, posZ);
-					setVelocityNew(0, motionY, 0);
-				}*/
+				if(world.getBlockState(result.getBlockPos()).isFullBlock()) {
+					setVelocityNew(0, 0, 0);
+				}
+				
 			}
 			
-			/*if(world.getBlockState(result.getBlockPos()).isFullBlock()){
+			if(world.getBlockState(getPosition()).isFullBlock()) {
 				updateMovementLogic = false;
-				//setVelocityNew(0, 0, 0);
-			}*/
+				for(int i=0; ; i++) {
+					if(world.getBlockState(getPosition().add(0,i,0)).isFullBlock()) continue;
+					else {
+						setPositionAndUpdate(posX, Math.round(posY+i)-0.4, posZ);
+						break;
+					}
+				}
+				
+			}
+			
+			
+			
 		}
 	}
 	

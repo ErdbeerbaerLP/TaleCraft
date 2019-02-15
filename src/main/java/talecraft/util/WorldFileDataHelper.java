@@ -30,7 +30,7 @@ public class WorldFileDataHelper {
 	public static void saveNBTToWorld(World world, String name, NBTTagCompound tag){
 		//if(!world.getSaveHandler().getWorldDirectory().getParent().equals("saves"))return;
 		File worldF = new File(world.getSaveHandler().getWorldDirectory(), "talecraft");
-		System.out.println("saving......");
+		System.out.println("saving......"+world.getSaveHandler().getWorldDirectory().getName());
 		worldF.mkdir();
 		File dat = new File(worldF, name + ".dat");
 		if(!dat.exists()){
