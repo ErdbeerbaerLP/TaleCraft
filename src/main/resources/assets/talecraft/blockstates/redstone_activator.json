@@ -1,7 +1,0 @@
-{
-  "variants" : {
-    "normal" : {"model" : "talecraft:redstone_activator"},
-    "powered=true" : {"model" : "talecraft:redstone_activator"},
-    "powered=false" : {"model" : "talecraft:redstone_activator"}
-  }
-}

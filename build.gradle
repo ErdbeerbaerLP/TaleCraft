@@ -11,7 +11,11 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
+<<<<<<< HEAD
 version = "0.3.4"
+=======
+version = "0.3.3"
+>>>>>>> c23cf79f628fdce4a30350d2520255e0d130d7a8
 group = "talecraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "talecraft"
 
