@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiWorldSelection;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderSkybox;
@@ -77,7 +78,7 @@ public class CustomMainMenu extends GuiScreen {
 			@Override
 			public void onClick(double mouseX, double mouseY) {
 				// TODO Auto-generated method stub
-//				mc.displayGuiScreen(new GuiMapList(CustomMainMenu.this));
+				mc.displayGuiScreen(new GuiWorldSelection(CustomMainMenu.this));
 			}
 		});
 		this.addButton(exitGameButton = new GuiButtonExt(4, this.width / 2, j + 24 * 3,100,20, I18n.format("menu.quit")) {
