@@ -109,12 +109,12 @@ public class CustomMainMenu extends GuiScreen {
 		this.panorama.render(partialTicks);
 		int i = 274;
 		int j = this.width / 2 - 120;
-		int k = 30;
+		int k = 30; //GuiMainMenu
 		this.mc.getTextureManager().bindTexture(new ResourceLocation("textures/gui/title/background/panorama_overlay.png"));
 		drawScaledCustomSizeModalRect(0, 0, 0.0F, 0.0F, 16, 128, this.width, this.height, 16.0F, 128.0F);
 		this.mc.getTextureManager().bindTexture(TALECRAFT_TITLE_TEXTURES);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		drawModalRectWithCustomSizedTexture(j + 17, 30,0.0F, 0.0F, 0, 0, 212, 48);
+		drawTexturedModalRect(j + 17, 30, 0, 0, 212, 48);
 		super.render(mouseX, mouseY, partialTicks);
 	}
 
