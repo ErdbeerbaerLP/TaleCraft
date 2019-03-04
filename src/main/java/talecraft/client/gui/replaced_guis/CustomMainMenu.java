@@ -44,14 +44,13 @@ public class CustomMainMenu extends GuiScreen {
 	private final RenderSkybox panorama = new RenderSkybox(new RenderSkyboxCube(new ResourceLocation("textures/gui/title/background/panorama")));
 
 	public CustomMainMenu() {
-
 		this.viewportTexture = new DynamicTexture(256, 256, false);
 		TaleCraft.lastVisitedWorld = null;
 	}
 
 	//GuiMainMenu
 	@Override
-	public void initGui() {
+	protected void initGui() {
 		TaleCraft.setPresence("In Main Menu", "talecraft");
 		File savesDir = new File(this.mc.gameDir, "saves");
 		final String[] savesList = savesDir.list();
@@ -59,7 +58,7 @@ public class CustomMainMenu extends GuiScreen {
 			if(s.startsWith(".TC")) continue;
 			boolean type = !s.contains("@SAV");
 //			mc.displayGuiScreen(new CrashQuestion());
-			return;
+			break;
 		}
 		int j = this.height / 4 + 48;
 		this.addButton(createMapButton = new GuiButtonExt(1, this.width / 2 - 100, j, "Create new Map") {
@@ -103,6 +102,8 @@ public class CustomMainMenu extends GuiScreen {
 			}
 		});
 		//		downloadMapButton.enabled = false;
+		createMapButton.enabled = false;
+		loadMapButton.enabled = false;
 	}
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
@@ -118,7 +119,11 @@ public class CustomMainMenu extends GuiScreen {
 		drawTexturedModalRect(j + 17, 30, 0, 0, 212, 48);
 		super.render(mouseX, mouseY, partialTicks);
 	}
-
+@Override
+public void tick() {
+	// TODO Auto-generated method stub
+	super.tick();
+}
 /*
 
 	@Override
