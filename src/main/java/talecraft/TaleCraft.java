@@ -44,7 +44,7 @@ public class TaleCraft {
 		//Register commands...
 	}
 	public void commonSetup(FMLCommonSetupEvent event) {
-		
+		TaleCraftTabs.init();
 	}
 	public void clientSetup(FMLClientSetupEvent event) {
 
