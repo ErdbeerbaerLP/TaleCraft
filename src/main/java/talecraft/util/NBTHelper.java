@@ -2,7 +2,7 @@ package talecraft.util;
 
 import java.util.Arrays;
 
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,8 +19,8 @@ import net.minecraftforge.common.util.Constants.NBT;
 public class NBTHelper {
 
 	public static final NBTTagCompound getOrCreate(NBTTagCompound parent, String name) {
-		if(parent.hasKey(name, parent.getId())) {
-			return parent.getCompoundTag(name);
+		if(parent.hasKey(name)) {
+			return parent.getCompound(name);
 		} else {
 			NBTTagCompound compound = new NBTTagCompound();
 			parent.setTag(name, compound);
@@ -29,8 +29,8 @@ public class NBTHelper {
 	}
 
 	public static NBTTagCompound getOrNull(NBTTagCompound parent, String name) {
-		if(parent.hasKey(name, parent.getId())) {
-			return parent.getCompoundTag(name);
+		if(parent.hasKey(name)) {
+			return parent.getCompound(name);
 		} else {
 			return null;
 		}
@@ -45,7 +45,7 @@ public class NBTHelper {
 	private static void asJson(NBTTagCompound compound, StringBuilder builder) {
 		builder.append('{');
 
-		for(Object keyObject : compound.getKeySet()) {
+		for(Object keyObject : compound.keySet()) {
 			String key = (String)keyObject;
 
 			builder.append(key);
@@ -67,7 +67,7 @@ public class NBTHelper {
 	private static void asJson(NBTTagList tag, StringBuilder builder) {
 		builder.append('[');
 
-		for(int i = 0; i < tag.tagCount(); i++) {
+		for(int i = 0; i < tag.size(); i++) {
 			asJson(tag.get(i), builder);
 			builder.append(", ");
 		}
@@ -82,7 +82,7 @@ public class NBTHelper {
 		builder.append(']');
 	}
 
-	private static void asJson(NBTBase tag, StringBuilder builder) {
+	private static void asJson(INBTBase tag, StringBuilder builder) {
 		switch(tag.getId()) {
 		case NBT.TAG_BYTE: builder.append(((NBTTagByte)tag).getByte()).append('b'); break;
 		case NBT.TAG_SHORT: builder.append(((NBTTagShort)tag).getByte()).append('b'); break;

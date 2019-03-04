@@ -8,8 +8,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockStoneBrick.EnumType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
@@ -18,9 +16,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -92,7 +90,7 @@ public class BombExplosion{ //The same thing as a normal explosion, except it do
                         d5 = d5 / d13;
                         d7 = d7 / d13;
                         d9 = d9 / d13;
-                        double d14 = (double)this.worldObj.getBlockDensity(vec3d, entity.getEntityBoundingBox());
+                        double d14 = (double)this.worldObj.getBlockDensity(vec3d, entity.getBoundingBox());
                         double d10 = (1.0D - d12) * d14;
                         entity.attackEntityFrom(DamageSource.causeExplosionDamage(explosion), 7.5f);
                         double d11 = 1.0D;
@@ -108,7 +106,7 @@ public class BombExplosion{ //The same thing as a normal explosion, except it do
                         if (entity instanceof EntityPlayer){
                             EntityPlayer entityplayer = (EntityPlayer)entity;
 
-                            if (!entityplayer.isSpectator() && (!entityplayer.isCreative() || !entityplayer.capabilities.isFlying)){
+                            if (!entityplayer.isSpectator() && (!entityplayer.isCreative() || entityplayer.onGround)){
                                 this.playerKnockbackMap.put(entityplayer, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
                             }
                         }
@@ -124,7 +122,7 @@ public class BombExplosion{ //The same thing as a normal explosion, except it do
         		for(int sz = -1; sz <= 1; sz++){
         			BlockPos pos = new BlockPos(sx + explosionX, sy + explosionY, sz + explosionZ);
         			IBlockState state = worldObj.getBlockState(pos);
-        			if(state != null && state.getBlock() == Blocks.STONEBRICK && state.getValue(BlockStoneBrick.VARIANT) == EnumType.CRACKED){
+        			if(state != null && state.getBlock() == Blocks.CRACKED_STONE_BRICKS){
         				origBlocks.add(pos);
         			}
         		}
@@ -146,7 +144,7 @@ public class BombExplosion{ //The same thing as a normal explosion, except it do
         }
         
         for(BlockPos pos : destroyBlocks){
-        	worldObj.setBlockToAir(pos);
+        	worldObj.destroyBlock(pos, false);
         }
     }
     
@@ -159,7 +157,7 @@ public class BombExplosion{ //The same thing as a normal explosion, except it do
     	int added = 0;
     	for(BlockPos side : sides){
     		IBlockState state = worldObj.getBlockState(side);
-			if(state != null && state.getBlock() == Blocks.STONEBRICK && state.getValue(BlockStoneBrick.VARIANT) == EnumType.CRACKED){
+			if(state != null && state.getBlock() == Blocks.CRACKED_STONE_BRICKS){
 				if(!destroyBlocks.contains(side)){
 					destroyBlocks.add(side);
 					added++;
@@ -172,17 +170,18 @@ public class BombExplosion{ //The same thing as a normal explosion, except it do
     /**
      * Does the second part of the explosion (sound, particles, drop spawn)
      */
-    public void doExplosionB(boolean spawnParticles)
+    @SuppressWarnings("deprecation")
+	public void doExplosionB(boolean spawnParticles)
     {
         this.worldObj.playSound((EntityPlayer)null, this.explosionX, this.explosionY, this.explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
         if (this.explosionSize >= 2.0F && this.isSmoking)
         {
-            this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
+            this.worldObj.spawnParticle(Particles.EXPLOSION_EMITTER, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D);
         }
         else
         {
-            this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
+            this.worldObj.spawnParticle(Particles.EXPLOSION, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D);
         }
 
         if (this.isSmoking)
@@ -209,18 +208,18 @@ public class BombExplosion{ //The same thing as a normal explosion, except it do
                     d3 = d3 * d7;
                     d4 = d4 * d7;
                     d5 = d5 * d7;
-                    this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5, new int[0]);
-                    this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
+                    this.worldObj.spawnParticle(Particles.EXPLOSION, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+                    this.worldObj.spawnParticle(Particles.SMOKE, d0, d1, d2, d3, d4, d5);
                 }
 
                 if (iblockstate.getMaterial() != Material.AIR)
                 {
                     if (block.canDropFromExplosion(explosion))
                     {
-                        block.dropBlockAsItemWithChance(this.worldObj, blockpos, this.worldObj.getBlockState(blockpos), 1.0F / this.explosionSize, 0);
+                        block.dropBlockAsItemWithChance(this.worldObj.getBlockState(blockpos), worldObj, blockpos, 1.0F / this.explosionSize, 0);
                     }
 
-                    block.onBlockExploded(this.worldObj, blockpos, explosion);
+                    block.onBlockExploded(this.worldObj.getBlockState(blockpos), this.worldObj, blockpos, explosion);
                 }
             }
         }
@@ -229,7 +228,7 @@ public class BombExplosion{ //The same thing as a normal explosion, except it do
         {
             for (BlockPos blockpos1 : this.affectedBlockPositions)
             {
-                if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0)
+                if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullCube() && this.explosionRNG.nextInt(3) == 0)
                 {
                     this.worldObj.setBlockState(blockpos1, Blocks.FIRE.getDefaultState());
                 }

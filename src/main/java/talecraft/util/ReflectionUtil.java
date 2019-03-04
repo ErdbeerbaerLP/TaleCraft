@@ -11,14 +11,14 @@ import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.gui.GuiListWorldSelectionEntry;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSummary;
-import net.minecraftforge.fml.common.eventhandler.IEventListener;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.IEventListener;
 
 public class ReflectionUtil {
-	
+
 	private static HashMap<GuiListWorldSelectionEntry, File> worldfolder = new HashMap<GuiListWorldSelectionEntry, File>();
-	
+
 	public static File getWorldFolderFromSelection(GuiListWorldSelectionEntry entry){
 		if(worldfolder.containsKey(entry)){
 			return worldfolder.get(entry);
@@ -41,9 +41,9 @@ public class ReflectionUtil {
 		}
 		return null;
 	}
-	
+
 	private static Map<World, List<IEventListener>> eventlisteners = new HashMap<World, List<IEventListener>>();
-	
+
 	@SuppressWarnings("unchecked")
 	public static List<IEventListener> getEventListeners(World world){
 		if(eventlisteners.containsKey(world)) return eventlisteners.get(world);
@@ -56,7 +56,7 @@ public class ReflectionUtil {
 					break;
 				}
 			}
-			
+
 			eventlisteners.put(world, list);
 			return list;
 		}catch(Exception e){
@@ -64,9 +64,9 @@ public class ReflectionUtil {
 		}
 		return null;
 	}
-	
+
 	private static Map<GuiListWorldSelectionEntry, WorldSummary> worldSummaries = new HashMap<GuiListWorldSelectionEntry, WorldSummary>();
-	
+
 	public static WorldSummary getWorldSummary(GuiListWorldSelectionEntry world){
 		if(worldSummaries.containsKey(world)) return worldSummaries.get(world);
 		try{
@@ -85,10 +85,10 @@ public class ReflectionUtil {
 		}
 		return null;
 	}
-	
-	@SideOnly(Side.CLIENT)
+
+	@OnlyIn(Dist.CLIENT)
 	public static void replaceMusicTicker(){
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		try {
 			Field[] fields = Minecraft.class.getDeclaredFields();
 			Field musicTickerF = null;
@@ -108,5 +108,5 @@ public class ReflectionUtil {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

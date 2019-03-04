@@ -1,6 +1,7 @@
 package talecraft.util;
 
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
+import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -15,9 +16,9 @@ public class RecursiveNBTIterator {
 		if(parent == null) return;
 		consumer.consume(depth+1, "<compound>", parent, null);
 
-		for(Object keyObject : parent.getKeySet()) {
+		for(Object keyObject : parent.keySet()) {
 			String key = (String)keyObject;
-			NBTBase value = parent.getTag(key);
+			INBTBase value = parent.getTag(key);
 
 			consumer.consume(depth+1, key, value, parent);
 
@@ -28,8 +29,8 @@ public class RecursiveNBTIterator {
 			if(value instanceof NBTTagList) {
 				NBTTagList list = (NBTTagList) value;
 				if(list.getTagType() == NBT.TAG_COMPOUND) {
-					for(int i = 0; i < list.tagCount(); i++) {
-						NBTTagCompound compound = list.getCompoundTagAt(i);
+					for(int i = 0; i < list.size(); i++) {
+						NBTTagCompound compound = list.getCompound(i);
 						iterate(compound, consumer, depth+1);
 					}
 				}
@@ -39,7 +40,7 @@ public class RecursiveNBTIterator {
 	}
 
 	public static interface NBTTreeConsumer {
-		public void consume(int depth, String name, NBTBase tag, NBTTagCompound parent);
+		public void consume(int depth, String name, INBTBase tag, NBTTagCompound parent);
 	}
 
 }

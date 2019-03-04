@@ -88,22 +88,22 @@ public class UndoTask {
 			taskTag.setString("time", task.time.toString());
 			taskTag.setTag("before", task.before.toNBT());
 			taskTag.setTag("after", task.after.toNBT());
-			list.appendTag(taskTag);
+			list.add(taskTag);
 		}
 		tag.setTag("list", list);
 		return tag;
 	}
 	
 	public static void loadFromNBT(NBTTagCompound tag){
-		NBTTagList list = tag.getTagList("list", tag.getId());
+		NBTTagList list = tag.getList("list", tag.getId());
 		TASKS.clear();
-		for(int i = 0; i < list.tagCount(); i++){
-			NBTTagCompound taskTag = list.getCompoundTagAt(i);
+		for(int i = 0; i < list.size(); i++){
+			NBTTagCompound taskTag = list.getCompound(i);
 			String tool = taskTag.getString("tool");
 			String user = taskTag.getString("user");
 			String time = taskTag.getString("time");
-			UndoRegion before = UndoRegion.fromNBT(taskTag.getCompoundTag("before"));
-			UndoRegion after = UndoRegion.fromNBT(taskTag.getCompoundTag("after"));
+			UndoRegion before = UndoRegion.fromNBT(taskTag.getCompound("before"));
+			UndoRegion after = UndoRegion.fromNBT(taskTag.getCompound("after"));
 			UndoTask task = new UndoTask(before, after, tool, user);
 			task.time = OffsetDateTime.parse(time);
 			TASKS.add(task);

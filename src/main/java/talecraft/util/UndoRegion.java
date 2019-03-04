@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 
 public class UndoRegion{
@@ -65,30 +67,30 @@ public class UndoRegion{
 	
 	public NBTTagCompound toNBT(){
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger("x", xPos);
-		tag.setInteger("y", yPos);
-		tag.setInteger("z", zPos);
+		tag.setInt("x", xPos);
+		tag.setInt("y", yPos);
+		tag.setInt("z", zPos);
 		
-		tag.setInteger("width", width);
-		tag.setInteger("height", height);
-		tag.setInteger("length", length);
+		tag.setInt("width", width);
+		tag.setInt("height", height);
+		tag.setInt("length", length);
 		
-		tag.setInteger("world", world.provider.getDimension());
+		tag.setInt("world", world.getDimension().getType().getId());
 		
 		NBTTagList list = new NBTTagList();
 		for(IBlockState state : blocks){
-			list.appendTag(new NBTTagInt(Block.getStateId(state)));
+			list.add(new NBTTagInt(Block.getStateId(state)));
 		}
 		tag.setTag("blocks", list);
 		return tag;
 	}
 	
 	public static UndoRegion fromNBT(NBTTagCompound tag){
-		UndoRegion ureg = new UndoRegion(tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z"), tag.getInteger("width"), tag.getInteger("height"), tag.getInteger("length"), DimensionManager.getWorld(tag.getInteger("world")));
-		NBTTagList list = tag.getTagList("blocks", 3);
-		IBlockState[] blocks = new IBlockState[list.tagCount()];
-		for(int i = 0; i < list.tagCount(); i++){
-			blocks[i] = Block.getStateById(list.getIntAt(i));
+		UndoRegion ureg = new UndoRegion(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"), tag.getInt("width"), tag.getInt("height"), tag.getInt("length"), DimensionManager.getWorld(Minecraft.getInstance().world.getServer(), DimensionType.getById(tag.getInt("world")), true, true));
+		NBTTagList list = tag.getList("blocks", 3);
+		IBlockState[] blocks = new IBlockState[list.size()];
+		for(int i = 0; i < list.size(); i++){
+			blocks[i] = Block.getStateById(list.getInt(i));
 		}
 		ureg.blocks = blocks;
 		return ureg;
