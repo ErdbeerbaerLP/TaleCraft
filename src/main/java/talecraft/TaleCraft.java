@@ -32,7 +32,7 @@ public class TaleCraft {
 		MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
 
 		//Register event handlers
-//		MinecraftForge.EVENT_BUS.register(TaleCraftEvents.class);
+		MinecraftForge.EVENT_BUS.register(TaleCraftEvents.class);
 	}
 	public void serverStarting(FMLServerStartingEvent evt)
 	{
