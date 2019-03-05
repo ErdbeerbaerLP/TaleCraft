@@ -2,12 +2,7 @@ package talecraft;
 
 import java.util.logging.Logger;
 
-import net.minecraft.block.material.EnumPushReaction;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -26,8 +21,8 @@ public class TaleCraft {
 	public static World lastVisitedWorld;
 	public static Minecraft mc = Minecraft.getInstance();
 //	public static GlobalScriptManager globalScriptManager;
-	public static final Material MATERIAL_ADMINIUM = new Material(MaterialColor.AIR, false, true, false, true, false, false, false, EnumPushReaction.BLOCK);
 	public TaleCraft() {
+		TaleCraftRegistered.load();
 		//Register loading state listeners
 		MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
 		MinecraftForge.EVENT_BUS.addListener(this::commonSetup);
@@ -37,14 +32,13 @@ public class TaleCraft {
 		MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
 
 		//Register event handlers
-		MinecraftForge.EVENT_BUS.register(TaleCraftEvents.class);
+//		MinecraftForge.EVENT_BUS.register(TaleCraftEvents.class);
 	}
 	public void serverStarting(FMLServerStartingEvent evt)
 	{
 		//Register commands...
 	}
 	public void commonSetup(FMLCommonSetupEvent event) {
-		TaleCraftTabs.init();
 	}
 	public void clientSetup(FMLClientSetupEvent event) {
 

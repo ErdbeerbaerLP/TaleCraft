@@ -1,12 +1,9 @@
 package talecraft;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.audio.Sound;
 import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiCustomizeSkin;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiLanguage;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
@@ -16,7 +13,6 @@ import net.minecraft.client.gui.GuiScreenResourcePacks;
 import net.minecraft.client.gui.GuiSnooper;
 import net.minecraft.client.gui.GuiVideoSettings;
 import net.minecraft.client.gui.ScreenChatOptions;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
@@ -24,15 +20,18 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.gui.GuiModList;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import talecraft.blocks.overrides.UnderwaterBarrier;
 import talecraft.client.gui.replaced_guis.CustomMainMenu;
-
+@EventBusSubscriber(bus=Bus.MOD)
 public class TaleCraftEvents {
 	
 	// REGISTRIES
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> ev) {
-		
+		ev.getRegistry().register(new UnderwaterBarrier(Block.Properties.create(Material.BARRIER).hardnessAndResistance(-1.0F, 3600000.8F)));
 	}
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> ev) {

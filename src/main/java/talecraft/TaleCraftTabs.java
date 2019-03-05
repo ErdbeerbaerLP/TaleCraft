@@ -9,11 +9,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class TaleCraftTabs {
-	// Empty stub method for 'touching' the class
-	public static final void init() {}
 
-	public static ItemGroup tab_TaleCraftTab = new ItemGroup("talecraftTab") {
-		
+	public static class TAB_TC extends ItemGroup{
+
+		public TAB_TC() {
+			super("talecraft_main");
+			// TODO Auto-generated constructor stub
+		}
 		@Override
 		public ItemStack createIcon() {
 //			return new ItemStack(TaleCraftItems.filler);
@@ -26,38 +28,48 @@ public class TaleCraftTabs {
 			// Add useful items from 'Vanilla'
 			items.add(new ItemStack(Blocks.COMMAND_BLOCK));
 			items.add(new ItemStack(Blocks.SPAWNER));
-			items.add(new ItemStack(Blocks.BARRIER));
+			items.add(new ItemStack(TaleCraftRegistered.WATER_BARRIER));
 			items.add(new ItemStack(Blocks.STRUCTURE_BLOCK));
 			super.fill(items);
 		}
-	};
+		
+	}
+	public static class TAB_TC_DECO extends ItemGroup{
 
-	public static ItemGroup tab_TaleCraftDecorationTab = new ItemGroup("talecraftDecoTab") {
+		public TAB_TC_DECO() {
+			super("talecraft_deco");
+			// TODO Auto-generated constructor stub
+		}
 		@Override
 		public ItemStack createIcon() {
 			return new ItemStack(Items.APPLE, 1);
 		}
 		
-		@OnlyIn(Dist.CLIENT)
-		public int getIconItemDamage() {
-			return (int) ((System.nanoTime() / 100D) % 16);
+	}
+	public static class TAB_TC_WORLD extends ItemGroup{
+
+		public TAB_TC_WORLD() {
+			super("talecraft_world");
+			// TODO Auto-generated constructor stub
 		}
-	};
-	
-	public static ItemGroup tab_TaleCraftWorldTab = new ItemGroup("talecraftWorldTab") {
 		@Override
 		public ItemStack createIcon() {
-//			return new ItemStack(TaleCraftItems.goldKey);
-			return new ItemStack(Items.APPLE);
+			return new ItemStack(Items.APPLE, 1);
 		}
-	};
-	
-	public static ItemGroup tab_TaleCraftWeaponTab = new ItemGroup("talecraftWeaponTab") {
+		
+	}
+	public static class TAB_TC_WEAPON extends ItemGroup{
+
+		public TAB_TC_WEAPON() {
+			super("talecraft_weapons");
+			// TODO Auto-generated constructor stub
+		}
 		@Override
 		public ItemStack createIcon() {
-//			return new ItemStack(TaleCraftItems.bomb);
-			return new ItemStack(Items.APPLE);
+			return new ItemStack(Items.APPLE, 1);
 		}
-	};
+		
+	}
+	
 
 }

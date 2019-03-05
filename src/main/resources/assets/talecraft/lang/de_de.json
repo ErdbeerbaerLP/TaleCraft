@@ -1,0 +1,13 @@
+{
+    "_blocks": "",
+    "_items": "",
+    "_chat": "",
+    "_gui": "",
+    "_tabs":"",
+    "itemGroup.talecraft_main": "TaleCraft Utensilien",
+    "itemGroup.talecraft_deco": "TaleCraft Deko",
+    "itemGroup.talecraft_world": "TaleCraft Welt",
+    "itemGroup.talecraft_weapons": "TaleCraft Waffen",
+    "_iteminfo":"",
+    "lore.barrier.waterloggable": "Dies kann nun Unterwasser platziert werden!"
+}
