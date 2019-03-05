@@ -15,6 +15,8 @@ import net.minecraft.client.gui.GuiVideoSettings;
 import net.minecraft.client.gui.ScreenChatOptions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -35,7 +37,7 @@ public class TaleCraftEvents {
 	}
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> ev) {
-		
+		ev.getRegistry().register(new ItemBlock(TaleCraftRegistered.WATER_BARRIER, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "barrier"));
 	}
 	@SubscribeEvent
 	public static void registerEntityType(RegistryEvent.Register<EntityType<?>> ev) {

@@ -9,5 +9,5 @@
     "itemGroup.talecraft_world": "TaleCraft World",
     "itemGroup.talecraft_weapons": "TaleCraft Weapons",
     "_iteminfo":"",
-    "lore.barrier.waterloggable": "This can now be placed underwater"
+    "lore.waterloggable": "This can be placed underwater"
 }

@@ -55,7 +55,7 @@ public class UnderwaterBarrier extends Block{
 			ITooltipFlag flagIn) {
 		// TODO Auto-generated method stub
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		tooltip.add(new TextComponentTranslation("barrier.waterloggable"));
+		tooltip.add(new TextComponentTranslation("lore.waterloggable"));
 	}
 }
 
