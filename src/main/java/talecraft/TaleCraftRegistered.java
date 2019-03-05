@@ -4,10 +4,14 @@ import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
-import talecraft.blocks.overrides.UnderwaterBarrier;
+import talecraft.blocks.UnderwaterBarrier;
+import talecraft.blocks.tileentity.TileEntityBarrier;
 
 public class TaleCraftRegistered {
+	
+
 	/**
 	 * Load this class
 	 */
@@ -30,6 +34,8 @@ public class TaleCraftRegistered {
 
 	// ----- TileEntities -----
 
+	public static TileEntityType<TileEntityBarrier> TE_BARRIER;
+	
 	// ----- Entities -----
 
 	// ----- Materials -----

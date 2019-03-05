@@ -1,21 +1,29 @@
 package talecraft.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.init.Fluids;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 
 @SuppressWarnings("deprecation")
-public class TCWaterloggableBlock extends TCBlock{
+public class TCWaterloggableInvisBlock extends TCInvisibleBlock{
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-	public TCWaterloggableBlock() {
+	public TCWaterloggableInvisBlock() {
 		// TODO Auto-generated constructor stub
 	}
 	@Override
@@ -40,6 +48,14 @@ public class TCWaterloggableBlock extends TCBlock{
 	@Override
 	public IFluidState getFluidState(IBlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+	}
+	@Override
+	public void addInformation(ItemStack stack, IBlockReader worldIn, List<ITextComponent> tooltip,
+			ITooltipFlag flagIn) {
+		// TODO Auto-generated method stub
+		super.addInformation(stack, worldIn, tooltip, flagIn);
+		tooltip.add(new TextComponentString(""));
+		tooltip.add(new TextComponentTranslation("lore.waterloggable"));
 	}
 
 }

@@ -1,7 +1,6 @@
 package talecraft;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiCustomizeSkin;
 import net.minecraft.client.gui.GuiLanguage;
@@ -16,7 +15,6 @@ import net.minecraft.client.gui.ScreenChatOptions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -24,7 +22,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.gui.GuiModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import talecraft.blocks.overrides.UnderwaterBarrier;
+import talecraft.blocks.UnderwaterBarrier;
+import talecraft.blocks.tileentity.TileEntityBarrier;
 import talecraft.client.gui.replaced_guis.CustomMainMenu;
 @EventBusSubscriber(bus=Bus.MOD)
 public class TaleCraftEvents {
@@ -33,7 +32,7 @@ public class TaleCraftEvents {
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> ev) {
-		ev.getRegistry().register(new UnderwaterBarrier(Block.Properties.create(Material.BARRIER).hardnessAndResistance(-1.0F, 3600000.8F)));
+		ev.getRegistry().register(new UnderwaterBarrier());
 	}
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> ev) {
@@ -45,7 +44,7 @@ public class TaleCraftEvents {
 	}
 	@SubscribeEvent
 	public static void registerTileEntityTypes(RegistryEvent.Register<TileEntityType<?>> ev) {
-		
+		TaleCraftRegistered.TE_BARRIER = TileEntityType.register(TaleCraft.MOD_ID+":te_barrier", TileEntityType.Builder.create(TileEntityBarrier::new)); 
 	}
 	
 	

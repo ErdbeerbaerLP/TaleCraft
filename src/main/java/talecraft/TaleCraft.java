@@ -4,6 +4,8 @@ import java.util.logging.Logger;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -12,6 +14,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import talecraft.client.renderer.ClientRenderer;
 
 @Mod(TaleCraft.MOD_ID)
 public class TaleCraft {
@@ -41,7 +44,7 @@ public class TaleCraft {
 	public void commonSetup(FMLCommonSetupEvent event) {
 	}
 	public void clientSetup(FMLClientSetupEvent event) {
-
+		ClientRenderer.regsiterAll();
 	}
 	public void serverSetup(FMLDedicatedServerSetupEvent event) {
 
@@ -55,6 +58,7 @@ public class TaleCraft {
 	/**
 	 * @return TRUE, if the client is in build-mode (aka: creative-mode), FALSE if not.
 	 **/
+	@OnlyIn(Dist.CLIENT)
 	public static boolean isBuildMode() {
 		return mc.playerController != null && mc.playerController.isInCreativeMode();
 	}
@@ -72,6 +76,9 @@ public class TaleCraft {
 	public static void setPresence(String title, String subtitle, String iconKey) {
 		//Unused for now
 	}
+
+	
+	
 
 
 }
