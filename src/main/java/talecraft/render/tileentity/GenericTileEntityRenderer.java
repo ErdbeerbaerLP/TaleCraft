@@ -216,9 +216,9 @@ public class GenericTileEntityRenderer<T extends TileEntity> extends TileEntityR
 		//		GlStateManager.popMatrix();
 		//	}
 		//
-		//	GlStateManager.enableLighting();
-		//	GlStateManager.enableCull();
-		//
+			GlStateManager.enableLighting();
+			GlStateManager.enableCull();
+		
 	}
 
 }
