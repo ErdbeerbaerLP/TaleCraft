@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -14,7 +15,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import talecraft.blocks.tileentity.TileEntityBarrier;
 import talecraft.client.renderer.ClientRenderer;
+import talecraft.render.tileentity.GenericTileEntityRenderer;
 
 @Mod(TaleCraft.MOD_ID)
 public class TaleCraft {
@@ -27,12 +31,11 @@ public class TaleCraft {
 	public TaleCraft() {
 		TaleCraftRegistered.load();
 		//Register loading state listeners
-		MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
-		MinecraftForge.EVENT_BUS.addListener(this::commonSetup);
-		MinecraftForge.EVENT_BUS.addListener(this::clientSetup);
-		MinecraftForge.EVENT_BUS.addListener(this::serverSetup);
-		MinecraftForge.EVENT_BUS.addListener(this::loadComplete);
-		MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStarting);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverSetup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
 
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(TaleCraftEvents.class);
@@ -44,6 +47,7 @@ public class TaleCraft {
 	public void commonSetup(FMLCommonSetupEvent event) {
 	}
 	public void clientSetup(FMLClientSetupEvent event) {
+		logger.info("Client Setup");
 		ClientRenderer.regsiterAll();
 	}
 	public void serverSetup(FMLDedicatedServerSetupEvent event) {
@@ -60,6 +64,7 @@ public class TaleCraft {
 	 **/
 	@OnlyIn(Dist.CLIENT)
 	public static boolean isBuildMode() {
+		logger.info("controller check:"+ mc.playerController);
 		return mc.playerController != null && mc.playerController.isInCreativeMode();
 	}
 //	public static ClientProxy asClient() {
