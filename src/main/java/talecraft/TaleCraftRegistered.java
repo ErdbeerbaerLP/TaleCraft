@@ -7,7 +7,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
 import talecraft.blocks.UnderwaterBarrier;
-import talecraft.blocks.tileentity.TileEntityBarrier;
+import talecraft.blocks.tileentity.*;
 
 public class TaleCraftRegistered {
 	
@@ -35,12 +35,14 @@ public class TaleCraftRegistered {
 	// ----- TileEntities -----
 
 	public static TileEntityType<TileEntityBarrier> TE_BARRIER;
+	public static TileEntityType<LightBlockTE> TE_LIGHT_BLOCK;
 	
 	// ----- Entities -----
 
 	// ----- Materials -----
 
 	public static final Material MATERIAL_ADMINIUM = new Material(MaterialColor.AIR, false, true, false, true, false, false, false, EnumPushReaction.BLOCK);
+	
 
 
 

@@ -25,6 +25,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import talecraft.blocks.UnderwaterBarrier;
 import talecraft.blocks.tileentity.TileEntityBarrier;
 import talecraft.client.gui.replaced_guis.CustomMainMenu;
+import talecraft.blocks.tileentity.LightBlockTE;
 @EventBusSubscriber(bus=Bus.MOD)
 public class TaleCraftEvents {
 	
@@ -45,7 +46,8 @@ public class TaleCraftEvents {
 	@SubscribeEvent
 	public static void registerTileEntityTypes(RegistryEvent.Register<TileEntityType<?>> ev) {
 		TaleCraftRegistered.TE_BARRIER = TileEntityType.register(TaleCraft.MOD_ID+":te_barrier", TileEntityType.Builder.create(TileEntityBarrier::new)); 
-	}
+		TaleCraftRegistered.TE_LIGHT_BLOCK = TileEntityType.register(TaleCraft.MOD_ID+":te_light", TileEntityType.Builder.create(LightBlockTE::new)); 
+		}
 	
 	
 	
