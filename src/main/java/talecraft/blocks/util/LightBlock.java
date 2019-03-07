@@ -17,6 +17,7 @@ import talecraft.TaleCraft;
 import talecraft.blocks.TCITriggerableBlock;
 import talecraft.blocks.TCInvisibleBlock;
 import talecraft.blocks.tileentity.LightBlockTE;
+import talecraft.client.gui.blocks.GuiLightBlock;
 import talecraft.invoke.EnumTriggerState;
 
 public class LightBlock extends TCInvisibleBlock implements TCITriggerableBlock {

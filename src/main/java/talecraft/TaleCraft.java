@@ -3,12 +3,14 @@ package talecraft;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import com.google.common.base.Predicate;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -17,9 +19,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import talecraft.blocks.tileentity.TileEntityBarrier;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import talecraft.client.renderer.ClientRenderer;
-import talecraft.render.tileentity.GenericTileEntityRenderer;
+import talecraft.network.INetworkMessage;
 
 @Mod(TaleCraft.MOD_ID)
 public class TaleCraft {
@@ -29,6 +32,10 @@ public class TaleCraft {
 	public static final Random random = new Random();
 	public static World lastVisitedWorld;
 	public static Minecraft mc = Minecraft.getInstance();
+	private static final String protVersion = "1.0.0";
+	private static final Predicate<String> pred = (ver) -> {return ver.equals(protVersion);};
+	
+	public static SimpleChannel network = NetworkRegistry.newSimpleChannel(new ResourceLocation(TaleCraft.MOD_ID, "talecraft-net"), ()->{return protVersion;}, pred, pred);
 //	public static GlobalScriptManager globalScriptManager;
 	public TaleCraft() {
 		TaleCraftRegistered.load();
