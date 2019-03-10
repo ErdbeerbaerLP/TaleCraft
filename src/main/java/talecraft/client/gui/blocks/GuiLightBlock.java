@@ -73,6 +73,24 @@ public class GuiLightBlock extends GuiScreen {
 		drawString(fontRenderer, "Light @ "+ pos.getX()+" " + pos.getY() + " " + pos.getZ(), 2, 2, 16777215);
 		light_slider.render(mouseX, mouseY, partialTicks);
 	}
-	
+	@Override
+	public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+		// TODO Auto-generated method stub
+		light_slider.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+	}
+	@Override
+	public boolean mouseDragged(double p_mouseDragged_1_, double p_mouseDragged_3_, int p_mouseDragged_5_,
+			double p_mouseDragged_6_, double p_mouseDragged_8_) {
+		light_slider.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
+		return super.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_,
+				p_mouseDragged_8_);
+	}
+	@Override
+	public boolean mouseReleased(double p_mouseReleased_1_, double p_mouseReleased_3_, int p_mouseReleased_5_) {
+		// TODO Auto-generated method stub
+		light_slider.mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
+		return super.mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
+	}
 
 }
