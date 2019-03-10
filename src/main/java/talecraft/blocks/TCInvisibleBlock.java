@@ -23,12 +23,13 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReaderBase;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import talecraft.TaleCraftRegistered;
 
 @SuppressWarnings("deprecation")
 public abstract class TCInvisibleBlock extends TCBlock{
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public TCInvisibleBlock() {
-		// TODO Auto-generated constructor stub
+		super(Block.Properties.create(TaleCraftRegistered.MATERIAL_ADMINIUM).doesNotBlockMovement());
 	}
 	@Override
 	  public EnumBlockRenderType getRenderType(IBlockState iBlockState) {

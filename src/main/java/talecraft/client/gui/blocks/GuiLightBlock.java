@@ -57,7 +57,7 @@ public class GuiLightBlock extends GuiScreen {
 			@Override
 			public void onChangeSliderValue(GuiSlider slider) {
 				// TODO Auto-generated method stub
-				int newValue = (int) (slider.getValue() * 16);
+				int newValue = (int) (slider.getValue());
 				String commandString = ClientNetworkHandler.makeBlockCommand(pos);
 				NBTTagCompound commandData = new NBTTagCompound();
 				commandData.setString("command", "set");
@@ -66,6 +66,7 @@ public class GuiLightBlock extends GuiScreen {
 			}
 		};
 		light_slider = new GuiSlider(3, 2, 16, "Light: ", 0, 15, tileEntity.getLightValue(), sliderCallback);
+		light_slider.showDecimal = false;
 	}
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {

@@ -26,6 +26,12 @@ public class LightBlock extends TCInvisibleBlock implements TCITriggerableBlock 
 		setRegistryName(TaleCraft.MOD_ID, "lightblock");
 	}
 	@Override
+	public boolean isSolid(IBlockState state) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		// TODO Auto-generated method stub
 		return new LightBlockTE();

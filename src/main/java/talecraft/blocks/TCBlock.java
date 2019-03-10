@@ -16,6 +16,9 @@ public abstract class TCBlock extends BlockContainer{
 	public TCBlock() {
 		super(Block.Properties.create(TaleCraftRegistered.MATERIAL_ADMINIUM).sound(SoundType.STONE).hardnessAndResistance(-1f, 6000001.0F));
 	}
+	public TCBlock(Block.Properties prop) {
+		super(prop.sound(SoundType.STONE).hardnessAndResistance(-1f, 6000001.0F));
+	}
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
