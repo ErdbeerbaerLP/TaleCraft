@@ -22,8 +22,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.gui.GuiModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.registries.IForgeRegistry;
 import talecraft.blocks.UnderwaterBarrier;
 import talecraft.blocks.tileentity.TileEntityBarrier;
+import talecraft.blocks.util.LightBlock;
 import talecraft.client.gui.replaced_guis.CustomMainMenu;
 import talecraft.blocks.tileentity.LightBlockTE;
 @EventBusSubscriber(bus=Bus.MOD)
@@ -33,11 +35,17 @@ public class TaleCraftEvents {
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> ev) {
-		ev.getRegistry().register(new UnderwaterBarrier());
+		final IForgeRegistry<Block> reg = ev.getRegistry();
+		
+		reg.register(new UnderwaterBarrier());
+		reg.register(new LightBlock());
 	}
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> ev) {
-		ev.getRegistry().register(new ItemBlock(TaleCraftRegistered.WATER_BARRIER, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "barrier"));
+		final IForgeRegistry<Item> reg = ev.getRegistry();
+		
+		reg.register(new ItemBlock(TaleCraftRegistered.WATER_BARRIER, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "barrier"));
+		reg.register(new ItemBlock(TaleCraftRegistered.LIGHT_BLOCK, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "lightblock"));
 	}
 	@SubscribeEvent
 	public static void registerEntityType(RegistryEvent.Register<EntityType<?>> ev) {

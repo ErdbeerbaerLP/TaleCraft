@@ -21,6 +21,10 @@ import talecraft.client.gui.blocks.GuiLightBlock;
 import talecraft.invoke.EnumTriggerState;
 
 public class LightBlock extends TCInvisibleBlock implements TCITriggerableBlock {
+	public LightBlock() {
+		// TODO Auto-generated constructor stub
+		setRegistryName(TaleCraft.MOD_ID, "lightblock");
+	}
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		// TODO Auto-generated method stub

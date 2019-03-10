@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
 import talecraft.blocks.UnderwaterBarrier;
 import talecraft.blocks.tileentity.*;
+import talecraft.blocks.util.LightBlock;
 
 public class TaleCraftRegistered {
 	
@@ -30,8 +31,11 @@ public class TaleCraftRegistered {
 	@ObjectHolder(TaleCraft.MOD_ID+":barrier")
 	public static final UnderwaterBarrier WATER_BARRIER = null;
 	
+	@ObjectHolder(TaleCraft.MOD_ID+":lightblock")
+	public static final LightBlock LIGHT_BLOCK = null;
+	
 	// ----- Items -----
-
+	
 	// ----- TileEntities -----
 
 	public static TileEntityType<TileEntityBarrier> TE_BARRIER;

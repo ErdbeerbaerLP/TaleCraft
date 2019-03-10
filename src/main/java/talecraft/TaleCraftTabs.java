@@ -30,6 +30,7 @@ public class TaleCraftTabs {
 			items.add(new ItemStack(Blocks.SPAWNER));
 			items.add(new ItemStack(TaleCraftRegistered.WATER_BARRIER));
 			items.add(new ItemStack(Blocks.STRUCTURE_BLOCK));
+			items.add(new ItemStack(TaleCraftRegistered.LIGHT_BLOCK));
 			super.fill(items);
 		}
 		

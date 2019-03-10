@@ -1,7 +1,12 @@
 package talecraft.client;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiConfirmOpenLink;
 import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,59 +34,75 @@ public class ClientNetworkHandler {
 		}
 
 		if(command.equals("client.debug.track.invoke")) {
-			proxy.getInvokeTracker().trackInvoke(data);
+//			proxy.getInvokeTracker().trackInvoke(data);
 			return;
 		}
 
-		if(command.equals("client.gui.editor.entity")) {
-			final UUID uuid = UUID.fromString(data.getString("entityUUID"));
-			final NBTTagCompound entity = data.getCompound("entityData");
-
-			// Open the GUI in the next tick.
-			proxy.sheduleClientTickTask(new Runnable() {
-				@Override public void run() {
-					RemoteEntityDataLink dataLink = new RemoteEntityDataLink() {
-						UUID entityUUID = uuid;
-						@Override public void updateData(NBTTagCompound entityData) {
-							NBTTagCompound compound = new NBTTagCompound();
-							compound.setString("entityUUID", entityUUID.toString());
-							compound.setTag("entityData", entityData);
-
-							String cmd = "server.data.entity.merge";
-							StringNBTCommandPacket command = new StringNBTCommandPacket(cmd, compound);
-							TaleCraft.network.sendToServer(command);
-						}
-					};
-					ClientProxy.mc.displayGuiScreen(new GuiEntityEditor(entity, dataLink));
-				}
-			});
-			return;
-		}
+//		if(command.equals("client.gui.editor.entity")) {
+//			final UUID uuid = UUID.fromString(data.getString("entityUUID"));
+//			final NBTTagCompound entity = data.getCompound("entityData");
+//
+//			// Open the GUI in the next tick.
+//			Minecraft.getInstance().addScheduledTask(new Runnable() {
+//				@Override public void run() {
+//					RemoteEntityDataLink dataLink = new RemoteEntityDataLink() {
+//						UUID entityUUID = uuid;
+//						@Override public void updateData(NBTTagCompound entityData) {
+//							NBTTagCompound compound = new NBTTagCompound();
+//							compound.setString("entityUUID", entityUUID.toString());
+//							compound.setTag("entityData", entityData);
+//
+//							String cmd = "server.data.entity.merge";
+//							StringNBTCommandPacket command = new StringNBTCommandPacket(cmd, compound);
+//							TaleCraft.network.sendToServer(command);
+//						}
+//					};
+//					ClientProxy.mc.displayGuiScreen(new GuiEntityEditor(entity, dataLink));
+//				}
+//			});
+//			return;
+//		}
 
 		if(command.equals("client.gui.openurl")) {
 			final String url = data.getString("url");
 
 			// This is possibly a stupid idea...
 			if(data.getBoolean("force")) {
-				Sys.openURL(url);
+				try {
+					Desktop.getDesktop().browse(new URI(url));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return;
 			}
 
 			// Open the GUI in the next tick.
-			proxy.sheduleClientTickTask(new Runnable() {
+			Minecraft.getInstance().addScheduledTask(new Runnable() {
 				@Override public void run() {
 					GuiConfirmOpenLink gui = new GuiConfirmOpenLink(new GuiYesNoCallback() {
-						@Override public void confirmClicked(boolean result, int id) {
+						@Override public void confirmResult(boolean result, int id) {
 							if (id == 31102009) {
 								if (result) {
-									Sys.openURL(url);
+									try {
+										Desktop.getDesktop().browse(new URI(url));
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (URISyntaxException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 								}
-								ClientProxy.mc.displayGuiScreen(null);
+								Minecraft.getInstance().displayGuiScreen(null);
 							}
 						}
 					}, url, 31102009, true);
 
-					ClientProxy.mc.displayGuiScreen(gui);
+					Minecraft.getInstance().displayGuiScreen(gui);
 				}
 			});
 			return;
@@ -89,29 +110,29 @@ public class ClientNetworkHandler {
 
 
 
-		if(command.equals("item.copy.trigger")) {
-			proxy.sheduleClientTickTask(new Runnable() {
-				@Override
-				public void run() {
-					CopyItem copy = TaleCraftItems.copy;
-					// ItemStack stack = new ItemStack(copy);
-					copy.onItemRightClick(ClientProxy.mc.world, ClientProxy.mc.player, EnumHand.MAIN_HAND);
-				}
-			});
-		}
+//		if(command.equals("item.copy.trigger")) {
+//			Minecraft.getInstance().addScheduledTask(new Runnable() {
+//				@Override
+//				public void run() {
+//					CopyItem copy = TaleCraftItems.copy;
+//					// ItemStack stack = new ItemStack(copy);
+//					copy.onItemRightClick(ClientProxy.mc.world, ClientProxy.mc.player, EnumHand.MAIN_HAND);
+//				}
+//			});
+//		}
 
-		if(command.equals("client.render.renderable.push")) {
-			ITemporaryRenderable renderable = PushRenderableFactory.parsePushRenderableFromNBT(data);
-			if(renderable != null && proxy.isBuildMode()) {
-				proxy.getRenderer().addTemporaryRenderer(renderable);
-			}
-			return;
-		}
+//		if(command.equals("client.render.renderable.push")) {
+//			ITemporaryRenderable renderable = PushRenderableFactory.parsePushRenderableFromNBT(data);
+//			if(renderable != null && proxy.isBuildMode()) {
+//				proxy.getRenderer().addTemporaryRenderer(renderable);
+//			}
+//			return;
+//		}
 
-		if(command.equals("client.render.renderable.clear")) {
-			proxy.getRenderer().clearTemporaryRenderers();
-			return;
-		}
+//		if(command.equals("client.render.renderable.clear")) {
+//			proxy.getRenderer().clearTemporaryRenderers();
+//			return;
+//		}
 
 		//		if(command.equals("switchShader") && Boolean.FALSE.booleanValue()) {
 		//			final String sh = data.getString("shaderName");
