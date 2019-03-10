@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -29,6 +30,10 @@ public abstract class TCInvisibleBlock extends TCBlock{
 	public TCInvisibleBlock() {
 		// TODO Auto-generated constructor stub
 	}
+	@Override
+	  public EnumBlockRenderType getRenderType(IBlockState iBlockState) {
+	    return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	  }
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
 		builder.add(WATERLOGGED);

@@ -154,7 +154,7 @@ public class ServerHandler {
 			TileEntity entity = world.getTileEntity(position);
 
 			if(entity != null) {
-				// TaleCraft.logger.info("(block command) " + position + " -> " + commandPacket.data);
+				TaleCraft.logger.info("(block command) " + position + " -> " + message.data);
 
 				if(entity instanceof TCIBlockCommandReceiver) {
 					((TCIBlockCommandReceiver) entity).commandReceived(message.data.getString("command"), message.data);

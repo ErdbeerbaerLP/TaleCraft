@@ -1,15 +1,15 @@
 package talecraft.util;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 public class PlayerHelper {
 
+	
 	public static final boolean isOp(EntityPlayerMP player) {
-		MinecraftServer server =Minecraft.getInstance().world.getServer();
-
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		
 		if(server.isSinglePlayer()) {
 			return true;
 		}
