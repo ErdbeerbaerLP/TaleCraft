@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
+import talecraft.server.ServerHandler;
 
 public class StringNBTCommandPacket{
 	public NBTTagCompound data;
@@ -33,7 +34,7 @@ public class StringNBTCommandPacket{
 		return buf;
 	}
 	public Object onMessageReceived(StringNBTCommandPacket a, Supplier<Context> b) {
-		
+		ServerHandler.handleSNBTCommand(b.get().getSender().connection, a);
 		return null;
 	}
 }

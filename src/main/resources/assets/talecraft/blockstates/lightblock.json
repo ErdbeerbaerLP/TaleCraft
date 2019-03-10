@@ -1,5 +1,5 @@
 {
   "variants" : {
-    "" : {"model" : "talecraft:lightblock"}
+    "" : {"model" : "talecraft:block/lightblock"}
   }
 }

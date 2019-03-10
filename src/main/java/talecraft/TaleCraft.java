@@ -54,6 +54,7 @@ public class TaleCraft {
 		//Register commands...
 	}
 	public void commonSetup(FMLCommonSetupEvent event) {
+		talecraft.network.NetworkRegistry.init();
 	}
 	public void clientSetup(FMLClientSetupEvent event) {
 		logger.info("Client Setup");
