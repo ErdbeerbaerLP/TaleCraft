@@ -35,6 +35,7 @@ public class TaleCraftEvents {
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> ev) {
+		TaleCraft.logger.info("Registering Blocks");
 		final IForgeRegistry<Block> reg = ev.getRegistry();
 		
 		reg.register(new UnderwaterBarrier());
@@ -42,6 +43,7 @@ public class TaleCraftEvents {
 	}
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> ev) {
+		TaleCraft.logger.info("Registering Items");
 		final IForgeRegistry<Item> reg = ev.getRegistry();
 		
 		reg.register(new ItemBlock(TaleCraftRegistered.WATER_BARRIER, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "barrier"));
@@ -49,10 +51,11 @@ public class TaleCraftEvents {
 	}
 	@SubscribeEvent
 	public static void registerEntityType(RegistryEvent.Register<EntityType<?>> ev) {
-		
+		TaleCraft.logger.info("Registering Entities");
 	}
 	@SubscribeEvent
 	public static void registerTileEntityTypes(RegistryEvent.Register<TileEntityType<?>> ev) {
+		TaleCraft.logger.info("Registering TileEntities");
 		TaleCraftRegistered.TE_BARRIER = TileEntityType.register(TaleCraft.MOD_ID+":te_barrier", TileEntityType.Builder.create(TileEntityBarrier::new)); 
 		TaleCraftRegistered.TE_LIGHT_BLOCK = TileEntityType.register(TaleCraft.MOD_ID+":te_light", TileEntityType.Builder.create(LightBlockTE::new)); 
 		}

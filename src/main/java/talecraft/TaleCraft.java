@@ -58,7 +58,7 @@ public class TaleCraft {
 	}
 	public void clientSetup(FMLClientSetupEvent event) {
 		logger.info("Client Setup");
-		ClientRenderer.regsiterAll();
+		ClientRenderer.registerAll();
 	}
 	public void serverSetup(FMLDedicatedServerSetupEvent event) {
 

@@ -10,7 +10,7 @@ import talecraft.TaleCraftRegistered;
 import talecraft.invoke.IInvoke;
 import talecraft.invoke.IInvokeSource;
 
-public class LightBlockTE extends TCTileEntity{
+public class LightBlockTE extends TCTileEntity {
 	int lightValue;
 	boolean lightActive;
 
