@@ -73,7 +73,6 @@ public class TaleCraft {
 	 **/
 	@OnlyIn(Dist.CLIENT)
 	public static boolean isBuildMode() {
-		logger.info("controller check:"+ mc.playerController);
 		return mc.playerController != null && mc.playerController.isInCreativeMode();
 	}
 //	public static ClientProxy asClient() {

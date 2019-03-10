@@ -27,9 +27,31 @@ public class GuiLightBlock extends GuiScreen {
 	GuiSlider light_slider;
 	@Override
 	protected void initGui() {
-		addButton(new GuiButtonExt(0, 2, 40, 100, 10, "Toggle"));
-		addButton(new GuiButtonExt(1, 2 + 100 + 2, 40, 50, 10, "Enable"));
-		addButton(new GuiButtonExt(2, 2 + 100 + 2 + 50 + 2, 40, 50, 10, "Disable"));
+		addButton(new GuiButtonExt(0, 2, 40, 100, 10, "Toggle"){
+			@Override
+			public void onClick(double mouseX, double mouseY) {
+				String commandString = ClientNetworkHandler.makeBlockCommand(pos);
+				NBTTagCompound commandData = new NBTTagCompound();
+				commandData.setString("command", "toggle");
+				TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
+			}
+		});
+		addButton(new GuiButtonExt(1, 2 + 100 + 2, 40, 50, 10, "Enable"){
+			@Override public void onClick(double mouseX, double mouseY) {
+				String commandString = ClientNetworkHandler.makeBlockCommand(pos);
+				NBTTagCompound commandData = new NBTTagCompound();
+				commandData.setString("command", "on");
+				TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
+			}
+		});
+		addButton(new GuiButtonExt(2, 2 + 100 + 2 + 50 + 2, 40, 50, 10, "Disable"){
+			@Override public void onClick(double mouseX, double mouseY) {
+			String commandString = ClientNetworkHandler.makeBlockCommand(pos);
+			NBTTagCompound commandData = new NBTTagCompound();
+			commandData.setString("command", "off");
+			TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
+		}
+	});
 		final ISlider sliderCallback = new ISlider() {
 			
 			@Override
@@ -48,58 +70,9 @@ public class GuiLightBlock extends GuiScreen {
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		super.render(mouseX, mouseY, partialTicks);
-		drawCenteredString(fontRenderer, "Light @ "+ pos.getX()+" " + pos.getY() + " " + pos.getZ(), 2, 2, 16777215);
+		drawString(fontRenderer, "Light @ "+ pos.getX()+" " + pos.getY() + " " + pos.getZ(), 2, 2, 16777215);
 		light_slider.render(mouseX, mouseY, partialTicks);
 	}
-	/*
-	@Override
-	public void buildGui() {
-		final BlockPos position = tileEntity.getPos();
-		addComponent(new QADLabel("Light @ " + position.getX() + " " + position.getY() + " " + position.getZ(), 2, 2));
-
-		final QADSlider slider = addComponent(new QADSlider(new DefaultSliderModel(tileEntity.getLightValue(), 15)));
-		slider.setX(2);
-		slider.setY(16);
-		slider.setSliderAction(new Runnable() {
-			@Override public void run() {
-				int newValue = (int) (slider.getSliderValue() * 16);
-				String commandString = ClientNetworkHandler.makeBlockCommand(position);
-				NBTTagCompound commandData = new NBTTagCompound();
-				commandData.setString("command", "set");
-				commandData.setInteger("lightValue", MathHelper.clamp(newValue, 0, 15));
-				TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
-			}
-		});
-
-		QADButton buttonToggle = QADFACTORY.createButton("Toggle", 2, 40, 100, new Runnable() {
-			@Override public void run() {
-				String commandString = ClientNetworkHandler.makeBlockCommand(position);
-				NBTTagCompound commandData = new NBTTagCompound();
-				commandData.setString("command", "toggle");
-				TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
-			}
-		});
-		addComponent(buttonToggle);
-
-		QADButton buttonEnable = QADFACTORY.createButton("Enable", 2 + 100 + 2, 40, 50, new Runnable() {
-			@Override public void run() {
-				String commandString = ClientNetworkHandler.makeBlockCommand(position);
-				NBTTagCompound commandData = new NBTTagCompound();
-				commandData.setString("command", "on");
-				TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
-			}
-		});
-		addComponent(buttonEnable);
-
-		QADButton buttonDisable = QADFACTORY.createButton("Disable", 2 + 100 + 2 + 50 + 2, 40, 50, new Runnable() {
-			@Override public void run() {
-				String commandString = ClientNetworkHandler.makeBlockCommand(position);
-				NBTTagCompound commandData = new NBTTagCompound();
-				commandData.setString("command", "off");
-				TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
-			}
-		});
-		addComponent(buttonDisable);
-	}*/
+	
 
 }
