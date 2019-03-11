@@ -10,7 +10,8 @@ import net.minecraftforge.fml.client.config.GuiSlider.ISlider;
 import talecraft.TaleCraft;
 import talecraft.blocks.tileentity.LightBlockTE;
 import talecraft.client.ClientNetworkHandler;
-import talecraft.network.StringNBTCommandPacket;
+import talecraft.client.gui.GuiColors;
+import talecraft.network.packets.StringNBTCommandPacket;
 
 public class GuiLightBlock extends GuiScreen {
 	LightBlockTE tileEntity;
@@ -71,7 +72,7 @@ public class GuiLightBlock extends GuiScreen {
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		super.render(mouseX, mouseY, partialTicks);
-		drawString(fontRenderer, "Light @ "+ pos.getX()+" " + pos.getY() + " " + pos.getZ(), 2, 2, 16777215);
+		drawString(fontRenderer, "Light @ "+ pos.getX()+" " + pos.getY() + " " + pos.getZ(), 2, 2, GuiColors.WHITE);
 		light_slider.render(mouseX, mouseY, partialTicks);
 	}
 	@Override

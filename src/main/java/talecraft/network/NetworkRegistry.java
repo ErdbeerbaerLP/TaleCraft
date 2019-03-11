@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import talecraft.TaleCraft;
+import talecraft.network.packets.StringNBTCommandPacket;
 
 public class NetworkRegistry {
 	private static int discriminator = 0;

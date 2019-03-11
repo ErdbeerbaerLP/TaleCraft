@@ -7,7 +7,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import talecraft.TaleCraft;
 import talecraft.invoke.IInvoke;
 import talecraft.invoke.IInvokeSource;
-import talecraft.network.StringNBTCommandPacket;
+import talecraft.network.packets.StringNBTCommandPacket;
 
 
 public class PlayerMirror {

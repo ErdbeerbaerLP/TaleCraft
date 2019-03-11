@@ -1,5 +1,5 @@
 {
   "variants" : {
-    "normal" : {"model" : "talecraft:collisiontriggerblock"}
+    "" : {"model" : "talecraft:block/collisiontriggerblock"}
   }
 }

@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import talecraft.TaleCraft;
-import talecraft.network.StringNBTCommandPacket;
+import talecraft.network.packets.StringNBTCommandPacket;
 
 public class ClientSettings {
 	NBTTagCompound settings = new NBTTagCompound();

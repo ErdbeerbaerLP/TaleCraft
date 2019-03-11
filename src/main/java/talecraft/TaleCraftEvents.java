@@ -25,8 +25,11 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.IForgeRegistry;
 import talecraft.blocks.UnderwaterBarrier;
 import talecraft.blocks.tileentity.TileEntityBarrier;
+import talecraft.blocks.util.CollisionTriggerBlock;
 import talecraft.blocks.util.LightBlock;
 import talecraft.client.gui.replaced_guis.CustomMainMenu;
+import talecraft.items.WandItem;
+import talecraft.blocks.tileentity.CollisionTriggerBlockTileEntity;
 import talecraft.blocks.tileentity.LightBlockTE;
 @EventBusSubscriber(bus=Bus.MOD)
 public class TaleCraftEvents {
@@ -40,6 +43,7 @@ public class TaleCraftEvents {
 		
 		reg.register(new UnderwaterBarrier());
 		reg.register(new LightBlock());
+		reg.register(new CollisionTriggerBlock());
 	}
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> ev) {
@@ -48,6 +52,8 @@ public class TaleCraftEvents {
 		
 		reg.register(new ItemBlock(TaleCraftRegistered.WATER_BARRIER, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "barrier"));
 		reg.register(new ItemBlock(TaleCraftRegistered.LIGHT_BLOCK, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "lightblock"));
+		reg.register(new WandItem().setRegistryName(TaleCraft.MOD_ID, "wand"));
+		reg.register(new ItemBlock(TaleCraftRegistered.COLLISION_TRIGGER, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "collisiontriggerblock"));
 	}
 	@SubscribeEvent
 	public static void registerEntityType(RegistryEvent.Register<EntityType<?>> ev) {
@@ -58,6 +64,7 @@ public class TaleCraftEvents {
 		TaleCraft.logger.info("Registering TileEntities");
 		TaleCraftRegistered.TE_BARRIER = TileEntityType.register(TaleCraft.MOD_ID+":te_barrier", TileEntityType.Builder.create(TileEntityBarrier::new)); 
 		TaleCraftRegistered.TE_LIGHT_BLOCK = TileEntityType.register(TaleCraft.MOD_ID+":te_light", TileEntityType.Builder.create(LightBlockTE::new)); 
+		TaleCraftRegistered.TE_COLLISION_TRIGGER = TileEntityType.register(TaleCraft.MOD_ID+":te_collisiontrigger", TileEntityType.Builder.create(CollisionTriggerBlockTileEntity::new)); 
 		}
 	
 	

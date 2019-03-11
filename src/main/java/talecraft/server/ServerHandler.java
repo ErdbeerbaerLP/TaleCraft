@@ -22,7 +22,7 @@ import talecraft.invoke.EnumTriggerState;
 import talecraft.invoke.IInvoke;
 import talecraft.invoke.IInvokeSource;
 import talecraft.invoke.Invoke;
-import talecraft.network.StringNBTCommandPacket;
+import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.util.PlayerHelper;
 
 public class ServerHandler {

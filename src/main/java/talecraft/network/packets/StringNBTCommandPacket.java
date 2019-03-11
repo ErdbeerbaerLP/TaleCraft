@@ -1,4 +1,4 @@
-package talecraft.network;
+package talecraft.network.packets;
 
 
 import java.util.function.Supplier;

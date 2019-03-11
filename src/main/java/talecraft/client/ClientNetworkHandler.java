@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import talecraft.TaleCraft;
-import talecraft.network.StringNBTCommandPacket;
+import talecraft.network.packets.StringNBTCommandPacket;
 
 public class ClientNetworkHandler {
 

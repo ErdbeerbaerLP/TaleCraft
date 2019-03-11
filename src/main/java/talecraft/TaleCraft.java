@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import com.google.common.base.Predicate;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;

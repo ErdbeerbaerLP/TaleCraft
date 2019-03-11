@@ -20,17 +20,17 @@ public interface IInvoke {
 			return compound;
 		}
 
-		public static final IScriptInvoke readSI(NBTTagCompound compoundTag) {
-			IInvoke invoke = read(compoundTag);
-
-			if(invoke instanceof IScriptInvoke) {
-				// TaleCraft.logger.info("Loaded IScriptInvoke : " + invoke.getType() + " : " + ((IScriptInvoke)invoke).getScriptName());
-				return (IScriptInvoke) invoke;
-			}
-
-			TaleCraft.logger.severe("Invalid Invoke Object! Required is IScriptInvoke, given is " + invoke.getType() + "!");
-			return new EmbeddedScriptInvoke("");
-		}
+//		public static final IScriptInvoke readSI(NBTTagCompound compoundTag) {
+//			IInvoke invoke = read(compoundTag);
+//
+//			if(invoke instanceof IScriptInvoke) {
+//				// TaleCraft.logger.info("Loaded IScriptInvoke : " + invoke.getType() + " : " + ((IScriptInvoke)invoke).getScriptName());
+//				return (IScriptInvoke) invoke;
+//			}
+//
+//			TaleCraft.logger.severe("Invalid Invoke Object! Required is IScriptInvoke, given is " + invoke.getType() + "!");
+//			return new EmbeddedScriptInvoke("");
+//		}
 
 		public static final IInvoke read(NBTTagCompound compoundTag) {
 			String type = compoundTag.getString("type");
@@ -54,11 +54,11 @@ public interface IInvoke {
 //				return invoke;
 //			}
 
-			if("EmbeddedScriptInvoke".equals(type)) {
-				EmbeddedScriptInvoke invoke = new EmbeddedScriptInvoke();
-				invoke.readFromNBT(compoundTag);
-				return invoke;
-			}
+//			if("EmbeddedScriptInvoke".equals(type)) {
+//				EmbeddedScriptInvoke invoke = new EmbeddedScriptInvoke();
+//				invoke.readFromNBT(compoundTag);
+//				return invoke;
+//			}
 
 			if("CommandInvoke".equals(type)) {
 				CommandInvoke invoke = new CommandInvoke();
