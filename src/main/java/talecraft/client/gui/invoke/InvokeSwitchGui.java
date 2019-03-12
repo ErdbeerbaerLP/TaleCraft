@@ -8,6 +8,7 @@ import talecraft.client.gui.components.GuiTCButton;
 import talecraft.invoke.BlockTriggerInvoke;
 import talecraft.invoke.CommandInvoke;
 import talecraft.invoke.NullInvoke;
+import talecraft.util.ArrayListHelper;
 
 public class InvokeSwitchGui extends TCGuiScreen {
 	int invokeTypeFlags;
@@ -25,7 +26,7 @@ public class InvokeSwitchGui extends TCGuiScreen {
 		int xOff = 2;
 		int yOff = 16;
 
-		addComponent(new GuiLabel(this.fontRenderer, "Select Invoke Type...", 4, 4));
+		addComponent(new GuiLabel(this.fontRenderer, ArrayListHelper.createArrayListString("Select Invoke Type..."), 4, 4));
 
 		{
 			addComponent(new GuiTCButton(xOff, yOff, TextFormatting.ITALIC+"Cancel") {

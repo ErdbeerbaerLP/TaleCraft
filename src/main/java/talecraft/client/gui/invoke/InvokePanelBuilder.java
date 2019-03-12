@@ -1,25 +1,21 @@
 package talecraft.client.gui.invoke;
 
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
 import talecraft.client.gui.TCGuiScreen;
 import talecraft.client.gui.components.GuiLabel;
 import talecraft.client.gui.components.GuiTCButton;
+import talecraft.client.gui.components.GuiTCButton.ButtonIcon;
 import talecraft.invoke.BlockTriggerInvoke;
 import talecraft.invoke.CommandInvoke;
-import talecraft.invoke.EnumTriggerState;
 import talecraft.invoke.IInvoke;
 import talecraft.invoke.NullInvoke;
 import talecraft.items.WandItem;
+import talecraft.util.ArrayListHelper;
 
 public class InvokePanelBuilder {
 	public static final int INVOKE_TYPE_EDIT_ALLOWALL = -1;
@@ -35,7 +31,7 @@ public class InvokePanelBuilder {
 	public static final void build(TCGuiScreen screen, int ox, int oy, IInvoke invoke, final IInvokeHolder holder, int invokeTypeFlags) {
 
 		if(invokeTypeFlags != 0) {
-			GuiButton button = new GuiButton(ox, oy, 20, "") {
+			GuiTCButton button = new GuiTCButton(ox, oy, 20, "", ButtonIcon.INVEDIT) {
 				@Override
 				public void onClick(double mouseX, double mouseY) {
 					// TODO Auto-generated method stub
@@ -51,7 +47,7 @@ public class InvokePanelBuilder {
 		}
 
 		if(invoke == null || invoke instanceof NullInvoke) {
-			screen.addComponent(new GuiLabel(screen.getFontRenderer(), "Null Invoke", 0, 0));
+			screen.addComponent(new GuiLabel(screen.getFontRenderer(), ArrayListHelper.createArrayListString("Null Invoke"), 0, 0));
 			return;
 		}
 
@@ -79,7 +75,7 @@ public class InvokePanelBuilder {
 		scriptName.setMaxStringLength(32700);
 		screen.addComponent(scriptName);
 
-		GuiButton buttonApply = new GuiTCButton(ox+100+2, oy, "Apply"){
+		GuiTCButton buttonApply = new GuiTCButton(ox+100+2, oy, 40, "Apply"){
 			@Override public void onClick(double mouseX, double mouseY) {
 				NBTTagCompound invokeData = new NBTTagCompound();
 				String text = scriptName.getText();
@@ -90,7 +86,7 @@ public class InvokePanelBuilder {
 			}
 		}; //QADFACTORY.createButton("Apply", ox+100+2, oy, 40, null);
 //		buttonApply.setTooltip("Saves the settings.", "There is no auto-save so make","sure to press this button.");
-		screen.addComponent(buttonApply);
+		screen.addComponent(buttonApply.setTooltip("Saves the settings.", "There is no auto-save so make","sure to press this button."));
 
 		//		QADButton buttonExecute = QADFACTORY.createButton("E", ox+100+4+40+2, oy, 20, null);
 		//		buttonExecute.setAction(new Runnable() {
@@ -163,7 +159,7 @@ public class InvokePanelBuilder {
 
 
 	private static void build_blocktrigger(TCGuiScreen screen, int ox, int oy, final BlockTriggerInvoke invoke, final IInvokeHolder holder) {
-		screen.addComponent(new GuiTCButton(ox, oy, "Set Region") {
+		screen.addComponent(new GuiTCButton(ox, oy, 100, "Set Region") {
 			@Override 
 			public void onClick(double mouseX, double mouseY) {
 				EntityPlayer player = Minecraft.getInstance().player;
@@ -180,15 +176,18 @@ public class InvokePanelBuilder {
 
 				holder.sendInvokeUpdate(invokeData);
 			}
-		});
+		}.setTooltip(
+				"Sets the region that is triggered",
+				"when this invoke is run."
+				));
 
-		screen.addComponent(new GuiTCButton(ox+100+2, oy, "") {
+		screen.addComponent(new GuiTCButton(ox+100+2, oy, 20, "", ButtonIcon.PLAY) {
 			@Override public void onClick(double mouseX, double mouseY) {
 				holder.sendCommand("trigger", null);
 			}
-		});
+		}.setTooltip("Trigger this invoke."));
 		
-		GuiTCButton state = new GuiTCButton(ox+100+2+20+2, oy,  "") {//.createButton("", ox+100+2+20+2, oy, 50)).setModel(new ButtonModel() {
+		GuiTCButton state = new GuiTCButton(ox+100+2+20+2, oy, 50,  "") {//.createButton("", ox+100+2+20+2, oy, 50)).setModel(new ButtonModel() {
 			int ordinal = invoke.getOnOff().getIntValue();
 
 			@Override 
@@ -222,7 +221,7 @@ public class InvokePanelBuilder {
 //				// IGNORE
 //			}
 		};
-		screen.addComponent(state);
+		screen.addComponent(state.setTooltip("The state of the trigger. Default is ON."));
 	}
 
 	public static class InvokeSwitchAction implements Runnable {
