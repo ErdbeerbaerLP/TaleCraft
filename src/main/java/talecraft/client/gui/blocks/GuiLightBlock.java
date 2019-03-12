@@ -66,7 +66,7 @@ public class GuiLightBlock extends GuiScreen {
 				TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
 			}
 		};
-		light_slider = new GuiSlider(3, 2, 16, "Light: ", 0, 15, tileEntity.getLightValue(), sliderCallback);
+		light_slider = new GuiSlider(3, 2, 16, "Light: ", 0, 15, tileEntity.getSetLightValue(), sliderCallback);
 		light_slider.showDecimal = false;
 	}
 	@Override

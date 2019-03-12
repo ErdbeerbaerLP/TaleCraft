@@ -1,5 +1,7 @@
 package talecraft.invoke;
 
+import talecraft.TaleCraft;
+
 public enum EnumTriggerState {
 	ON(1,true), OFF(0,false), INVERT(-1,true), IGNORE(-2,true);
 
@@ -25,6 +27,7 @@ public enum EnumTriggerState {
 	}
 
 	public EnumTriggerState override(EnumTriggerState triggerStateOverride) {
+		TaleCraft.logger.info(triggerStateOverride.name());
 		switch (triggerStateOverride) {
 		case ON: return ON;
 		case OFF: return OFF;

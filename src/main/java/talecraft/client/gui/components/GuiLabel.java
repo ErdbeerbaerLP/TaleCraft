@@ -13,6 +13,7 @@ public class GuiLabel extends net.minecraft.client.gui.GuiLabel {
 		super(text, color, font);
 		this.x = x;
 		this.y = y;
+		this.visible = true;
 	}
 	public GuiLabel(FontRenderer font, List<String> text, int x, int y) {
 		this(font, text, x, y, GuiColors.WHITE);

@@ -50,6 +50,15 @@ public class TCGuiScreen extends GuiScreen {
 		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 	}
 	@Override
+	public boolean mouseReleased(double p_mouseReleased_1_, double p_mouseReleased_3_, int p_mouseReleased_5_) {
+		for(Gui comp : components) {
+			if(comp instanceof GuiTextField) {
+				((GuiTextField)comp).mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
+			}
+		}
+		return super.mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
+	}
+	@Override
 	public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
 		for(Gui comp : components) {
 			if(comp instanceof GuiTextField) {
@@ -67,6 +76,15 @@ public class TCGuiScreen extends GuiScreen {
 			}
 		}
 		return super.keyReleased(p_keyReleased_1_, p_keyReleased_2_, p_keyReleased_3_);
+	}
+	@Override
+	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
+		for(Gui comp : components) {
+			if(comp instanceof GuiTextField) {
+				((GuiTextField)comp).charTyped(p_charTyped_1_, p_charTyped_2_);
+			}
+		}
+		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
 	}
 	public Gui getComponent(int index){
 		return components.get(index);

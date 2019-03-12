@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemDebugStick;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import talecraft.client.gui.TCGuiScreen;
@@ -12,6 +13,7 @@ import talecraft.client.gui.components.GuiTCButton;
 import talecraft.client.gui.components.GuiTCButton.ButtonIcon;
 import talecraft.invoke.BlockTriggerInvoke;
 import talecraft.invoke.CommandInvoke;
+import talecraft.invoke.EnumTriggerState;
 import talecraft.invoke.IInvoke;
 import talecraft.invoke.NullInvoke;
 import talecraft.items.WandItem;
@@ -70,11 +72,10 @@ public class InvokePanelBuilder {
 	private static void build_command(TCGuiScreen screen,
 			int ox, int oy, CommandInvoke invoke, final IInvokeHolder holder) {
 
-		final GuiTextField scriptName = new GuiTextField(-1, screen.getFontRenderer(), ox+1, oy+2, 30, 50); // QADFACTORY.createTextField(invoke.getCommand(), ox+1, oy+2, 100-2);
+		final GuiTextField scriptName = new GuiTextField(-1, screen.getFontRenderer(), ox+1, oy+2, 100-2, 20); // QADFACTORY.createTextField(invoke.getCommand(), ox+1, oy+2, 100-2);
 		
 		scriptName.setMaxStringLength(32700);
 		screen.addComponent(scriptName);
-
 		GuiTCButton buttonApply = new GuiTCButton(ox+100+2, oy, 40, "Apply"){
 			@Override public void onClick(double mouseX, double mouseY) {
 				NBTTagCompound invokeData = new NBTTagCompound();
@@ -83,6 +84,7 @@ public class InvokePanelBuilder {
 				invokeData.setString("command", text);
 
 				holder.sendInvokeUpdate(invokeData);
+				
 			}
 		}; //QADFACTORY.createButton("Apply", ox+100+2, oy, 40, null);
 //		buttonApply.setTooltip("Saves the settings.", "There is no auto-save so make","sure to press this button.");
@@ -160,6 +162,8 @@ public class InvokePanelBuilder {
 
 	private static void build_blocktrigger(TCGuiScreen screen, int ox, int oy, final BlockTriggerInvoke invoke, final IInvokeHolder holder) {
 		screen.addComponent(new GuiTCButton(ox, oy, 100, "Set Region") {
+			
+			
 			@Override 
 			public void onClick(double mouseX, double mouseY) {
 				EntityPlayer player = Minecraft.getInstance().player;
@@ -175,6 +179,7 @@ public class InvokePanelBuilder {
 				invokeData.setIntArray("bounds", bounds);
 
 				holder.sendInvokeUpdate(invokeData);
+				
 			}
 		}.setTooltip(
 				"Sets the region that is triggered",
@@ -182,12 +187,14 @@ public class InvokePanelBuilder {
 				));
 
 		screen.addComponent(new GuiTCButton(ox+100+2, oy, 20, "", ButtonIcon.PLAY) {
+			
 			@Override public void onClick(double mouseX, double mouseY) {
 				holder.sendCommand("trigger", null);
 			}
+			
 		}.setTooltip("Trigger this invoke."));
 		
-		GuiTCButton state = new GuiTCButton(ox+100+2+20+2, oy, 50,  "") {//.createButton("", ox+100+2+20+2, oy, 50)).setModel(new ButtonModel() {
+		GuiTCButton state = new GuiTCButton(ox+100+2+20+2, oy, 50,  "") {
 			int ordinal = invoke.getOnOff().getIntValue();
 
 			@Override 
@@ -202,24 +209,11 @@ public class InvokePanelBuilder {
 				invokeData.setInt("state", ordinal);
 				holder.sendInvokeUpdate(invokeData);
 			}
-
-//			@Override 
-//			public String getText() {
-//				return EnumTriggerState.get(ordinal).name();
-//			}
-
-//			@Override 
-//			public ResourceLocation getIcon() {
-//				// IGNORE
-//				return null;
-//			}
-//			@Override public void setText(String newText) {
-//				// IGNORE
-//			}
-//			
-//			@Override public void setIcon(ResourceLocation newIcon) {
-//				// IGNORE
-//			}
+			public void render(int mouseX, int mouseY, float partial) {
+				this.displayString = EnumTriggerState.get(ordinal).name();
+				super.render(mouseX, mouseY, partial);
+				
+			};
 		};
 		screen.addComponent(state.setTooltip("The state of the trigger. Default is ON."));
 	}

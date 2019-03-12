@@ -20,15 +20,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.PacketDistributor;
 import talecraft.TaleCraft;
 import talecraft.blocks.TCITriggerableBlock;
+import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.util.WorldHelper;
 import talecraft.util.WorldHelper.BlockRegionIterator;
 
 public class Invoke {
 
 	public static final void invoke(IInvoke invoke, IInvokeSource source, Map<String,Object> scopeParams, EnumTriggerState triggerStateOverride) {
-		if(source.getInvokeWorld() != null && source.getInvokeWorld().getGameRules().getBoolean("tc_disableInvokeSystem")) {
+		if(source.getInvokeWorld() == null/* && source.getInvokeWorld().getGameRules().getBoolean("tc_disableInvokeSystem")*/) {
 			TaleCraft.logger.info("Tried to execute invoke {"+invoke+"}, but the invoke system is disabled!");
 			return;
 		}
@@ -107,7 +109,7 @@ public class Invoke {
 			pktdata.setString("type", "line-to-box");
 			pktdata.setIntArray("src", new int[]{source.getInvokePosition().getX(),source.getInvokePosition().getY(),source.getInvokePosition().getZ()});
 			pktdata.setIntArray("box", new int[]{ix,iy,iz,ax,ay,az});
-//			TaleCraft.network.sendToAll(new StringNBTCommandPacket("client.render.renderable.push", pktdata));
+			TaleCraft.network.send(PacketDistributor.ALL.noArg(), new StringNBTCommandPacket("client.render.renderable.push", pktdata));
 		}
 
 		// Since we dont have lambda's, lets do things the old (ugly) way.

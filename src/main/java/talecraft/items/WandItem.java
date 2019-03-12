@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -37,7 +38,12 @@ public class WandItem extends TCItem implements TCITriggerableItem{
 		
 		return EnumActionResult.PASS;
 	}
-	
+	@Override
+	public boolean canPlayerBreakBlockWhileHolding(IBlockState state, World worldIn, BlockPos pos,
+			EntityPlayer player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	@Override //Clears the wand selection
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
