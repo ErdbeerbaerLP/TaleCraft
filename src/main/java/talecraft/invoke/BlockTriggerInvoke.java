@@ -38,13 +38,13 @@ public class BlockTriggerInvoke implements IInvoke {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public void write(NBTTagCompound compound) {
 		compound.setIntArray("bounds", bounds);
 		compound.setInt("state", triggerState.getIntValue());
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void read(NBTTagCompound compound) {
 		triggerState = EnumTriggerState.get(compound.hasKey("state") ? compound.getInt("state") : 1);
 		bounds = compound.getIntArray("bounds");
 

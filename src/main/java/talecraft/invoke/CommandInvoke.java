@@ -27,12 +27,12 @@ public class CommandInvoke implements IInvoke {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public void write(NBTTagCompound compound) {
 		compound.setString("command", command);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
+	public void read(NBTTagCompound compound) {
 		command = compound.getString("command");
 	}
 

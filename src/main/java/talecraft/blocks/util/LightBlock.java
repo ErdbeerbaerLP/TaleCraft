@@ -50,11 +50,13 @@ public class LightBlock extends TCInvisibleBlock implements TCITriggerableBlock 
 
 	@Override
 	public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
+		System.out.println("WORLD: "+(world.isRemote? "REMOTE": "CLIENT"));
 		if (world.isRemote)
 			return;
-
+		
 		TileEntity tileEntity = world.getTileEntity(position);
-
+		System.out.println(tileEntity);
+		System.out.println(triggerState.name());
 		if(tileEntity != null && tileEntity instanceof LightBlockTE) {
 			switch (triggerState) {
 			case ON: ((LightBlockTE) tileEntity).setLightActive(true); break;

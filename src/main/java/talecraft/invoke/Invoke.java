@@ -30,7 +30,7 @@ import talecraft.util.WorldHelper.BlockRegionIterator;
 public class Invoke {
 
 	public static final void invoke(IInvoke invoke, IInvokeSource source, Map<String,Object> scopeParams, EnumTriggerState triggerStateOverride) {
-		if(source.getInvokeWorld() == null/* && source.getInvokeWorld().getGameRules().getBoolean("tc_disableInvokeSystem")*/) {
+		if(source.getInvokeWorld() == null /* TODO Check for world if invokes are disabled for it?*/) {
 			TaleCraft.logger.info("Tried to execute invoke {"+invoke+"}, but the invoke system is disabled!");
 			return;
 		}
@@ -68,12 +68,12 @@ public class Invoke {
 
 		if(invoke instanceof BlockTriggerInvoke) {
 			// TaleCraft.logger.info("--> Executing BlockRegionTrigger from " + source.getPosition());
-
+			
 			int[] bounds = ((BlockTriggerInvoke) invoke).getBounds();
-			EnumTriggerState state = ((BlockTriggerInvoke) invoke).getOnOff();
-
+			EnumTriggerState state =  ((BlockTriggerInvoke) invoke).getOnOff();
+			if(state != EnumTriggerState.INVERT)
 			state = triggerStateOverride.override(state);
-
+			
 			if(bounds == null || bounds.length != 6) {
 				TaleCraft.logger.severe("Invalid bounds @ BlockRegionTrigger @ " + source.getInvokePosition());
 				return;
@@ -112,11 +112,9 @@ public class Invoke {
 			TaleCraft.network.send(PacketDistributor.ALL.noArg(), new StringNBTCommandPacket("client.render.renderable.push", pktdata));
 		}
 
-		// Since we dont have lambda's, lets do things the old (ugly) way.
-		WorldHelper.foreach(world, ix, iy, iz, ax, ay, az, new BlockRegionIterator() {
-			@Override public void $(World world, IBlockState state, BlockPos position) {
-				trigger(world, position, state, triggerStateOverride);
-			}
+		// Since we now have lambda's, lets use them ;)
+		WorldHelper.foreach(world, ix, iy, iz, ax, ay, az, (wrld,state,position)-> {
+				trigger(wrld, position, state, triggerStateOverride);
 		});
 	}
 

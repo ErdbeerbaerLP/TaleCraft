@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -22,6 +23,9 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import talecraft.client.ClientProxy;
+import talecraft.client.ClientSettings;
+import talecraft.client.render.renderables.SelectionBoxRenderer;
 import talecraft.client.renderer.ClientRenderer;
 import talecraft.network.INetworkMessage;
 
@@ -33,13 +37,17 @@ public class TaleCraft {
 	public static final Random random = new Random();
 	public static World lastVisitedWorld;
 	public static Minecraft mc = Minecraft.getInstance();
+	private static ClientProxy clientProxy;
+	
 	private static final String protVersion = "1.0.0";
 	private static final Predicate<String> pred = (ver) -> {return ver.equals(protVersion);};
 	
 	public static SimpleChannel network = NetworkRegistry.newSimpleChannel(new ResourceLocation(TaleCraft.MOD_ID, "talecraft-net"), ()->{return protVersion;}, pred, pred);
+	
 //	public static GlobalScriptManager globalScriptManager;
 	public TaleCraft() {
 		TaleCraftRegistered.load();
+		
 		//Register loading state listeners
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStarting);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
@@ -58,6 +66,9 @@ public class TaleCraft {
 		talecraft.network.NetworkRegistry.init();
 	}
 	public void clientSetup(FMLClientSetupEvent event) {
+		
+		TaleCraft.clientProxy = new ClientProxy();
+		ClientProxy.settings.init();
 		logger.info("Client Setup");
 		ClientRenderer.registerAll();
 	}
@@ -68,7 +79,9 @@ public class TaleCraft {
 
 	}
 	public void loadComplete(FMLLoadCompleteEvent event) {
-
+		DistExecutor.runWhenOn(Dist.CLIENT, ()->()->{
+			TaleCraft.asClient().getRenderer().addStaticRenderer(new SelectionBoxRenderer());
+		});
 	}
 	/**
 	 * @return TRUE, if the client is in build-mode (aka: creative-mode), FALSE if not.
@@ -90,6 +103,11 @@ public class TaleCraft {
 	}
 	public static void setPresence(String title, String subtitle, String iconKey) {
 		//Unused for now
+	}
+	@OnlyIn(Dist.CLIENT)
+	public static ClientProxy asClient() {
+		// TODO Auto-generated method stub
+		return TaleCraft.clientProxy;
 	}
 
 	

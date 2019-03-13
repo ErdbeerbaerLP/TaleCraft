@@ -13,6 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import talecraft.TaleCraft;
+import talecraft.client.render.ITemporaryRenderable;
+import talecraft.client.render.PushRenderableFactory;
 import talecraft.network.packets.StringNBTCommandPacket;
 
 public class ClientNetworkHandler {
@@ -34,7 +36,7 @@ public class ClientNetworkHandler {
 		}
 
 		if(command.equals("client.debug.track.invoke")) {
-//			proxy.getInvokeTracker().trackInvoke(data);
+			TaleCraft.asClient().getInvokeTracker().trackInvoke(data);
 			return;
 		}
 
@@ -121,36 +123,36 @@ public class ClientNetworkHandler {
 //			});
 //		}
 
-//		if(command.equals("client.render.renderable.push")) {
-//			ITemporaryRenderable renderable = PushRenderableFactory.parsePushRenderableFromNBT(data);
-//			if(renderable != null && proxy.isBuildMode()) {
-//				proxy.getRenderer().addTemporaryRenderer(renderable);
-//			}
-//			return;
-//		}
+		if(command.equals("client.render.renderable.push")) {
+			ITemporaryRenderable renderable = PushRenderableFactory.parsePushRenderableFromNBT(data);
+			if(renderable != null && TaleCraft.isBuildMode()) {
+				TaleCraft.asClient().getRenderer().addTemporaryRenderer(renderable);
+			}
+			return;
+		}
 
-//		if(command.equals("client.render.renderable.clear")) {
-//			proxy.getRenderer().clearTemporaryRenderers();
-//			return;
-//		}
+		if(command.equals("client.render.renderable.clear")) {
+			TaleCraft.asClient().getRenderer().clearTemporaryRenderers();
+			return;
+		}
 
-		//		if(command.equals("switchShader") && Boolean.FALSE.booleanValue()) {
-		//			final String sh = data.getString("shaderName");
-		//			clientTickQeue.offer(new Runnable() {
-		//				String shader = sh;
-		//				@Override
-		//				public void run() {
-		//					System.out.println("SWITCH : " + shader);
-		//
-		//					Field[] fields = mc.entityRenderer.getClass().getDeclaredFields();
-		//					Field shaderResourceLocations = null;
-		//					for(Field field : fields) {
-		//						System.out.println("entityRenderer."+field.getName() + " : " + field.getType());
-		//					}
-		//				}
-		//			});
-		//			return;
-		//		}
+//				if(command.equals("switchShader") && Boolean.FALSE.booleanValue()) {
+//					final String sh = data.getString("shaderName");
+//					clientTickQeue.offer(new Runnable() {
+//						String shader = sh;
+//						@Override
+//						public void run() {
+//							System.out.println("SWITCH : " + shader);
+//		
+//							Field[] fields = mc.entityRenderer.getClass().getDeclaredFields();
+//							Field shaderResourceLocations = null;
+//							for(Field field : fields) {
+//								System.out.println("entityRenderer."+field.getName() + " : " + field.getType());
+//							}
+//						}
+//					});
+//					return;
+//				}
 
 		TaleCraft.logger.info("Received Command -> " + command + ", with data: " + data);
 		// XXX: Implement more Server->Client commands.

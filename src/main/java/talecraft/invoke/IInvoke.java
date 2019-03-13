@@ -8,15 +8,15 @@ public interface IInvoke {
 	public String getType();
 	public void getColor(float[] color_out);
 
-	public void writeToNBT(NBTTagCompound compound);
-	public void readFromNBT(NBTTagCompound compound);
+	public void write(NBTTagCompound compound);
+	public void read(NBTTagCompound compound);
 
 	public static class Serializer {
 
 		public static final NBTTagCompound write(IInvoke invoke) {
 			NBTTagCompound compound = new NBTTagCompound();
 			compound.setString("type", invoke.getType());
-			invoke.writeToNBT(compound);
+			invoke.write(compound);
 			return compound;
 		}
 
@@ -44,7 +44,7 @@ public interface IInvoke {
 
 			if("BlockTriggerInvoke".equals(type)) {
 				BlockTriggerInvoke invoke = new BlockTriggerInvoke();
-				invoke.readFromNBT(compoundTag);
+				invoke.read(compoundTag);
 				return invoke;
 			}
 
@@ -62,7 +62,7 @@ public interface IInvoke {
 
 			if("CommandInvoke".equals(type)) {
 				CommandInvoke invoke = new CommandInvoke();
-				invoke.readFromNBT(compoundTag);
+				invoke.read(compoundTag);
 				return invoke;
 			}
 

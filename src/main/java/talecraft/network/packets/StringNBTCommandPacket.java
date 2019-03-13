@@ -18,8 +18,6 @@ public class StringNBTCommandPacket{
 	}
 
 	public StringNBTCommandPacket(String cmdIN, NBTTagCompound dataIN) {
-		System.out.println("NEW PACKET CMD: "+cmdIN);
-		System.out.println("NEW PACKET DATA: "+dataIN);
 		this.data = dataIN != null ? dataIN : new NBTTagCompound();
 		this.command = cmdIN;
 	}
@@ -27,8 +25,6 @@ public class StringNBTCommandPacket{
 	public StringNBTCommandPacket(String cmd) {
 		data = new NBTTagCompound();
 		command = cmd;
-		System.out.println("NEW PACKET CMD: "+cmd);
-		System.out.println("NEW PACKET DATA: "+data);
 	}
 	public PacketBuffer encode(StringNBTCommandPacket packet, PacketBuffer buf) {
 		buf.writeInt(command.length());
@@ -38,7 +34,7 @@ public class StringNBTCommandPacket{
 		return buf;
 	}
 	public Object onMessageReceived(StringNBTCommandPacket a, Supplier<Context> b) {
-		System.out.println("DiST"+b.get().getDirection().name());
+		System.out.println("DIST: "+b.get().getDirection().name());
 		ServerHandler.handleSNBTCommand(b.get().getSender().connection, a);
 		return null;
 	}
