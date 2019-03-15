@@ -1,5 +1,5 @@
 {
   "variants" : {
-    "normal" : {"model" : "talecraft:/block/urlblock"}
+    "" : {"model" : "talecraft:/block/urlblock"}
   }
 }
