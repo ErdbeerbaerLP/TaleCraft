@@ -21,7 +21,11 @@ public class GuiURLBlock extends TCGuiScreen {
 	public GuiURLBlock(URLBlockTileEntity tileEntity) {
 		this.tileEntity = tileEntity;
 	}
-
+	@Override
+	public boolean doesGuiPauseGame() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	@Override
 	public void initGui() {
 		final BlockPos position = tileEntity.getPos();
