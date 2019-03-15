@@ -2,10 +2,8 @@ package talecraft.network.packets;
 
 import java.util.function.Supplier;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import talecraft.TaleCraft;
 
@@ -29,7 +27,7 @@ public class StringNBTCommandPacketClient {
 		command = cmd;
 	}
 
-	public PacketBuffer encode(StringNBTCommandPacket packet, PacketBuffer buf) {
+	public PacketBuffer encode(StringNBTCommandPacketClient packet, PacketBuffer buf) {
 		buf.writeInt(command.length());
 		buf.writeString(command);
 //		buf.writeBoolean(data == null);
