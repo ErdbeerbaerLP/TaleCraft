@@ -29,7 +29,9 @@ public class TCGuiScreen extends GuiScreen {
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		// TODO Auto-generated method stub
+		drawDefaultBackground();
 		super.render(mouseX, mouseY, partialTicks);
+		
 		for(Gui comp : components) {
 			if(comp instanceof GuiTextField) {
 				((GuiTextField)comp).drawTextField(mouseX, mouseY, partialTicks);
