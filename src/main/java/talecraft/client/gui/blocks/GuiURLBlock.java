@@ -26,7 +26,7 @@ public class GuiURLBlock extends TCGuiScreen {
 	public void initGui() {
 		final BlockPos position = tileEntity.getPos();
 
-		addComponent(new GuiLabel(this.fontRenderer, ArrayListHelper.createArrayListString("URL Block @ " + position.getX() + " " + position.getY() + " " + position.getZ()), 5, 2));
+		addComponent(new GuiLabel(this.fontRenderer, ArrayListHelper.createArrayListString("URL Block @ " + position.getX() + " " + position.getY() + " " + position.getZ()), 2, 7));
 
 		textField_url = new GuiTextField(fontRenderer, 3, 14+20+4, width-6, 20);
 		textField_url.setText(tileEntity.getURL());
