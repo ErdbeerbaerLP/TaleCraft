@@ -9,6 +9,7 @@ public class GuiTextField extends net.minecraft.client.gui.GuiTextField {
 	private boolean acceptsColors = false;
 	public GuiTextField(FontRenderer fontRenderer, int x, int y, int width, int height) {
 		super(-1, fontRenderer, x, y, width, height);
+		setMaxStringLength(100);
 	}
 	@Override
 	public void writeText(String textToWrite) {
@@ -21,6 +22,7 @@ public class GuiTextField extends net.minecraft.client.gui.GuiTextField {
 			super.writeText(textToWrite);
 		}
 	}
+
 	/**
 	 * 	currently unused
 	 */
