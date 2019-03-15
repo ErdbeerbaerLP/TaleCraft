@@ -1,5 +1,6 @@
 package talecraft.client;
 
+import ca.weblite.objc.Client;
 import talecraft.client.render.renderables.SelectionBoxRenderer;
 
 public class ClientProxy {
@@ -7,12 +8,13 @@ public class ClientProxy {
 	private ClientRenderer clientRenderer;
 	private InfoBar infoBarInstance;
 	private InvokeTracker invokeTracker;
-	
+	private ClientNetworkHandler netHandler;
 	public ClientProxy() {
 		clientRenderer = new ClientRenderer(this);
 		clientRenderer.preInit();
 		infoBarInstance = new InfoBar();
 		invokeTracker = new InvokeTracker();
+		netHandler = new ClientNetworkHandler();
 	}
 
 	public ClientRenderer getRenderer() {
@@ -26,4 +28,9 @@ public class ClientProxy {
 		// TODO Auto-generated method stub
 		return invokeTracker;
 	}
+
+	public ClientNetworkHandler getNetworkHandler() {
+		return netHandler;
+	}
+	
 }

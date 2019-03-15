@@ -33,9 +33,17 @@ public class StringNBTCommandPacket{
 		buf.writeCompoundTag(data);
 		return buf;
 	}
+	public static StringNBTCommandPacket decode(PacketBuffer a) {
+		int cmdLength = a.readInt();
+		String c = a.readString(cmdLength);
+		NBTTagCompound t = a.readCompoundTag();
+		return new StringNBTCommandPacket(c, t);
+	}
 	public Object onMessageReceived(StringNBTCommandPacket a, Supplier<Context> b) {
 		System.out.println("DIST: "+b.get().getDirection().name());
 		ServerHandler.handleSNBTCommand(b.get().getSender().connection, a);
 		return null;
 	}
+
+	
 }

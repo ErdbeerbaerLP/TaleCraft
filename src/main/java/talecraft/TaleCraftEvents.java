@@ -1,7 +1,6 @@
 package talecraft;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiCustomizeSkin;
 import net.minecraft.client.gui.GuiLanguage;
@@ -19,14 +18,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.client.gui.GuiModList;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -34,13 +32,16 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import talecraft.blocks.UnderwaterBarrier;
-import talecraft.blocks.tileentity.TileEntityBarrier;
-import talecraft.blocks.util.CollisionTriggerBlock;
-import talecraft.blocks.util.LightBlock;
-import talecraft.client.gui.replaced_guis.CustomMainMenu;
-import talecraft.items.WandItem;
 import talecraft.blocks.tileentity.CollisionTriggerBlockTileEntity;
 import talecraft.blocks.tileentity.LightBlockTE;
+import talecraft.blocks.tileentity.TileEntityBarrier;
+import talecraft.blocks.tileentity.URLBlockTileEntity;
+import talecraft.blocks.util.CollisionTriggerBlock;
+import talecraft.blocks.util.LightBlock;
+import talecraft.blocks.util.URLBlock;
+import talecraft.client.gui.replaced_guis.CustomMainMenu;
+import talecraft.items.WandItem;
+import talecraft.render.tileentity.GenericTileEntityRenderer;
 @EventBusSubscriber(bus=Bus.MOD)
 public class TaleCraftEvents {
 
@@ -54,16 +55,24 @@ public class TaleCraftEvents {
 		reg.register(new UnderwaterBarrier());
 		reg.register(new LightBlock());
 		reg.register(new CollisionTriggerBlock());
+		reg.register(new URLBlock());
 	}
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> ev) {
 		TaleCraft.logger.info("Registering Items");
 		final IForgeRegistry<Item> reg = ev.getRegistry();
-
+		// BLOCKS
 		reg.register(new ItemBlock(TaleCraftRegistered.WATER_BARRIER, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "barrier"));
 		reg.register(new ItemBlock(TaleCraftRegistered.LIGHT_BLOCK, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "lightblock"));
-		reg.register(new WandItem().setRegistryName(TaleCraft.MOD_ID, "wand"));
 		reg.register(new ItemBlock(TaleCraftRegistered.COLLISION_TRIGGER, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "collisiontriggerblock"));
+		reg.register(new ItemBlock(TaleCraftRegistered.URL_BLOCK, new Item.Properties()).setRegistryName(TaleCraft.MOD_ID, "urlblock"));
+		
+		
+		
+		
+		
+		// ITEMS
+		reg.register(new WandItem().setRegistryName(TaleCraft.MOD_ID, "wand"));
 	}
 	@SubscribeEvent
 	public static void registerEntityType(RegistryEvent.Register<EntityType<?>> ev) {
@@ -75,8 +84,24 @@ public class TaleCraftEvents {
 		TaleCraftRegistered.TE_BARRIER = TileEntityType.register(TaleCraft.MOD_ID+":te_barrier", TileEntityType.Builder.create(TileEntityBarrier::new)); 
 		TaleCraftRegistered.TE_LIGHT_BLOCK = TileEntityType.register(TaleCraft.MOD_ID+":te_light", TileEntityType.Builder.create(LightBlockTE::new)); 
 		TaleCraftRegistered.TE_COLLISION_TRIGGER = TileEntityType.register(TaleCraft.MOD_ID+":te_collisiontrigger", TileEntityType.Builder.create(CollisionTriggerBlockTileEntity::new)); 
+		TaleCraftRegistered.TE_URL = TileEntityType.register(TaleCraft.MOD_ID+":te_urlblock", TileEntityType.Builder.create(URLBlockTileEntity::new)); 
 	}
-
+	public static void registerTileEntityRenderers() {
+		// TODO Auto-generated method stub
+		TaleCraft.logger.info("Registering Renderers");
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrier.class,
+				new GenericTileEntityRenderer<TileEntityBarrier>("minecraft:textures/item/barrier.png"));
+		
+		ClientRegistry.bindTileEntitySpecialRenderer(LightBlockTE.class,
+				new GenericTileEntityRenderer<LightBlockTE>(TaleCraft.MOD_ID+":textures/blocks/util/light.png"));
+		
+		ClientRegistry.bindTileEntitySpecialRenderer(CollisionTriggerBlockTileEntity.class,
+				new GenericTileEntityRenderer<CollisionTriggerBlockTileEntity>(TaleCraft.MOD_ID+":textures/blocks/util/trigger.png"));
+		
+		ClientRegistry.bindTileEntitySpecialRenderer(URLBlockTileEntity.class,
+				new GenericTileEntityRenderer<URLBlockTileEntity>(TaleCraft.MOD_ID+":textures/blocks/util/url.png"));
+		
+	}
 
 
 

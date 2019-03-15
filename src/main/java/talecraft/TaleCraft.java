@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import com.google.common.base.Predicate;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,10 +23,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import talecraft.client.ClientProxy;
-import talecraft.client.ClientSettings;
 import talecraft.client.render.renderables.SelectionBoxRenderer;
-import talecraft.client.renderer.ClientRenderer;
-import talecraft.network.INetworkMessage;
 
 @Mod(TaleCraft.MOD_ID)
 public class TaleCraft {
@@ -44,7 +40,6 @@ public class TaleCraft {
 	
 	public static SimpleChannel network = NetworkRegistry.newSimpleChannel(new ResourceLocation(TaleCraft.MOD_ID, "talecraft-net"), ()->{return protVersion;}, pred, pred);
 	
-//	public static GlobalScriptManager globalScriptManager;
 	public TaleCraft() {
 		TaleCraftRegistered.load();
 		
@@ -60,7 +55,7 @@ public class TaleCraft {
 	}
 	public void serverStarting(FMLServerStartingEvent evt)
 	{
-		//Register commands...
+		//TODO Register commands...
 	}
 	public void commonSetup(FMLCommonSetupEvent event) {
 		talecraft.network.NetworkRegistry.init();
@@ -70,7 +65,7 @@ public class TaleCraft {
 		TaleCraft.clientProxy = new ClientProxy();
 		ClientProxy.settings.init();
 		logger.info("Client Setup");
-		ClientRenderer.registerAll();
+		TaleCraftEvents.registerTileEntityRenderers();
 	}
 	public void serverSetup(FMLDedicatedServerSetupEvent event) {
 

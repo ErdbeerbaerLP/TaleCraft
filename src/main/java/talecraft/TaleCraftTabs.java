@@ -19,7 +19,7 @@ public class TaleCraftTabs {
 		@Override
 		public ItemStack createIcon() {
 //			return new ItemStack(TaleCraftItems.filler);
-			return new ItemStack(Items.APPLE);
+			return new ItemStack(TaleCraftRegistered.ITEM_WAND);
 		}
 
 		@Override
@@ -30,7 +30,10 @@ public class TaleCraftTabs {
 			items.add(new ItemStack(Blocks.SPAWNER));
 			items.add(new ItemStack(TaleCraftRegistered.WATER_BARRIER));
 			items.add(new ItemStack(Blocks.STRUCTURE_BLOCK));
+			items.add(new ItemStack(TaleCraftRegistered.ITEM_WAND));
 			items.add(new ItemStack(TaleCraftRegistered.LIGHT_BLOCK));
+			items.add(new ItemStack(TaleCraftRegistered.COLLISION_TRIGGER));
+			items.add(new ItemStack(TaleCraftRegistered.URL_BLOCK));
 			super.fill(items);
 		}
 		

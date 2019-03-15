@@ -9,8 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import talecraft.client.gui.TCGuiScreen;
 import talecraft.client.gui.components.GuiLabel;
-import talecraft.client.gui.components.GuiTCButton;
-import talecraft.client.gui.components.GuiTCButton.ButtonIcon;
+import talecraft.client.gui.components.GuiButton;
+import talecraft.client.gui.components.GuiButton.ButtonIcon;
 import talecraft.invoke.BlockTriggerInvoke;
 import talecraft.invoke.CommandInvoke;
 import talecraft.invoke.EnumTriggerState;
@@ -33,7 +33,7 @@ public class InvokePanelBuilder {
 	public static final void build(TCGuiScreen screen, int ox, int oy, IInvoke invoke, final IInvokeHolder holder, int invokeTypeFlags) {
 
 		if(invokeTypeFlags != 0) {
-			GuiTCButton button = new GuiTCButton(ox, oy, 20, "", ButtonIcon.INVEDIT) {
+			GuiButton button = new GuiButton(ox, oy, 20, "", ButtonIcon.INVEDIT) {
 				@Override
 				public void onClick(double mouseX, double mouseY) {
 					// TODO Auto-generated method stub
@@ -76,7 +76,7 @@ public class InvokePanelBuilder {
 		
 		scriptName.setMaxStringLength(32700);
 		screen.addComponent(scriptName);
-		GuiTCButton buttonApply = new GuiTCButton(ox+100+2, oy, 40, "Apply"){
+		GuiButton buttonApply = new GuiButton(ox+100+2, oy, 40, "Apply"){
 			@Override public void onClick(double mouseX, double mouseY) {
 				NBTTagCompound invokeData = new NBTTagCompound();
 				String text = scriptName.getText();
@@ -161,7 +161,7 @@ public class InvokePanelBuilder {
 
 
 	private static void build_blocktrigger(TCGuiScreen screen, int ox, int oy, final BlockTriggerInvoke invoke, final IInvokeHolder holder) {
-		screen.addComponent(new GuiTCButton(ox, oy, 100, "Set Region") {
+		screen.addComponent(new GuiButton(ox, oy, 100, "Set Region") {
 			
 			
 			@Override 
@@ -186,7 +186,7 @@ public class InvokePanelBuilder {
 				"when this invoke is run."
 				));
 
-		screen.addComponent(new GuiTCButton(ox+100+2, oy, 20, "", ButtonIcon.PLAY) {
+		screen.addComponent(new GuiButton(ox+100+2, oy, 20, "", ButtonIcon.PLAY) {
 			
 			@Override public void onClick(double mouseX, double mouseY) {
 				holder.sendCommand("trigger", null);
@@ -194,7 +194,7 @@ public class InvokePanelBuilder {
 			
 		}.setTooltip("Trigger this invoke."));
 		
-		GuiTCButton state = new GuiTCButton(ox+100+2+20+2, oy, 50,  "") {
+		GuiButton state = new GuiButton(ox+100+2+20+2, oy, 50,  "") {
 			int ordinal = invoke.getOnOff().getIntValue();
 
 			@Override 

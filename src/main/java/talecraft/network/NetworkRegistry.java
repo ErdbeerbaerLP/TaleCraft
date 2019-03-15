@@ -18,7 +18,7 @@ public class NetworkRegistry {
 	public static void init() {
 		TaleCraft.logger.info("Registering network Packets");
 //		register();
-		NetworkRegistry.<StringNBTCommandPacket>register(StringNBTCommandPacket.class, (a,b) -> a.encode(a, b), (a) ->{int cmdLength = a.readInt(); String c = a.readString(cmdLength); NBTTagCompound t = a.readCompoundTag(); System.out.println(cmdLength+c+t);return new StringNBTCommandPacket(c, t);}, (a,b) -> {a.onMessageReceived(a, b);});
+		NetworkRegistry.<StringNBTCommandPacket>register(StringNBTCommandPacket.class, (a,b) -> a.encode(a, b), (a) ->{return StringNBTCommandPacket.decode(a);}, (a,b) -> {a.onMessageReceived(a, b);});
 		NetworkRegistry.<PlayerNBTDataMergePacket>register(PlayerNBTDataMergePacket.class, (a,b) -> a.encode(a,b), (a)->{return PlayerNBTDataMergePacket.decode(a);}, (a,b)-> {a.onMessage(a, b);});
 	}
 	private static <MSG> void register(Class<MSG> handler, BiConsumer<MSG, PacketBuffer> encoder, Function<PacketBuffer, MSG> decoder, BiConsumer<MSG, Supplier<Context>> messageConsumer){

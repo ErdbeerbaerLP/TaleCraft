@@ -1,7 +1,11 @@
 {
     "_blocks": "",
     "block.talecraft.barrier": "Barriere",
+    "block.talecraft.lightblock": "Lichtblock",
+    "block.talecraft.collisiontriggerblock": "Auslöserblock",
+    "block.talecraft.urlblock": "URL Block",
     "_items": "",
+    "item.talecraft.wand" : "Cursor",
     "_chat": "",
     "_gui": "",
     "_tabs":"",

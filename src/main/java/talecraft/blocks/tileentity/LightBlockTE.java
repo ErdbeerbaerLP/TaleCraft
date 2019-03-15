@@ -3,12 +3,10 @@ package talecraft.blocks.tileentity;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import talecraft.TaleCraftRegistered;
 import talecraft.invoke.IInvoke;
-import talecraft.invoke.IInvokeSource;
 
 public class LightBlockTE extends TCTileEntity {
 	int lightValue;

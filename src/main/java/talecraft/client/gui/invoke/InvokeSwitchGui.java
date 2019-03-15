@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.text.TextFormatting;
 import talecraft.client.gui.TCGuiScreen;
 import talecraft.client.gui.components.GuiLabel;
-import talecraft.client.gui.components.GuiTCButton;
+import talecraft.client.gui.components.GuiButton;
 import talecraft.invoke.BlockTriggerInvoke;
 import talecraft.invoke.CommandInvoke;
 import talecraft.invoke.NullInvoke;
@@ -29,7 +29,7 @@ public class InvokeSwitchGui extends TCGuiScreen {
 		addComponent(new GuiLabel(this.fontRenderer, ArrayListHelper.createArrayListString("Select Invoke Type..."), 4, 4));
 
 		{
-			addComponent(new GuiTCButton(xOff, yOff, TextFormatting.ITALIC+"Cancel") {
+			addComponent(new GuiButton(xOff, yOff, TextFormatting.ITALIC+"Cancel") {
 				@Override public void onClick() {
 					mc.displayGuiScreen(screen);
 				}
@@ -39,7 +39,7 @@ public class InvokeSwitchGui extends TCGuiScreen {
 		}
 
 		if((invokeTypeFlags & InvokePanelBuilder.INVOKE_TYPE_EDIT_ALLOW_NULL) != 0) {
-			addComponent(new GuiTCButton(xOff, yOff,"None"){
+			addComponent(new GuiButton(xOff, yOff,"None"){
 				@Override public void onClick() {
 					holder.switchInvokeType(NullInvoke.TYPE);
 					mc.displayGuiScreen(null);
@@ -49,7 +49,7 @@ public class InvokeSwitchGui extends TCGuiScreen {
 		}
 
 		if((invokeTypeFlags & InvokePanelBuilder.INVOKE_TYPE_EDIT_ALLOW_BLOCKTRIGGER) != 0) {
-			addComponent(new GuiTCButton(xOff, yOff,"Block Trigger"){
+			addComponent(new GuiButton(xOff, yOff,"Block Trigger"){
 				@Override public void onClick() {
 					holder.switchInvokeType(BlockTriggerInvoke.TYPE);
 					mc.displayGuiScreen(null);
@@ -59,7 +59,7 @@ public class InvokeSwitchGui extends TCGuiScreen {
 		}
 
 		if((invokeTypeFlags & InvokePanelBuilder.INVOKE_TYPE_EDIT_ALLOW_COMMAND) != 0) {
-			addComponent(new GuiTCButton(xOff, yOff,"Command") {
+			addComponent(new GuiButton(xOff, yOff,"Command") {
 				@Override public void onClick() {
 					holder.switchInvokeType(CommandInvoke.TYPE);
 					mc.displayGuiScreen(null);

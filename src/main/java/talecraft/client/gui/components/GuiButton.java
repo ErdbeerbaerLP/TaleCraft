@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
-public class GuiTCButton extends GuiButtonExt{
+public class GuiButton extends GuiButtonExt{
 	private ButtonIcon BUTTON_ICON;
 	private String[] tooltips = new String[0];
 	public enum ButtonIcon{
@@ -32,20 +32,20 @@ public class GuiTCButton extends GuiButtonExt{
 		}
 	}
 	
-	public GuiTCButton(int xPos, int yPos, String displayString) {
+	public GuiButton(int xPos, int yPos, String displayString) {
 		this(xPos, yPos, 100, displayString);
 	}
 	
-	public GuiTCButton(int xPos, int yPos, int width, String displayString) {
+	public GuiButton(int xPos, int yPos, int width, String displayString) {
 		this(xPos, yPos, width, 20, displayString);
 	}
-	public GuiTCButton(int xPos, int yPos, int width, String displayString, ButtonIcon texture) {
+	public GuiButton(int xPos, int yPos, int width, String displayString, ButtonIcon texture) {
 		this(xPos, yPos, width, 20, displayString, texture);
 	}
-	public GuiTCButton(int xPos, int yPos, int width, int height, String displayString) {
+	public GuiButton(int xPos, int yPos, int width, int height, String displayString) {
 		this(xPos, yPos, width, height, displayString, ButtonIcon.NONE);
 	}
-	public GuiTCButton(int xPos, int yPos, int width, int height, String displayString, ButtonIcon texture) {
+	public GuiButton(int xPos, int yPos, int width, int height, String displayString, ButtonIcon texture) {
 		super(-1, xPos, yPos, width, height, displayString);
 		this.BUTTON_ICON = texture;
 	}
@@ -60,7 +60,7 @@ public class GuiTCButton extends GuiButtonExt{
 		this.onClick();
 	}
 	public void onClick() {}
-	public GuiTCButton setTooltip(String... tooltips) {
+	public GuiButton setTooltip(String... tooltips) {
 		this.tooltips  = tooltips;
 		return this;
 	}
