@@ -4,6 +4,7 @@
     "block.talecraft.lightblock": "Light Block",
     "block.talecraft.collisiontriggerblock": "Trigger Block",
     "block.talecraft.urlblock": "URL Block",
+    "block.talecraft.delayblock": "Delay Block",
     "_items": "",
     "item.talecraft.wand" : "Wand",
     "_chat": "",

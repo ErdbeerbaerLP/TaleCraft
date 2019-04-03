@@ -27,18 +27,21 @@ public class LightBlockTE extends TCTileEntity {
 	public void setLightValue(int value) {
 		lightValue = value < 15 ? (value > 0 ? value : 0) : 15;
 		world.notifyBlockUpdate(this.pos, world.getBlockState(pos), world.getBlockState(pos), 0); //TODO Confirm
+		world.notifyLightSet(pos);
 	}
 
 	public void setLightActive(boolean flag) {
 		if(lightActive != flag) {
 			lightActive = flag;
 			world.notifyBlockUpdate(this.pos, world.getBlockState(pos), world.getBlockState(pos), 0); //TODO Confirm
+			world.notifyLightSet(pos);
 		}
 	}
 
 	public void toggleLightActive() {
 		lightActive = !lightActive;
 		world.notifyBlockUpdate(this.pos, world.getBlockState(pos), world.getBlockState(pos), 0); //TODO Confirm
+		world.notifyLightSet(pos);
 	}
 
 	@Override

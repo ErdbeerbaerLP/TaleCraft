@@ -31,6 +31,9 @@ public abstract class TCInvisibleBlock extends TCBlock{
 	public TCInvisibleBlock() {
 		super(Block.Properties.create(TaleCraftRegistered.MATERIAL_ADMINIUM).doesNotBlockMovement());
 	}
+	public TCInvisibleBlock(Block.Properties prop) {
+		super(prop);
+	}
 	@Override
 	  public EnumBlockRenderType getRenderType(IBlockState iBlockState) {
 	    return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;

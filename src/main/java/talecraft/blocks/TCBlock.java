@@ -5,16 +5,23 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 import talecraft.TaleCraftRegistered;
 
 public abstract class TCBlock extends BlockContainer{
 
 	public TCBlock() {
 		super(Block.Properties.create(TaleCraftRegistered.MATERIAL_ADMINIUM).sound(SoundType.STONE).hardnessAndResistance(-1f, 6000001.0F));
+	}
+	public void registerItem(IForgeRegistry<Item> reg) {
+		reg.register(new ItemBlock(this, new Item.Properties()).setRegistryName(this.getRegistryName()));
 	}
 	public TCBlock(Block.Properties prop) {
 		super(prop.sound(SoundType.STONE).hardnessAndResistance(-1f, 6000001.0F));

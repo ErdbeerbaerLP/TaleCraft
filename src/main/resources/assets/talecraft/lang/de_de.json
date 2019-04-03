@@ -4,6 +4,7 @@
     "block.talecraft.lightblock": "Lichtblock",
     "block.talecraft.collisiontriggerblock": "Auslöserblock",
     "block.talecraft.urlblock": "URL Block",
+    "block.talecraft.delayblock": "Verzögerungsblock",
     "_items": "",
     "item.talecraft.wand" : "Cursor",
     "_chat": "",

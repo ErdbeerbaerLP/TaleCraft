@@ -34,6 +34,7 @@ public class TaleCraftTabs {
 			items.add(new ItemStack(TaleCraftRegistered.LIGHT_BLOCK));
 			items.add(new ItemStack(TaleCraftRegistered.COLLISION_TRIGGER));
 			items.add(new ItemStack(TaleCraftRegistered.URL_BLOCK));
+			items.add(new ItemStack(TaleCraftRegistered.DELAY_BLOCK));
 			super.fill(items);
 		}
 		

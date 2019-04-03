@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraftforge.fml.client.config.GuiSlider;
 
 
 public class TCGuiScreen extends GuiScreen {
@@ -39,6 +40,9 @@ public class TCGuiScreen extends GuiScreen {
 			if(comp instanceof GuiLabel) {
 				((GuiLabel)comp).render(mouseX, mouseY, partialTicks);
 			}
+			if(comp instanceof GuiSlider) {
+				((GuiSlider)comp).render(mouseX, mouseY, partialTicks);
+			}
 		}
 	}
 	@Override
@@ -48,6 +52,9 @@ public class TCGuiScreen extends GuiScreen {
 			if(comp instanceof GuiTextField) {
 				((GuiTextField)comp).mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 			}
+			if(comp instanceof GuiSlider) {
+				((GuiSlider)comp).mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+			}
 		}
 		return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
 	}
@@ -56,6 +63,9 @@ public class TCGuiScreen extends GuiScreen {
 		for(Gui comp : components) {
 			if(comp instanceof GuiTextField) {
 				((GuiTextField)comp).mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
+			}
+			if(comp instanceof GuiSlider) {
+				((GuiSlider)comp).mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
 			}
 		}
 		return super.mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);

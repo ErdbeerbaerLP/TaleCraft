@@ -42,6 +42,7 @@ public class TaleCraft {
 	
 	public TaleCraft() {
 		TaleCraftRegistered.load();
+		talecraft.network.NetworkRegistry.init();
 		
 		//Register loading state listeners
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStarting);
@@ -58,7 +59,6 @@ public class TaleCraft {
 		//TODO Register commands...
 	}
 	public void commonSetup(FMLCommonSetupEvent event) {
-		talecraft.network.NetworkRegistry.init();
 	}
 	public void clientSetup(FMLClientSetupEvent event) {
 		
@@ -66,6 +66,8 @@ public class TaleCraft {
 		ClientProxy.settings.init();
 		logger.info("Client Setup");
 		TaleCraftEvents.registerTileEntityRenderers();
+		TaleCraft.asClient().getRenderer().addStaticRenderer(new SelectionBoxRenderer());
+		
 	}
 	public void serverSetup(FMLDedicatedServerSetupEvent event) {
 
@@ -74,9 +76,6 @@ public class TaleCraft {
 
 	}
 	public void loadComplete(FMLLoadCompleteEvent event) {
-		DistExecutor.runWhenOn(Dist.CLIENT, ()->()->{
-			TaleCraft.asClient().getRenderer().addStaticRenderer(new SelectionBoxRenderer());
-		});
 	}
 	/**
 	 * @return TRUE, if the client is in build-mode (aka: creative-mode), FALSE if not.
