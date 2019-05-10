@@ -7,9 +7,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import de.erdbeerbaerlp.discordrpc.DRPCEventHandler;
 import de.erdbeerbaerlp.discordrpc.Discord;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -134,7 +132,6 @@ public class TaleCraft {
 	public void init(FMLInitializationEvent event) {
 		proxy.init(event);
 		NetworkRegistry.INSTANCE.registerGuiHandler(TaleCraft.instance, new GuiHandler());
-		setPresence("Starting Game", "starting_2");
 		// Convert tile entity IDs
 		CompoundDataFixer compoundDataFixer = FMLCommonHandler.instance().getDataFixer();
 		ModFixs dataFixer = compoundDataFixer.init(Reference.MOD_ID, 1);
@@ -187,15 +184,6 @@ public class TaleCraft {
 
 	public static NBTTagCompound getSettings(EntityPlayer player) {
 		return proxy.getSettings(player);
-	}
-	
-	public static void setPresence(String title, String iconKey) {
-		setPresence(title, "", iconKey);
-	}
-	public static void setPresence(String title, String subtitle, String iconKey) {
-		if(Loader.isModLoaded("discordrpc")) {
-			Discord.setPresence( DRPCEventHandler.removeFormatting(title), DRPCEventHandler.removeFormatting(subtitle), iconKey);
-		}
 	}
 
 }

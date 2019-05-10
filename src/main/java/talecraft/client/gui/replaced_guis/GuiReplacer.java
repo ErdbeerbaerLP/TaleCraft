@@ -67,11 +67,6 @@ public class GuiReplacer { //It Rhymes! (No anymore, sry)
 				System.err.println("Redirecting to somehow opened multiplayer menu to main menu");
 				e.setGui(new CustomMainMenu());
 			}
-			if(e.getGui() instanceof GuiOptions || e.getGui() instanceof GuiVideoSettings || e.getGui() instanceof GuiSnooper|| e.getGui() instanceof ScreenChatOptions || e.getGui() instanceof GuiControls || e.getGui() instanceof GuiScreenOptionsSounds || e.getGui() instanceof GuiCustomizeSkin || e.getGui() instanceof GuiScreenResourcePacks|| e.getGui() instanceof GuiLanguage|| e.getGui() instanceof GuiConfig)
-				TaleCraft.setPresence("Editing Options", "talecraft");
-			
-			if(e.getGui() instanceof GuiModList)
-				TaleCraft.setPresence("Looking at the Mod list", "talecraft");
 		}
 		
 //		System.out.println(e.getGui());

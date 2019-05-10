@@ -1,7 +1,6 @@
 package talecraft;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandResultStats.Type;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -9,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -67,14 +65,6 @@ public class TaleCraftEventHandler {
 			try {
 				boolean building = TaleCraft.asClient().isBuildMode();
 				boolean testWorld = TaleCraft.lastVisitedWorld.getWorldInfo().getWorldName().equals("TC_TEST");
-				if(testWorld) TaleCraft.setPresence("Testing Map", "talecraft");
-				else {
-					EntityPlayerSP player = Minecraft.getMinecraft().player;
-					int posX = Double.valueOf(player.posX).intValue();
-					int posY = Double.valueOf(player.posY).intValue();
-					int posZ = Double.valueOf(player.posZ).intValue();
-					TaleCraft.setPresence((building?"Building Map \"":"Playing Map \"")+TaleCraft.lastVisitedWorld.getWorldInfo().getWorldName()+"\"", "X: "+posX+" Y: "+posY+" Z: " + posZ + " | Item: " + player.getHeldItemMainhand().getDisplayName()+" | "+(!player.isDead?("Health: "+player.getHealth()):"Dead :("), "talecraft");
-				}
 				ticks = 0;
 			}catch (Exception e) {
 				// TODO: handle exception

@@ -99,7 +99,6 @@ public class GuiDLMapInfo extends QADGuiScreen {
 		mapInfo.setCentered();
 		descPanel.allowLeftMouseButtonScrolling = true;
 		updateDescription();
-		TaleCraft.setPresence("Looking at map \""+map.name+"\"", "talecraft");
 		
 	}
 	@Override

@@ -8,7 +8,6 @@ public class GuiCopyingWorld extends GuiScreen {
 	public GuiCopyingWorld(String text) {
 		this.text = text;
 		System.out.println("INITIALIZING GUI!!!!!");
-		TaleCraft.setPresence("In loading screen...", "talecraft");
 	}
 	@Override
 	public boolean doesGuiPauseGame() {

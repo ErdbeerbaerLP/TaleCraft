@@ -77,7 +77,6 @@ public class GuiDownloading extends GuiScreen {
 				else if(zip.getStatus() == DownloadZip.CANCELLED) str1 = "Cancelled";
 				int progress = Math.round(zip.getProgress());
 				str2 = "Status: "+progress+"%";
-				TaleCraft.setPresence("Downloading \""+parentGui.map.name+"\"", str2, "talecraft");
 				//		System.out.println(zip.getSize());
 				drawCenteredString(fontRenderer, str1, width/2, height/2-30, 16777215);
 				drawCenteredString(fontRenderer, str2, width/2, height/2-10, 16777215);
@@ -91,8 +90,7 @@ public class GuiDownloading extends GuiScreen {
 				if(this.unzipStarted) return;
 				this.unzipStarted = true;
 				byte[] buffer = new byte[1024];
-				TaleCraft.setPresence("Downloading \""+parentGui.map.name+"\"", "Unzipping...", "talecraft");
-
+				
 				try{
 
 					//create output directory is not exists

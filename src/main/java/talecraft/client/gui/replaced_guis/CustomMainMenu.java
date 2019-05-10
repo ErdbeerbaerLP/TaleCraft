@@ -57,7 +57,6 @@ public class CustomMainMenu extends GuiScreen {
 	//GuiMainMenu
 	@Override
 	public void initGui() {
-    	TaleCraft.setPresence("In Main Menu", "talecraft");
 		File savesDir = new File(this.mc.mcDataDir, "saves");
 		final String[] savesList = savesDir.list();
         for(String s : savesList){
