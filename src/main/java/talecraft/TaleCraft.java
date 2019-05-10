@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import de.erdbeerbaerlp.discordrpc.Discord;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
@@ -74,9 +73,6 @@ public class TaleCraft {
 	@Mod.EventHandler
 	public void modConstructing(FMLConstructionEvent event) {
 		if(Loader.isModLoaded("discordrpc")) {
-		Discord.disableModDefault(true);
-		Discord.customDiscordInit("544959465020063777");
-		Discord.setPresence("Starting Game", "", "starting_1", false);
 		}
 	}
 	@Mod.EventHandler
