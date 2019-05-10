@@ -33,16 +33,14 @@ public class TaleCraft {
 	public static World lastVisitedWorld;
 	public static Minecraft mc = Minecraft.getInstance();
 	private static ClientProxy clientProxy;
-	
 	private static final String protVersion = "1.0.0";
 	private static final Predicate<String> pred = (ver) -> {return ver.equals(protVersion);};
-	
 	public static SimpleChannel network = NetworkRegistry.newSimpleChannel(new ResourceLocation(TaleCraft.MOD_ID, "talecraft-net"), ()->{return protVersion;}, pred, pred);
-	
+
 	public TaleCraft() {
 		TaleCraftRegistered.load();
 		talecraft.network.NetworkRegistry.init();
-		
+
 		//Register loading state listeners
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStarting);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
@@ -60,13 +58,13 @@ public class TaleCraft {
 	public void commonSetup(FMLCommonSetupEvent event) {
 	}
 	public void clientSetup(FMLClientSetupEvent event) {
-		
+
 		TaleCraft.clientProxy = new ClientProxy();
 		ClientProxy.settings.init();
 		logger.info("Client Setup");
 		TaleCraftEvents.registerTileEntityRenderers();
 		TaleCraft.asClient().getRenderer().addStaticRenderer(new SelectionBoxRenderer());
-		
+
 	}
 	public void serverSetup(FMLDedicatedServerSetupEvent event) {
 
@@ -83,14 +81,7 @@ public class TaleCraft {
 	public static boolean isBuildMode() {
 		return mc.playerController != null && mc.playerController.isInCreativeMode();
 	}
-//	public static ClientProxy asClient() {
-//		return proxy.asClient();
-//	}
-//
-//	public static NBTTagCompound getSettings(EntityPlayer player) {
-//		return proxy.getSettings(player);
-//	}
-//	
+
 	public static void setPresence(String title, String iconKey) {
 		setPresence(title, "", iconKey);
 	}
@@ -103,8 +94,8 @@ public class TaleCraft {
 		return TaleCraft.clientProxy;
 	}
 
-	
-	
+
+
 
 
 }
