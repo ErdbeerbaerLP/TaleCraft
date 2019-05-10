@@ -2,7 +2,6 @@ package talecraft.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MusicTicker;
-import talecraft.TaleCraft;
 
 public class TCMusicTicker extends MusicTicker {
 

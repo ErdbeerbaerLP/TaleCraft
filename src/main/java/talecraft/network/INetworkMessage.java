@@ -2,10 +2,7 @@ package talecraft.network;
 
 import com.google.common.base.Supplier;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import talecraft.TaleCraft;
 

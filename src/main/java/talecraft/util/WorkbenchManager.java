@@ -1,6 +1,5 @@
 package talecraft.util;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;

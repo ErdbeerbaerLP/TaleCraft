@@ -1,8 +1,5 @@
 package talecraft.client;
 
-import ca.weblite.objc.Client;
-import talecraft.client.render.renderables.SelectionBoxRenderer;
-
 public class ClientProxy {
 	public static final ClientSettings settings = new ClientSettings();
 	private ClientRenderer clientRenderer;

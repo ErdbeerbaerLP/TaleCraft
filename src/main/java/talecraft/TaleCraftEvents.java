@@ -15,7 +15,6 @@ import net.minecraft.client.gui.ScreenChatOptions;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -35,13 +34,20 @@ import talecraft.blocks.UnderwaterBarrier;
 import talecraft.blocks.tileentity.CollisionTriggerBlockTileEntity;
 import talecraft.blocks.tileentity.DelayBlockTileEntity;
 import talecraft.blocks.tileentity.LightBlockTE;
+import talecraft.blocks.tileentity.MemoryBlockTileEntity;
+import talecraft.blocks.tileentity.MessageBlockTileEntity;
+import talecraft.blocks.tileentity.SummonBlockTileEntity;
 import talecraft.blocks.tileentity.TileEntityBarrier;
 import talecraft.blocks.tileentity.URLBlockTileEntity;
 import talecraft.blocks.util.CollisionTriggerBlock;
 import talecraft.blocks.util.DelayBlock;
 import talecraft.blocks.util.LightBlock;
+import talecraft.blocks.util.MemoryBlock;
+import talecraft.blocks.util.MessageBlock;
+import talecraft.blocks.util.SummonBlock;
 import talecraft.blocks.util.URLBlock;
 import talecraft.client.gui.replaced_guis.CustomMainMenu;
+import talecraft.items.EntityCloneItem;
 import talecraft.items.WandItem;
 import talecraft.render.tileentity.GenericTileEntityRenderer;
 @EventBusSubscriber(bus=Bus.MOD)
@@ -59,6 +65,9 @@ public class TaleCraftEvents {
 		reg.register(new CollisionTriggerBlock());
 		reg.register(new URLBlock());
 		reg.register(new DelayBlock());
+		reg.register(new MemoryBlock());
+		reg.register(new SummonBlock());
+		reg.register(new MessageBlock());
 	}
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> ev) {
@@ -70,10 +79,13 @@ public class TaleCraftEvents {
 		TaleCraftRegistered.COLLISION_TRIGGER.registerItem(reg);
 		TaleCraftRegistered.URL_BLOCK.registerItem(reg);
 		TaleCraftRegistered.DELAY_BLOCK.registerItem(reg);
-
+		TaleCraftRegistered.MEMORY_BLOCK.registerItem(reg);
+		TaleCraftRegistered.SUMMON_BLOCK.registerItem(reg);
+		TaleCraftRegistered.MESSAGE_BLOCK.registerItem(reg);
 
 		// ITEMS
 		reg.register(new WandItem().setRegistryName(TaleCraft.MOD_ID, "wand"));
+		reg.register(new EntityCloneItem().setRegistryName(TaleCraft.MOD_ID, "npcclone"));
 	}
 	@SubscribeEvent
 	public static void registerEntityType(RegistryEvent.Register<EntityType<?>> ev) {
@@ -87,6 +99,9 @@ public class TaleCraftEvents {
 		TaleCraftRegistered.TE_COLLISION_TRIGGER = TileEntityType.register(TaleCraft.MOD_ID+":te_collisiontrigger", TileEntityType.Builder.create(CollisionTriggerBlockTileEntity::new)); 
 		TaleCraftRegistered.TE_URL = TileEntityType.register(TaleCraft.MOD_ID+":te_urlblock", TileEntityType.Builder.create(URLBlockTileEntity::new)); 
 		TaleCraftRegistered.TE_DELAY = TileEntityType.register(TaleCraft.MOD_ID+":te_delayblock", TileEntityType.Builder.create(DelayBlockTileEntity::new)); 
+		TaleCraftRegistered.TE_MEMORY_BLOCK = TileEntityType.register(TaleCraft.MOD_ID+":te_memoryblock", TileEntityType.Builder.create(MemoryBlockTileEntity::new)); 
+		TaleCraftRegistered.TE_SUMMON = TileEntityType.register(TaleCraft.MOD_ID+":te_summon", TileEntityType.Builder.create(SummonBlockTileEntity::new)); 
+		TaleCraftRegistered.TE_MESSAGE = TileEntityType.register(TaleCraft.MOD_ID+":te_message", TileEntityType.Builder.create(MessageBlockTileEntity::new));
 	}
 	public static void registerTileEntityRenderers() {
 		TaleCraft.logger.info("Registering Tileentity-Renderers");
@@ -104,6 +119,15 @@ public class TaleCraftEvents {
 
 		ClientRegistry.bindTileEntitySpecialRenderer(DelayBlockTileEntity.class,
 				new GenericTileEntityRenderer<DelayBlockTileEntity>(TaleCraft.MOD_ID+":textures/blocks/util/delay.png"));
+		
+		ClientRegistry.bindTileEntitySpecialRenderer(MemoryBlockTileEntity.class,
+				new GenericTileEntityRenderer<MemoryBlockTileEntity>(TaleCraft.MOD_ID+":textures/blocks/util/memory.png"));
+		
+		ClientRegistry.bindTileEntitySpecialRenderer(SummonBlockTileEntity.class,
+				new GenericTileEntityRenderer<SummonBlockTileEntity>(TaleCraft.MOD_ID+":textures/blocks/util/spawner.png"));
+
+		ClientRegistry.bindTileEntitySpecialRenderer(MessageBlockTileEntity.class,
+				new GenericTileEntityRenderer<MessageBlockTileEntity>(TaleCraft.MOD_ID+":textures/blocks/util/message.png"));
 
 	}
 

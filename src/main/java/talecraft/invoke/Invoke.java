@@ -1,7 +1,6 @@
 package talecraft.invoke;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
@@ -14,7 +13,6 @@ import net.minecraft.block.BlockTNT;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
@@ -25,7 +23,6 @@ import talecraft.TaleCraft;
 import talecraft.blocks.TCITriggerableBlock;
 import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.util.WorldHelper;
-import talecraft.util.WorldHelper.BlockRegionIterator;
 
 public class Invoke {
 

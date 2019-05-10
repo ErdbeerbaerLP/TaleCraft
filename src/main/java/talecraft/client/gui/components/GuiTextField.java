@@ -1,7 +1,6 @@
 package talecraft.client.gui.components;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.SharedConstants;
 import talecraft.TaleCraft;
 
 public class GuiTextField extends net.minecraft.client.gui.GuiTextField {

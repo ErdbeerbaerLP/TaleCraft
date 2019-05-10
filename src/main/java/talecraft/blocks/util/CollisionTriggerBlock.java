@@ -13,7 +13,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
 import talecraft.TaleCraft;
 import talecraft.blocks.TCInvisibleBlock;
 import talecraft.blocks.tileentity.CollisionTriggerBlockTileEntity;

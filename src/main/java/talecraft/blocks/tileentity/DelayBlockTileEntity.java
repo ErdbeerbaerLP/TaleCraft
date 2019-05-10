@@ -1,6 +1,7 @@
 package talecraft.blocks.tileentity;
 
 import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 import talecraft.TaleCraftRegistered;
 import talecraft.invoke.BlockTriggerInvoke;
@@ -77,10 +78,8 @@ public class DelayBlockTileEntity extends TCTileEntity {
 	int ticks = 0;
 	@Override
 	public void tick() {
-		System.out.println("T? "+triggered+" TICKS: "+ticks+" DELAY: "+getDelayValue());
 		if(triggered) {
 			ticks++;
-			System.out.println("Triggered for "+ticks+ " ticks");
 			if(ticks > getDelayValue()) {
 				triggered = false;
 				ticks = 0;

@@ -1,7 +1,6 @@
 package talecraft.util;
 
 import net.minecraft.nbt.INBTBase;
-import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants.NBT;

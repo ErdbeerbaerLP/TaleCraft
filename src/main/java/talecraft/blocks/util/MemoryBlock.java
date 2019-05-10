@@ -14,18 +14,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import talecraft.TaleCraft;
 import talecraft.blocks.TCITriggerableBlock;
 import talecraft.blocks.TCInvisibleBlock;
-import talecraft.blocks.tileentity.DelayBlockTileEntity;
-import talecraft.client.gui.blocks.GuiDelayBlock;
+import talecraft.blocks.tileentity.MemoryBlockTileEntity;
+import talecraft.client.gui.blocks.GuiMemoryBlock;
 import talecraft.invoke.EnumTriggerState;
 
-public class DelayBlock extends TCInvisibleBlock implements TCITriggerableBlock {
-	public DelayBlock() {
-		setRegistryName(TaleCraft.MOD_ID, "delayblock");
+public class MemoryBlock extends TCInvisibleBlock implements TCITriggerableBlock {
+
+	public MemoryBlock() {
+		// TODO Auto-generated constructor stub
+		setRegistryName(TaleCraft.MOD_ID, "memoryblock");
 	}
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		// TODO Auto-generated method stub
-		return new DelayBlockTileEntity();
+	public TileEntity createNewTileEntity(IBlockReader r) {
+		return new MemoryBlockTileEntity();
 	}
 
 	@Override
@@ -35,13 +36,12 @@ public class DelayBlock extends TCInvisibleBlock implements TCITriggerableBlock 
 
 		TileEntity tileentity = world.getTileEntity(position);
 
-		if (tileentity instanceof DelayBlockTileEntity) {
-			((DelayBlockTileEntity)tileentity).trigger(triggerState);
+		if (tileentity instanceof MemoryBlockTileEntity) {
+			((MemoryBlockTileEntity)tileentity).trigger(triggerState);
 		}
 	}
-	
-	@Override
 	@OnlyIn(Dist.CLIENT)
+	@Override
 	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		if(!worldIn.isRemote)
@@ -52,10 +52,9 @@ public class DelayBlock extends TCInvisibleBlock implements TCITriggerableBlock 
 			return true;
 
 		Minecraft mc = Minecraft.getInstance();
-		mc.displayGuiScreen(new GuiDelayBlock((DelayBlockTileEntity)worldIn.getTileEntity(pos)));
+		mc.displayGuiScreen(new GuiMemoryBlock((MemoryBlockTileEntity)worldIn.getTileEntity(pos)));
 
 		return true;
 	}
-	
 
 }

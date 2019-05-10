@@ -3,7 +3,6 @@ package talecraft.server;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.PacketDistributor;
 import talecraft.TaleCraft;
 import talecraft.invoke.IInvoke;
 import talecraft.invoke.IInvokeSource;

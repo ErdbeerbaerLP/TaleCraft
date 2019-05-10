@@ -31,10 +31,15 @@ public class TaleCraftTabs {
 			items.add(new ItemStack(TaleCraftRegistered.WATER_BARRIER));
 			items.add(new ItemStack(Blocks.STRUCTURE_BLOCK));
 			items.add(new ItemStack(TaleCraftRegistered.ITEM_WAND));
+			items.add(new ItemStack(TaleCraftRegistered.ITEM_ENTITCLONE));
 			items.add(new ItemStack(TaleCraftRegistered.LIGHT_BLOCK));
 			items.add(new ItemStack(TaleCraftRegistered.COLLISION_TRIGGER));
 			items.add(new ItemStack(TaleCraftRegistered.URL_BLOCK));
 			items.add(new ItemStack(TaleCraftRegistered.DELAY_BLOCK));
+			items.add(new ItemStack(TaleCraftRegistered.MEMORY_BLOCK));
+			items.add(new ItemStack(TaleCraftRegistered.SUMMON_BLOCK));
+			items.add(new ItemStack(TaleCraftRegistered.MESSAGE_BLOCK));
+			
 			super.fill(items);
 		}
 		

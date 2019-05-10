@@ -14,18 +14,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import talecraft.TaleCraft;
 import talecraft.blocks.TCITriggerableBlock;
 import talecraft.blocks.TCInvisibleBlock;
-import talecraft.blocks.tileentity.DelayBlockTileEntity;
-import talecraft.client.gui.blocks.GuiDelayBlock;
+import talecraft.blocks.tileentity.MessageBlockTileEntity;
+import talecraft.client.gui.blocks.GuiMessageBlock;
 import talecraft.invoke.EnumTriggerState;
 
-public class DelayBlock extends TCInvisibleBlock implements TCITriggerableBlock {
-	public DelayBlock() {
-		setRegistryName(TaleCraft.MOD_ID, "delayblock");
+public class MessageBlock extends TCInvisibleBlock implements TCITriggerableBlock {
+	public MessageBlock() {
+		setRegistryName(TaleCraft.MOD_ID, "messageblock");
 	}
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		// TODO Auto-generated method stub
-		return new DelayBlockTileEntity();
+	public TileEntity createNewTileEntity(IBlockReader r) {
+		return new MessageBlockTileEntity();
 	}
 
 	@Override
@@ -35,13 +34,12 @@ public class DelayBlock extends TCInvisibleBlock implements TCITriggerableBlock 
 
 		TileEntity tileentity = world.getTileEntity(position);
 
-		if (tileentity instanceof DelayBlockTileEntity) {
-			((DelayBlockTileEntity)tileentity).trigger(triggerState);
+		if (tileentity instanceof MessageBlockTileEntity) {
+			((MessageBlockTileEntity)tileentity).commandReceived("trigger", null);;
 		}
 	}
-	
-	@Override
 	@OnlyIn(Dist.CLIENT)
+	@Override
 	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		if(!worldIn.isRemote)
@@ -52,10 +50,9 @@ public class DelayBlock extends TCInvisibleBlock implements TCITriggerableBlock 
 			return true;
 
 		Minecraft mc = Minecraft.getInstance();
-		mc.displayGuiScreen(new GuiDelayBlock((DelayBlockTileEntity)worldIn.getTileEntity(pos)));
+		mc.displayGuiScreen(new GuiMessageBlock((MessageBlockTileEntity)worldIn.getTileEntity(pos)));
 
 		return true;
 	}
-	
 
 }

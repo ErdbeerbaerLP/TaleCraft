@@ -1,7 +1,6 @@
 package talecraft.util;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ArrayListHelper {
 	public static ArrayList<String> createArrayListString(String... strings) {

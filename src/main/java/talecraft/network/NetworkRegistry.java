@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 
 import com.google.common.base.Function;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import talecraft.TaleCraft;

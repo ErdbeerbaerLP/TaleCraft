@@ -6,11 +6,10 @@ import talecraft.TaleCraft;
 import talecraft.blocks.tileentity.URLBlockTileEntity;
 import talecraft.client.ClientNetworkHandler;
 import talecraft.client.gui.TCGuiScreen;
-import talecraft.client.gui.components.GuiLabel;
 import talecraft.client.gui.components.GuiButton;
+import talecraft.client.gui.components.GuiLabel;
 import talecraft.client.gui.components.GuiTextField;
 import talecraft.network.packets.StringNBTCommandPacket;
-import talecraft.util.ArrayListHelper;
 
 public class GuiURLBlock extends TCGuiScreen {
 	URLBlockTileEntity tileEntity;
@@ -30,7 +29,7 @@ public class GuiURLBlock extends TCGuiScreen {
 	public void initGui() {
 		final BlockPos position = tileEntity.getPos();
 
-		addComponent(new GuiLabel(this.fontRenderer, ArrayListHelper.createArrayListString("URL Block @ " + position.getX() + " " + position.getY() + " " + position.getZ()), 2, 7));
+		addComponent(new GuiLabel(this.fontRenderer, "URL Block @ " + position.getX() + " " + position.getY() + " " + position.getZ(), 2, 7));
 
 		textField_url = new GuiTextField(fontRenderer, 3, 14+20+4, width-6, 20);
 		textField_url.setText(tileEntity.getURL());

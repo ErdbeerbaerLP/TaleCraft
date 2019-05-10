@@ -7,26 +7,22 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.vecmath.Matrix4f;
+
+import org.lwjgl.opengl.GL11;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 import talecraft.TaleCraft;
 import talecraft.client.ClientRenderer;
 import talecraft.client.environment.Environment.SkyLayer;
-import talecraft.client.render.IRenderable;
 
 public class Environments {
 	private static final ResourceLocation environmentRes = new ResourceLocation("talecraft:environment.json");

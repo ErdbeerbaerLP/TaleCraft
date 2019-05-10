@@ -1,5 +1,5 @@
 {
   "variants" : {
-    "normal" : {"model" : "talecraft:memoryblock"}
+    "" : {"model" : "talecraft:block/memoryblock"}
   }
 }

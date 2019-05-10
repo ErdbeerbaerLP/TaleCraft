@@ -1,9 +1,10 @@
 package talecraft.util;
 
+import java.util.Map;
+
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.schemas.Schema;
 
-import java.util.Map;
 import net.minecraft.nbt.NBTTagCompound;
 import talecraft.TaleCraft;
 
