@@ -74,7 +74,6 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 
 		this.loadServerIcon();
 	}
-
 	public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks)
 	{
 		String s = this.worldSummary.getDisplayName();
@@ -293,6 +292,23 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 
 	public void editWorld()
 	{
+		final File worldDat = new File("./"+this.containingListSel.worldPathName+"/"+this.worldSummary.getFileName()+"/talecraft/info.dat");
+		NBTTagCompound worldComp = null;
+		try {
+			worldComp = CompressedStreamTools.read(worldDat);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(worldComp != null && worldComp.hasKey("allowedUUIDs") && !worldComp.getString("allowedUUIDs").trim().equals("*")) {
+			for(String UUID : worldComp.getString("allowedUUIDs").split(";")) {
+				if(UUID.equals(Minecraft.getMinecraft().getSession().getPlayerID())) {
+					this.client.displayGuiScreen(new GuiNoEditPermission());
+					return;
+				}
+			}
+			
+		}
 		this.client.displayGuiScreen(new MapEditor(this.worldSelScreen, this.worldSummary.getFileName(), this.worldPathName));
 	}
 
