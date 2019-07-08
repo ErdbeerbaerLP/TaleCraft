@@ -72,8 +72,8 @@ public class GuiCertError extends QADGuiScreen {
 					System.err.println("Couldn't open link: "+ throwable.getMessage());
 				}
 			}
-//			mc.shutdown();
-			mc.displayGuiScreen(this);
+			mc.shutdown();
+//			mc.displayGuiScreen(this);
 		}
 	}
 
