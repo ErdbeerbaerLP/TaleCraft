@@ -17,6 +17,7 @@ public class GuiCertError extends QADGuiScreen {
 	final QADButton btnYes = new QADButton("Yes");
 	final QADLabel l = new QADLabel("You need \"Lets EncryptCraft\" to use this feature.");
 	final QADLabel l2 = new QADLabel("Do you want to close the game, open the mods folder and the website of the mod?");
+	final QADLabel l3 = new QADLabel("(Just grab the newest version for 1.10+)");
 	@Override
 	public void buildGui() {
 		btnYes.setAction(()->{
@@ -31,6 +32,7 @@ public class GuiCertError extends QADGuiScreen {
 		this.addComponent(btnYes);
 		this.addComponent(l);
 		this.addComponent(l2);
+		this.addComponent(l3);
 	}
 	@Override
 	public void updateGui() {
@@ -38,6 +40,8 @@ public class GuiCertError extends QADGuiScreen {
 		l.setPosition(width/2, height/2);
 		l2.setCentered();
 		l2.setPosition(l.getX(), l.getY()+11);
+		l3.setCentered();
+		l3.setPosition(l2.getX(), l2.getY()+11);
 		btnNo.setWidth(30);
 		btnNo.setPosition(width/2, height-40);
 		btnYes.setWidth(30);
