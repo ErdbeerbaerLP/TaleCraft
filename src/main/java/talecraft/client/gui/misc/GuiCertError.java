@@ -20,7 +20,7 @@ public class GuiCertError extends QADGuiScreen {
 	@Override
 	public void buildGui() {
 		btnYes.setAction(()->{
-			GuiConfirmOpenLink guiconfirmopenlink = new GuiConfirmOpenLink(GuiCertError.this, "https://www.curseforge.com/minecraft/mc-mods/letsencryptcraft", 13, false);
+			GuiConfirmOpenLink guiconfirmopenlink = new GuiConfirmOpenLink(GuiCertError.this, "https://www.curseforge.com/minecraft/mc-mods/letsencryptcraft/files", 13, false);
 			guiconfirmopenlink.disableSecurityWarning();
 			mc.displayGuiScreen(guiconfirmopenlink);
 		});
@@ -64,7 +64,7 @@ public class GuiCertError extends QADGuiScreen {
 				{
 					Class<?> oclass = Class.forName("java.awt.Desktop");
 					Object object = oclass.getMethod("getDesktop").invoke((Object)null);
-					oclass.getMethod("browse", URI.class).invoke(object, new URI("https://www.curseforge.com/minecraft/mc-mods/letsencryptcraft"));
+					oclass.getMethod("browse", URI.class).invoke(object, new URI("https://www.curseforge.com/minecraft/mc-mods/letsencryptcraft/files"));
 					oclass.getMethod("open", File.class).invoke(object, new File("./mods"));
 				}
 				catch (Throwable throwable)
