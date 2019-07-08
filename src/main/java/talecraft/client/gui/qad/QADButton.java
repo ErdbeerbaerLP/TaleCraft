@@ -2,8 +2,6 @@ package talecraft.client.gui.qad;
 
 import java.util.List;
 
-import org.lwjgl.input.Mouse;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import talecraft.client.gui.qad.model.DefaultButtonModel;

@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -21,11 +19,7 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiCreateWorld;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.gui.GuiScreenWorking;
-import net.minecraft.client.gui.GuiWorldSelection;
 import net.minecraft.client.gui.GuiYesNo;
 import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.renderer.GlStateManager;
@@ -35,19 +29,13 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraft.world.storage.ISaveFormat;
-import net.minecraft.world.storage.ISaveHandler;
-import net.minecraft.world.storage.WorldInfo;
 import net.minecraft.world.storage.WorldSummary;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import talecraft.Reference;
-import talecraft.client.gui.misc.GuiWorldInfo;
 /**
  * Modified version of GuiListWorldSelectionEntry
  * Changed to show world description, talecraft version and author

@@ -6,13 +6,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiGameOver;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import talecraft.TaleCraft;
 import talecraft.client.gui.misc.GuiCopyingWorld;
 

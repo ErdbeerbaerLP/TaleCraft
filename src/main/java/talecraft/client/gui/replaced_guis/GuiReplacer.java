@@ -1,35 +1,15 @@
 package talecraft.client.gui.replaced_guis;
 
-import java.lang.reflect.Field;
-
-import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiCreateWorld;
-import net.minecraft.client.gui.GuiCustomizeSkin;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiLanguage;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
-import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiScreenOptionsSounds;
-import net.minecraft.client.gui.GuiScreenResourcePacks;
-import net.minecraft.client.gui.GuiSnooper;
-import net.minecraft.client.gui.GuiVideoSettings;
-import net.minecraft.client.gui.GuiWorldSelection;
-import net.minecraft.client.gui.ScreenChatOptions;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.client.gui.ForgeGuiFactory.ForgeConfigGui;
-import net.minecraftforge.fml.client.GuiModList;
-import net.minecraftforge.fml.client.config.GuiConfig;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import talecraft.TaleCraft;
-import talecraft.client.gui.misc.CrashQuestion;
 import talecraft.client.gui.replaced_guis.map.MapCreator;
-import talecraft.client.gui.replaced_guis.map.MapSelector;
 
 public class GuiReplacer { //It Rhymes! (No anymore, sry)
 
@@ -52,7 +32,7 @@ public class GuiReplacer { //It Rhymes! (No anymore, sry)
 					e.setGui(new MapCreator());
 				}
 			}
-			if(e.getGui().getClass() == GuiMainMenu.class) {
+			if(e.getGui() instanceof GuiMainMenu) {
 				e.setGui(new CustomMainMenu());
 			}
 			if(e.getGui().getClass() == GuiGameOver.class) {

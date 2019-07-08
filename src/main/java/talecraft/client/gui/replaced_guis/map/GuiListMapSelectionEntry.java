@@ -18,9 +18,6 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiCreateWorld;
-import net.minecraft.client.gui.GuiErrorScreen;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiScreenWorking;
 import net.minecraft.client.gui.GuiWorldSelection;
@@ -36,16 +33,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraft.world.storage.ISaveFormat;
-import net.minecraft.world.storage.ISaveHandler;
-import net.minecraft.world.storage.WorldInfo;
 import net.minecraft.world.storage.WorldSummary;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import talecraft.Reference;
 import talecraft.client.gui.misc.GuiCopyingWorld;
 import talecraft.client.gui.misc.GuiWorldInfo;
-import talecraft.client.gui.replaced_guis.CustomMainMenu;
-import talecraft.client.gui.replaced_guis.NewIngameMenu;
-import talecraft.client.gui.replaced_guis.map.download.GuiMapListEntry;
 /**
  * Modified version of GuiListWorldSelectionEntry
  * Changed to show world description, talecraft version and author

@@ -21,8 +21,6 @@ import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import talecraft.client.gui.replaced_guis.map.GuiListMapSelectionEntry;
-import talecraft.client.gui.replaced_guis.map.MapSelector;
 @SideOnly(Side.CLIENT)
 public class GuiListSaveSelection extends GuiListExtended
 {

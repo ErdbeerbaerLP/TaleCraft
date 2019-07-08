@@ -2,6 +2,7 @@ package talecraft.items;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.mojang.realmsclient.gui.ChatFormatting;
 
 import net.minecraft.client.util.ITooltipFlag;

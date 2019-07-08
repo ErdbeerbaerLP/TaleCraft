@@ -15,7 +15,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
-import talecraft.TaleCraft;
 
 public class GuiDownloading extends GuiScreen {
 	private GuiDLMapInfo parentGui;
@@ -161,8 +160,6 @@ public class GuiDownloading extends GuiScreen {
 	}
 	@Override
 	public void handleKeyboardInput() throws IOException {
-		// TODO Auto-generated method stub
-		char typedChar = Keyboard.getEventCharacter();
 		int keyCode = Keyboard.getEventKey();
 
 		if(keyCode == 1) return;

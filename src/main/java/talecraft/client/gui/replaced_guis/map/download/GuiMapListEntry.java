@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.util.text.TextFormatting;
-import talecraft.client.gui.misc.GuiWorldInfo;
 public class GuiMapListEntry implements GuiListExtended.IGuiListEntry
 {
 	private static final Logger LOGGER = LogManager.getLogger();

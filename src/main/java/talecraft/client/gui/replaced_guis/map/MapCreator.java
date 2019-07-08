@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiScreen;

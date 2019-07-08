@@ -15,7 +15,6 @@ import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
-import talecraft.client.gui.replaced_guis.save.GuiListSaveSelectionEntry;
 /**
  * Modified version of GuiWorldSelection<br>
  * this was required because of reflection not working<br>

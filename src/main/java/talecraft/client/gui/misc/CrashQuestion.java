@@ -32,7 +32,7 @@ public class CrashQuestion extends GuiScreen{
 			
 	        this.drawBackground(0);
 	        drawCenteredString(fontRenderer, TextFormatting.UNDERLINE+"Crash?", width/2, 30, 16777215);
-	        drawCenteredString(fontRenderer, "There is still a temporary world in you saves folder...", width/2, 50, 16777215);
+	        drawCenteredString(fontRenderer, "There is still a temporary world in your saves folder...", width/2, 50, 16777215);
 	        drawCenteredString(fontRenderer, "If it was an crash you could attempt to reload the world", width/2, 60, 16777215);
 	        drawCenteredString(fontRenderer, "If not it may be just not deleted properly, try joining and leaving it again", width/2, 70, 16777215);
 	        drawCenteredString(fontRenderer, "By clicking \"Delete Folder(s)\" you remove all folders ", width/2, 90, 16777215);

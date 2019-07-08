@@ -5,12 +5,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiConfirmOpenLink;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.text.TextFormatting;
-import talecraft.TaleCraft;
-import talecraft.client.gui.qad.QADBoxLabel;
 import talecraft.client.gui.qad.QADButton;
 import talecraft.client.gui.qad.QADGuiScreen;
 import talecraft.client.gui.qad.QADLabel;

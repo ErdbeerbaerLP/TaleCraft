@@ -2,7 +2,6 @@ package talecraft.client.gui.replaced_guis.map.download;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -15,13 +14,10 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiConfirmOpenLink;
-import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiScreenDemo;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
-import talecraft.TaleCraft;
 public class GuiMapList extends GuiScreen{
 
 	private static final Logger LOGGER = LogManager.getLogger();

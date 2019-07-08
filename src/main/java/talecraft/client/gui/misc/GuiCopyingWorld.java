@@ -1,7 +1,6 @@
 package talecraft.client.gui.misc;
 
 import net.minecraft.client.gui.GuiScreen;
-import talecraft.TaleCraft;
 
 public class GuiCopyingWorld extends GuiScreen {
 	private String text;

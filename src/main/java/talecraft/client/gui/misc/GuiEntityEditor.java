@@ -3,6 +3,7 @@ package talecraft.client.gui.misc;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -15,12 +16,12 @@ import talecraft.client.gui.qad.QADButton;
 import talecraft.client.gui.qad.QADFACTORY;
 import talecraft.client.gui.qad.QADGuiScreen;
 import talecraft.client.gui.qad.QADNumberTextField;
+import talecraft.client.gui.qad.QADNumberTextField.NumberType;
 import talecraft.client.gui.qad.QADPanel;
 import talecraft.client.gui.qad.QADScrollPanel;
 import talecraft.client.gui.qad.QADTextField;
-import talecraft.client.gui.qad.QADTickBox;
-import talecraft.client.gui.qad.QADNumberTextField.NumberType;
 import talecraft.client.gui.qad.QADTextField.TextChangeListener;
+import talecraft.client.gui.qad.QADTickBox;
 import talecraft.client.gui.qad.QADTickBox.TickBoxModel;
 import talecraft.client.gui.qad.model.nbtcompound.NBTBooleanTickBoxModel;
 import talecraft.client.gui.qad.model.nbtcompound.NBTByteTextFieldModel;

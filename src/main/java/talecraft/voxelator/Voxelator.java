@@ -16,9 +16,25 @@ import talecraft.util.MissingNBTTagException;
 import talecraft.util.MutableBlockPos;
 import talecraft.util.UndoRegion;
 import talecraft.util.UndoTask;
-import talecraft.voxelator.actions.*;
-import talecraft.voxelator.predicates.*;
-import talecraft.voxelator.shapes.*;
+import talecraft.voxelator.actions.VXActionGrassify;
+import talecraft.voxelator.actions.VXActionReplace;
+import talecraft.voxelator.actions.VXActionVariationsReplace;
+import talecraft.voxelator.predicates.VXPredicateAND;
+import talecraft.voxelator.predicates.VXPredicateAlways;
+import talecraft.voxelator.predicates.VXPredicateAverageSmooth;
+import talecraft.voxelator.predicates.VXPredicateBoxSmooth;
+import talecraft.voxelator.predicates.VXPredicateHasAirAbove;
+import talecraft.voxelator.predicates.VXPredicateHeightLimit;
+import talecraft.voxelator.predicates.VXPredicateIsAir;
+import talecraft.voxelator.predicates.VXPredicateIsSolid;
+import talecraft.voxelator.predicates.VXPredicateIsState;
+import talecraft.voxelator.predicates.VXPredicateIsType;
+import talecraft.voxelator.predicates.VXPredicateNOT;
+import talecraft.voxelator.predicates.VXPredicateOR;
+import talecraft.voxelator.predicates.VXPredicateRandom;
+import talecraft.voxelator.shapes.VXShapeBox;
+import talecraft.voxelator.shapes.VXShapeCylinder;
+import talecraft.voxelator.shapes.VXShapeSphere;
 
 // TODO: Create (de)serialization and a GUI for the VOXELATOR system.
 // TODO: Create a VXAction that repeats another VXAction multiple times.

@@ -24,7 +24,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
-import talecraft.TaleCraftSounds;
 import talecraft.TaleCraft;
 import talecraft.TaleCraftItems;
 import talecraft.client.ClientKeyboardHandler;

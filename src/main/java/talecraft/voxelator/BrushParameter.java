@@ -1,6 +1,10 @@
 package talecraft.voxelator;
 
-import talecraft.voxelator.params.*;
+import talecraft.voxelator.params.BlockstateBrushParameter;
+import talecraft.voxelator.params.BooleanBrushParameter;
+import talecraft.voxelator.params.FloatBrushParameter;
+import talecraft.voxelator.params.IntegerBrushParameter;
+import talecraft.voxelator.params.ListBrushParameter;
 
 public abstract class BrushParameter {
 	public static final BrushParameter[] NO_PARAMETERS = new BrushParameter[0];
