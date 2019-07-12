@@ -303,14 +303,15 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry
 		if(worldComp != null && worldComp.hasKey("allowedUUIDs") && !worldComp.getString("allowedUUIDs").trim().equals("*")) {
 			for(String UUID : worldComp.getString("allowedUUIDs").split(";")) {
 				if(UUID.equals(Minecraft.getMinecraft().getSession().getPlayerID())) {
-					this.client.displayGuiScreen(new GuiNoEditPermission());
+					this.client.displayGuiScreen(new MapEditor(this.worldSelScreen, this.worldSummary.getFileName(), this.worldPathName));
+					
 					return;
 				}
 			}
+			this.client.displayGuiScreen(new GuiNoEditPermission());
 			
 		}
-		this.client.displayGuiScreen(new MapEditor(this.worldSelScreen, this.worldSummary.getFileName(), this.worldPathName));
-	}
+		}
 
 
 	private void loadWorld()
