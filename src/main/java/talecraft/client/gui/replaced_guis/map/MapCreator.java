@@ -57,7 +57,7 @@ public class MapCreator extends QADGuiScreen {
     {
     	newgui = this;
         this.worldSeed = "";
-        this.worldName = I18n.format("selectWorld.newWorld");
+        this.worldName = "New Map";
     }
     
     /**
