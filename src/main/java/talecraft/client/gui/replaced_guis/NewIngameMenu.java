@@ -40,6 +40,7 @@ public class NewIngameMenu extends GuiIngameMenu {
 		if(TaleCraft.asClient().isBuildMode() || (currentWorld != null && currentWorld.getSaveHandler().getWorldDirectory().getName().equals("TC_TEST")))
 			this.buttonList.get(4).visible = false;
 		testBtn.visible = false;
+		testHereButton.visible = false;
 	}
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
