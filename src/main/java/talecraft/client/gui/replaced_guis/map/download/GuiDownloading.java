@@ -54,14 +54,13 @@ public class GuiDownloading extends GuiScreen {
 	private boolean firstInit = false;
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		// TODO Auto-generated method stub
 		drawDefaultBackground();
 		buttonList.get(0).x = width/2-100;
 		buttonList.get(0).y = height/2+30;
 		String str1 = "";
 		String str2 = "Status: ";
 		String str3 = "Do NOT close the game while this is shown!";
-		if(firstInit ) {
+		if(firstInit) {
 			if(!unzipOnly) {
 				if(zip.getStatus() == DownloadZip.DOWNLOADING) str1 = "Downloading map...";
 				else if(zip.getStatus() == DownloadZip.ERROR) {
@@ -77,17 +76,21 @@ public class GuiDownloading extends GuiScreen {
 				int progress = Math.round(zip.getProgress());
 				str2 = "Status: "+progress+"%";
 				//		System.out.println(zip.getSize());
-				drawCenteredString(fontRenderer, str1, width/2, height/2-30, 16777215);
-				drawCenteredString(fontRenderer, str2, width/2, height/2-10, 16777215);
-				drawCenteredString(fontRenderer, str3, width/2, height/2, 16777215);
+				
 			}else {
 				str1 = "Unzipping...";
 				str2 = "Status: Unzipping...";
 			}
+			drawCenteredString(fontRenderer, str1, width/2, height/2-30, 16777215);
+			drawCenteredString(fontRenderer, str2, width/2, height/2-10, 16777215);
+			drawCenteredString(fontRenderer, str3, width/2, height/2, 16777215);
 			if((unzipOnly || zip.getStatus() == DownloadZip.COMPLETE)) { 
-				//			this.mc.displayGuiScreen(parentGui);
 				if(this.unzipStarted) return;
-				this.unzipStarted = true;
+				new Thread() {
+					public void run() {
+						
+					
+				unzipStarted = true;
 				byte[] buffer = new byte[1024];
 				
 				try{
@@ -148,12 +151,14 @@ public class GuiDownloading extends GuiScreen {
 					CompressedStreamTools.write(tag, mapInfoFile);
 					
 					
-					this.mc.displayGuiScreen(new GuiDLMapInfo((GuiMapList) ((GuiDLMapInfo)parentGui).parent, ((GuiDLMapInfo)parentGui).map));
+					mc.displayGuiScreen(new GuiDLMapInfo((GuiMapList) ((GuiDLMapInfo)parentGui).parent, ((GuiDLMapInfo)parentGui).map));
 				}catch(IOException ex){
 					ex.printStackTrace(); 
 
 				}
 			}
+		}.start();
+		}
 		}
 		firstInit = true;
 		super.drawScreen(mouseX, mouseY, partialTicks);

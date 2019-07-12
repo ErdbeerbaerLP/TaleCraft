@@ -1,6 +1,7 @@
 package talecraft.client.gui.replaced_guis.map.download;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -88,7 +89,7 @@ public class GuiMapListSelection extends GuiListExtended
 				return;
 			}
 
-			if(connection.getResponseCode() != 200) {
+			if(connection.getResponseCode() != 200 && !(connection.getResponseCode() == 404 && !this.search.getText().isEmpty())) {
 				if(!errorToastShown)mc.getToastGui().add(new IToast() {
 
 					@Override
@@ -130,7 +131,7 @@ public class GuiMapListSelection extends GuiListExtended
 			this.loadReady  = true;
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			if(!(e instanceof FileNotFoundException))
 			e.printStackTrace();
 		}
 	}
