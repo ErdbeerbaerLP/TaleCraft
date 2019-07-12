@@ -76,7 +76,7 @@ public class GuiDownloading extends GuiScreen {
 				int progress = Math.round(zip.getProgress());
 				str2 = "Status: "+progress+"%";
 				//		System.out.println(zip.getSize());
-				
+
 			}else {
 				str1 = "Unzipping...";
 				str2 = "Status: Unzipping...";
@@ -88,77 +88,72 @@ public class GuiDownloading extends GuiScreen {
 				if(this.unzipStarted) return;
 				new Thread() {
 					public void run() {
-						
-					
-				unzipStarted = true;
-				byte[] buffer = new byte[1024];
-				
-				try{
+						unzipStarted = true;
+						byte[] buffer = new byte[1024];
+						try{
+							//create output directory is not exists
+							File folder = new File("./saves/.TC_MAPS/");
+							if(!folder.exists()){
+								folder.mkdir();
+							}
+							//get the zip file content
+							ZipInputStream zis = 
+									new ZipInputStream(new FileInputStream(unzipOnly ? new File(new File(mc.mcDataDir, "saves/.TC_DOWNLOADS"), fileName): zip.getFile()));
+							//get the zipped file list entry
 
-					//create output directory is not exists
-					File folder = new File("./saves/.TC_MAPS/");
-					if(!folder.exists()){
-						folder.mkdir();
-					}
+							ZipEntry ze = zis.getNextEntry();
+							String outDir = ze.getName().split("/")[0];
+							while(ze!=null){
 
-					//get the zip file content
-					ZipInputStream zis = 
-							new ZipInputStream(new FileInputStream(unzipOnly ? new File(new File(mc.mcDataDir, "saves/.TC_DOWNLOADS"), fileName): zip.getFile()));
-					//get the zipped file list entry
-					
-					ZipEntry ze = zis.getNextEntry();
-					String outDir = ze.getName().split("/")[0];
-					while(ze!=null){
+								String fileName = ze.getName();
+								File newFile = new File("./saves/.TC_MAPS/"+fileName);
+								//		           System.out.println("file unzip : "+ newFile.getAbsoluteFile());
 
-						String fileName = ze.getName();
-						File newFile = new File("./saves/.TC_MAPS/"+fileName);
-						//		           System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+								//create all non exists folders
+								//else you will hit FileNotFoundException for compressed folder
+								new File(newFile.getParent()).mkdirs();
+								if(ze.isDirectory()) newFile.mkdirs();
+								else { newFile.createNewFile();
+								FileOutputStream fos = new FileOutputStream(newFile);             
 
-						//create all non exists folders
-						//else you will hit FileNotFoundException for compressed folder
-						new File(newFile.getParent()).mkdirs();
-						if(ze.isDirectory()) newFile.mkdirs();
-						else { newFile.createNewFile();
-						FileOutputStream fos = new FileOutputStream(newFile);             
+								int len;
+								while ((len = zis.read(buffer)) > 0) {
+									fos.write(buffer, 0, len);
+								}
 
-						int len;
-						while ((len = zis.read(buffer)) > 0) {
-							fos.write(buffer, 0, len);
+								fos.close();   
+								}
+								ze = zis.getNextEntry();
+							}
+							zis.closeEntry();
+							zis.close();
+							System.out.println(outDir);
+							if(!new File("./saves/.TC_MAPS/"+outDir+"/talecraft").exists()) new File("./saves/.TC_MAPS/"+outDir+"/talecraft").mkdirs();
+							File mapInfoFile = new File("./saves/.TC_MAPS/" +outDir+"/talecraft/info.dat");
+							if(!mapInfoFile.exists()) mapInfoFile.createNewFile();
+							else {
+								mapInfoFile.delete();
+								mapInfoFile.createNewFile();
+							}
+							NBTTagCompound tag = new NBTTagCompound();
+							tag.setString("description",parentGui.map.description);
+							tag.setString("author",parentGui.map.author);
+							tag.setString("version",parentGui.map.mapVersion);
+							tag.setString("allowedUUIDs",parentGui.map.mapUUIDs);
+							tag.setBoolean("usesScripts",parentGui.map.hasScripts);
+							tag.setBoolean("usesMods",parentGui.map.additionalModsRequired);
+							tag.setString("mapURL",parentGui.map.mapURL);
+							CompressedStreamTools.write(tag, mapInfoFile);
+
+
+							mc.displayGuiScreen(new GuiDLMapInfo((GuiMapList) ((GuiDLMapInfo)parentGui).parent, ((GuiDLMapInfo)parentGui).map));
+						}catch(IOException ex){
+							ex.printStackTrace(); 
+
 						}
-
-						fos.close();   
-						}
-						ze = zis.getNextEntry();
 					}
-					zis.closeEntry();
-					zis.close();
-					System.out.println(outDir);
-					if(!new File("./saves/.TC_MAPS/"+outDir+"/talecraft").exists()) new File("./saves/.TC_MAPS/"+outDir+"/talecraft").mkdirs();
-					File mapInfoFile = new File("./saves/.TC_MAPS/" +outDir+"/talecraft/info.dat");
-					if(!mapInfoFile.exists()) mapInfoFile.createNewFile();
-					else {
-						mapInfoFile.delete();
-						mapInfoFile.createNewFile();
-					}
-					NBTTagCompound tag = new NBTTagCompound();
-					tag.setString("description",parentGui.map.description);
-					tag.setString("author",parentGui.map.author);
-					tag.setString("version",parentGui.map.mapVersion);
-					tag.setString("allowedUUIDs",parentGui.map.mapUUIDs);
-					tag.setBoolean("usesScripts",parentGui.map.hasScripts);
-					tag.setBoolean("usesMods",parentGui.map.additionalModsRequired);
-					tag.setString("mapURL",parentGui.map.mapURL);
-					CompressedStreamTools.write(tag, mapInfoFile);
-					
-					
-					mc.displayGuiScreen(new GuiDLMapInfo((GuiMapList) ((GuiDLMapInfo)parentGui).parent, ((GuiDLMapInfo)parentGui).map));
-				}catch(IOException ex){
-					ex.printStackTrace(); 
-
-				}
+				}.start();
 			}
-		}.start();
-		}
 		}
 		firstInit = true;
 		super.drawScreen(mouseX, mouseY, partialTicks);
