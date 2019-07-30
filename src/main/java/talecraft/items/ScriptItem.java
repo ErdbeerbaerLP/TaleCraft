@@ -1,9 +1,5 @@
 package talecraft.items;
 
-import java.util.List;
-
-import org.mozilla.javascript.Scriptable;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.command.CommandResultStats.Type;
 import net.minecraft.command.ICommandSender;
@@ -26,212 +22,211 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.mozilla.javascript.Scriptable;
 import talecraft.TaleCraft;
-import talecraft.invoke.EnumTriggerState;
-import talecraft.invoke.IInvoke;
-import talecraft.invoke.IInvokeSource;
-import talecraft.invoke.Invoke;
-import talecraft.invoke.NullInvoke;
+import talecraft.invoke.*;
+
+import java.util.List;
 
 // TODO: Finish implementing this item.
 public class ScriptItem extends TCItem {
 
-	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.getHeldItem(hand);
-		if(world.isRemote)
-			return EnumActionResult.PASS;
+    private static NBTTagCompound getNBT(ItemStack stack) {
+        NBTTagCompound comp = stack.getTagCompound();
 
-		NBTTagCompound compound = getNBT(stack);
+        if (comp == null) {
+            comp = new NBTTagCompound();
+            stack.setTagCompound(comp);
+        }
 
-		// get invoke
-		IInvoke invoke = IInvoke.Serializer.read(compound.getCompoundTag("invoke_on_use"));
+        return comp;
+    }
 
-		// make sure to not waste time
-		if(invoke == null) return EnumActionResult.PASS;
-		if(invoke instanceof NullInvoke) return EnumActionResult.PASS;
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (world.isRemote)
+            return EnumActionResult.PASS;
 
-		// execute invoke
-		Invoke.invoke(invoke, new TempstackvokeSource(world, new BlockPos(hitX, hitY, hitZ), player), null, EnumTriggerState.ON);
+        NBTTagCompound compound = getNBT(stack);
 
-		return EnumActionResult.SUCCESS;
-	}
+        // get invoke
+        IInvoke invoke = IInvoke.Serializer.read(compound.getCompoundTag("invoke_on_use"));
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		if(world.isRemote)
-			return ActionResult.newResult(EnumActionResult.PASS, stack);
+        // make sure to not waste time
+        if (invoke == null) return EnumActionResult.PASS;
+        if (invoke instanceof NullInvoke) return EnumActionResult.PASS;
 
-		NBTTagCompound compound = getNBT(stack);
+        // execute invoke
+        Invoke.invoke(invoke, new TempstackvokeSource(world, new BlockPos(hitX, hitY, hitZ), player), null, EnumTriggerState.ON);
 
-		// get invoke
-		IInvoke invoke = IInvoke.Serializer.read(compound.getCompoundTag("invoke_on_rclick"));
+        return EnumActionResult.SUCCESS;
+    }
 
-		// make sure to not waste time
-		if(invoke == null) return ActionResult.newResult(EnumActionResult.PASS, stack);
-		if(invoke instanceof NullInvoke) return ActionResult.newResult(EnumActionResult.PASS, stack);
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (world.isRemote)
+            return ActionResult.newResult(EnumActionResult.PASS, stack);
 
-		// execute invoke
-		Invoke.invoke(invoke, new TempstackvokeSource(world, player.getPosition(), player), null, EnumTriggerState.ON);
+        NBTTagCompound compound = getNBT(stack);
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-	}
+        // get invoke
+        IInvoke invoke = IInvoke.Serializer.read(compound.getCompoundTag("invoke_on_rclick"));
 
-	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		NBTTagCompound compound = getNBT(stack);
+        // make sure to not waste time
+        if (invoke == null) return ActionResult.newResult(EnumActionResult.PASS, stack);
+        if (invoke instanceof NullInvoke) return ActionResult.newResult(EnumActionResult.PASS, stack);
 
-		// get invoke
-		IInvoke invoke = IInvoke.Serializer.read(compound.getCompoundTag("invoke_on_lclick"));
+        // execute invoke
+        Invoke.invoke(invoke, new TempstackvokeSource(world, player.getPosition(), player), null, EnumTriggerState.ON);
 
-		// make sure to not waste time
-		if(invoke == null) return false;
-		if(invoke instanceof NullInvoke) return false;
+        return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+    }
 
-		// execute invoke
-		Invoke.invoke(invoke, new TempstackvokeSource(player.world, player.getPosition(), player), null, EnumTriggerState.ON);
+    @Override
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+        NBTTagCompound compound = getNBT(stack);
 
-		return false;
-	}
+        // get invoke
+        IInvoke invoke = IInvoke.Serializer.read(compound.getCompoundTag("invoke_on_lclick"));
 
-	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		// Should I allow this?
-	}
+        // make sure to not waste time
+        if (invoke == null) return false;
+        if (invoke instanceof NullInvoke) return false;
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		NBTTagCompound compound = getNBT(stack);
+        // execute invoke
+        Invoke.invoke(invoke, new TempstackvokeSource(player.world, player.getPosition(), player), null, EnumTriggerState.ON);
 
-		NBTTagList lore = compound.getTagList("lore", NBT.TAG_STRING);
-		if(lore.hasNoTags()) return;
+        return false;
+    }
 
-		for(int i = 0; i < lore.tagCount(); i++) {
-			tooltip.add(lore.getStringTagAt(i));
-		}
-	}
+    @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        // Should I allow this?
+    }
 
-	private static final NBTTagCompound getNBT(ItemStack stack) {
-		NBTTagCompound comp = stack.getTagCompound();
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+        NBTTagCompound compound = getNBT(stack);
 
-		if(comp == null) {
-			comp = new NBTTagCompound();
-			stack.setTagCompound(comp);
-		}
+        NBTTagList lore = compound.getTagList("lore", NBT.TAG_STRING);
+        if (lore.hasNoTags()) return;
 
-		return comp;
-	}
+        for (int i = 0; i < lore.tagCount(); i++) {
+            tooltip.add(lore.getStringTagAt(i));
+        }
+    }
 
-	private static class TempstackvokeSource implements IInvokeSource, ICommandSender {
-		World world;
-		Entity holder;
-		BlockPos position;
-		Scriptable scriptScope;
+    private static class TempstackvokeSource implements IInvokeSource, ICommandSender {
+        World world;
+        Entity holder;
+        BlockPos position;
+        Scriptable scriptScope;
 
-		public TempstackvokeSource(World worldIn, BlockPos positionIn, Entity holderIn) {
-			this.world = worldIn;
-			this.holder = holderIn;
-			this.position = positionIn;
-		}
+        public TempstackvokeSource(World worldIn, BlockPos positionIn, Entity holderIn) {
+            this.world = worldIn;
+            this.holder = holderIn;
+            this.position = positionIn;
+        }
 
-		@Override
-		public Scriptable getInvokeScriptScope() {
-			if(scriptScope == null) {
+        @Override
+        public Scriptable getInvokeScriptScope() {
+            if (scriptScope == null) {
 
-				// if(holder != null) ... ?
+                // if(holder != null) ... ?
 
-				scriptScope = TaleCraft.globalScriptManager.createNewWorldScope(world);
-			}
+                scriptScope = TaleCraft.globalScriptManager.createNewWorldScope(world);
+            }
 
-			return scriptScope;
-		}
+            return scriptScope;
+        }
 
-		@Override
-		public ICommandSender getInvokeAsCommandSender() {
-			return this;
-		}
+        @Override
+        public ICommandSender getInvokeAsCommandSender() {
+            return this;
+        }
 
-		@Override
-		public BlockPos getInvokePosition() {
-			return position;
-		}
+        @Override
+        public BlockPos getInvokePosition() {
+            return position;
+        }
 
-		@Override
-		public World getInvokeWorld() {
-			return world;
-		}
+        @Override
+        public World getInvokeWorld() {
+            return world;
+        }
 
-		@Override
-		public void getInvokes(List<IInvoke> invokes) {
-			// nope
-		}
+        @Override
+        public void getInvokes(List<IInvoke> invokes) {
+            // nope
+        }
 
-		@Override
-		public String getName() {
-			return "ItemStack Invoke Source";
-		}
+        @Override
+        public String getName() {
+            return "ItemStack Invoke Source";
+        }
 
-		@Override
-		public ITextComponent getDisplayName() {
-			return new TextComponentString(getName());
-		}
+        @Override
+        public ITextComponent getDisplayName() {
+            return new TextComponentString(getName());
+        }
 
-		@Override
-		public void sendMessage(ITextComponent message) {
-			if(holder != null)
-				holder.sendMessage(message);
-		}
+        @Override
+        public void sendMessage(ITextComponent message) {
+            if (holder != null)
+                holder.sendMessage(message);
+        }
 
-		@Override
-		public boolean canUseCommand(int permLevel, String commandName) {
-			return true;
-		}
+        @Override
+        public boolean canUseCommand(int permLevel, String commandName) {
+            return true;
+        }
 
-		@Override
-		public BlockPos getPosition() {
-			return position;
-		}
+        @Override
+        public BlockPos getPosition() {
+            return position;
+        }
 
-		@Override
-		public Vec3d getPositionVector() {
-			return new Vec3d(position.getX(), position.getY(), position.getZ());
-		}
+        @Override
+        public Vec3d getPositionVector() {
+            return new Vec3d(position.getX(), position.getY(), position.getZ());
+        }
 
-		@Override
-		public World getEntityWorld() {
-			return world;
-		}
+        @Override
+        public World getEntityWorld() {
+            return world;
+        }
 
-		@Override
-		public Entity getCommandSenderEntity() {
-			return holder;
-		}
+        @Override
+        public Entity getCommandSenderEntity() {
+            return holder;
+        }
 
-		@Override
-		public boolean sendCommandFeedback() {
-			return true;
-		}
+        @Override
+        public boolean sendCommandFeedback() {
+            return true;
+        }
 
-		@Override
-		public void setCommandStat(Type type, int amount) {
-			if(holder != null)
-				holder.setCommandStat(type, amount);
-		}
+        @Override
+        public void setCommandStat(Type type, int amount) {
+            if (holder != null)
+                holder.setCommandStat(type, amount);
+        }
 
-		@Override
-		public void getInvokeColor(float[] color) {
-			color[0] = 0.0f;
-			color[1] = 0.0f;
-			color[2] = 1.0f;
-		}
+        @Override
+        public void getInvokeColor(float[] color) {
+            color[0] = 0.0f;
+            color[1] = 0.0f;
+            color[2] = 1.0f;
+        }
 
-		@Override
-		public MinecraftServer getServer() {
-			return FMLCommonHandler.instance().getMinecraftServerInstance();
-		}
+        @Override
+        public MinecraftServer getServer() {
+            return FMLCommonHandler.instance().getMinecraftServerInstance();
+        }
 
-	}
+    }
 
 }

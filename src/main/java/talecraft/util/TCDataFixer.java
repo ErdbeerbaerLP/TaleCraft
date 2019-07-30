@@ -1,20 +1,19 @@
 package talecraft.util;
 
-import java.util.Map;
-
 import com.google.common.collect.Maps;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.IFixableData;
 import talecraft.Reference;
 import talecraft.TaleCraft;
 
+import java.util.Map;
+
 // Adapted from: net.minecraft.util.datafix.fixes.TileEntityId
 public class TCDataFixer implements IFixableData {
     private static final Map<String, String> OLD_TO_NEW_ID_MAP = Maps.newHashMap();
-    
+
     static {
-    	OLD_TO_NEW_ID_MAP.put("minecraft:tc_lockeddoorblock", Reference.MOD_ID + ":lockeddoorblock");
+        OLD_TO_NEW_ID_MAP.put("minecraft:tc_lockeddoorblock", Reference.MOD_ID + ":lockeddoorblock");
         OLD_TO_NEW_ID_MAP.put("minecraft:tc_killblock", Reference.MOD_ID + ":killblock");
         OLD_TO_NEW_ID_MAP.put("minecraft:tc_clockblock", Reference.MOD_ID + ":clockblock");
         OLD_TO_NEW_ID_MAP.put("minecraft:tc_redstone_trigger", Reference.MOD_ID + ":redstone_trigger");
@@ -37,8 +36,8 @@ public class TCDataFixer implements IFixableData {
         OLD_TO_NEW_ID_MAP.put("minecraft:tc_summonblock", Reference.MOD_ID + ":summonblock");
         OLD_TO_NEW_ID_MAP.put("minecraft:tc_musicblock", Reference.MOD_ID + ":musicblock");
         OLD_TO_NEW_ID_MAP.put("minecraft:tc_camerablock", Reference.MOD_ID + ":camerablock");
-        
-    	OLD_TO_NEW_ID_MAP.put("tc_lockeddoorblock", Reference.MOD_ID + ":lockeddoorblock");
+
+        OLD_TO_NEW_ID_MAP.put("tc_lockeddoorblock", Reference.MOD_ID + ":lockeddoorblock");
         OLD_TO_NEW_ID_MAP.put("tc_killblock", Reference.MOD_ID + ":killblock");
         OLD_TO_NEW_ID_MAP.put("tc_clockblock", Reference.MOD_ID + ":clockblock");
         OLD_TO_NEW_ID_MAP.put("tc_redstone_trigger", Reference.MOD_ID + ":redstone_trigger");
@@ -69,11 +68,11 @@ public class TCDataFixer implements IFixableData {
     }
 
     public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-    	String oldID = compound.getString("id");
+        String oldID = compound.getString("id");
         String newID = OLD_TO_NEW_ID_MAP.get(oldID);
 
-        if(newID != null) {
-        	TaleCraft.logger.info("Converted tile entity ID. Old ID: " + oldID + ", new ID: " + newID);
+        if (newID != null) {
+            TaleCraft.logger.info("Converted tile entity ID. Old ID: " + oldID + ", new ID: " + newID);
             compound.setString("id", newID);
         }
 

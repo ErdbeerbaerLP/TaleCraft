@@ -5,14 +5,14 @@ import talecraft.TaleCraftTabs;
 
 public class TCWorldItem extends Item {
 
-	public TCWorldItem() {
+    public TCWorldItem() {
         this.setCreativeTab(TaleCraftTabs.tab_TaleCraftWorldTab);
         this.setMaxStackSize(64);
-	}
-	
-	@Override
-	public boolean isFull3D() {
-		return true;
-	}
+    }
+
+    @Override
+    public boolean isFull3D() {
+        return true;
+    }
 
 }

@@ -13,14 +13,14 @@ import talecraft.entity.projectile.EntityBoomerang;
 
 public class RenderBoomerang extends Render<EntityBoomerang> {
 
-	public RenderBoomerang(RenderManager renderManager) {
-		super(renderManager);
-	}
-	
-	@Override
-	public void doRender(EntityBoomerang entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GlStateManager.pushMatrix();
-        GlStateManager.translate((float)x, (float)y, (float)z);
+    public RenderBoomerang(RenderManager renderManager) {
+        super(renderManager);
+    }
+
+    @Override
+    public void doRender(EntityBoomerang entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) x, (float) y, (float) z);
         GlStateManager.enableRescaleNormal();
         bindEntityTexture(entity);
         GlStateManager.rotate(180F, 0.0F, 1.0F, 1.0F);
@@ -29,11 +29,11 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
         Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(TaleCraftItems.boomerang), ItemCameraTransforms.TransformType.FIXED);
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
-	}
+    }
 
-	@Override
-	protected ResourceLocation getEntityTexture(EntityBoomerang entity) {
-		return TextureMap.LOCATION_BLOCKS_TEXTURE;
-	}
+    @Override
+    protected ResourceLocation getEntityTexture(EntityBoomerang entity) {
+        return TextureMap.LOCATION_BLOCKS_TEXTURE;
+    }
 
 }

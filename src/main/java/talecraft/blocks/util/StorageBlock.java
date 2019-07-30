@@ -19,37 +19,37 @@ import talecraft.tileentity.StorageBlockTileEntity;
 
 public class StorageBlock extends TCBlockContainer implements TCITriggerableBlock {
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new StorageBlockTileEntity();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new StorageBlockTileEntity();
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote)
-			return true;
-		if(!TaleCraft.proxy.isBuildMode())
-			return false;
-		if(playerIn.isSneaking())
-			return true;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote)
+            return true;
+        if (!TaleCraft.proxy.isBuildMode())
+            return false;
+        if (playerIn.isSneaking())
+            return true;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		mc.displayGuiScreen(new GuiStorageBlock((StorageBlockTileEntity)worldIn.getTileEntity(pos)));
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.displayGuiScreen(new GuiStorageBlock((StorageBlockTileEntity) worldIn.getTileEntity(pos)));
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
-		if (world.isRemote)
-			return;
+    @Override
+    public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
+        if (world.isRemote)
+            return;
 
-		TileEntity tileentity = world.getTileEntity(position);
+        TileEntity tileentity = world.getTileEntity(position);
 
-		if (tileentity instanceof StorageBlockTileEntity) {
-			((StorageBlockTileEntity)tileentity).commandReceived("trigger", null);
-		}
-	}
+        if (tileentity instanceof StorageBlockTileEntity) {
+            ((StorageBlockTileEntity) tileentity).commandReceived("trigger", null);
+        }
+    }
 
 }

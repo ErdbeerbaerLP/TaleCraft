@@ -19,33 +19,33 @@ import talecraft.tileentity.ScriptBlockTileEntity;
 
 public class ScriptBlock extends TCBlockContainer implements TCITriggerableBlock {
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new ScriptBlockTileEntity();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new ScriptBlockTileEntity();
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote)
-			return true;
-		if(!TaleCraft.proxy.isBuildMode())
-			return false;
-		if(playerIn.isSneaking())
-			return true;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote)
+            return true;
+        if (!TaleCraft.proxy.isBuildMode())
+            return false;
+        if (playerIn.isSneaking())
+            return true;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		mc.displayGuiScreen(new GuiScriptBlock((ScriptBlockTileEntity)worldIn.getTileEntity(pos)));
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.displayGuiScreen(new GuiScriptBlock((ScriptBlockTileEntity) worldIn.getTileEntity(pos)));
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
-		ScriptBlockTileEntity tEntity = (ScriptBlockTileEntity)world.getTileEntity(position);
-		if(tEntity != null) {
-			tEntity.triggerInvokeScript();
-		}
-	}
+    @Override
+    public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
+        ScriptBlockTileEntity tEntity = (ScriptBlockTileEntity) world.getTileEntity(position);
+        if (tEntity != null) {
+            tEntity.triggerInvokeScript();
+        }
+    }
 
 }

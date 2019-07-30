@@ -1,9 +1,6 @@
 package talecraft.blocks.util;
 
-import java.util.List;
-
 import net.minecraft.block.BlockBarrier;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -25,14 +22,17 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import talecraft.TaleCraftTabs;
 
-public class BarrierEXTBlock extends BlockBarrier {
-	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 15);
+import java.util.List;
 
-	public BarrierEXTBlock() {
-		super();
-		this.setCreativeTab(TaleCraftTabs.tab_TaleCraftTab);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
-	}
+@SuppressWarnings("deprecation")
+public class BarrierEXTBlock extends BlockBarrier {
+    public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 15);
+
+    public BarrierEXTBlock() {
+        super();
+        this.setCreativeTab(TaleCraftTabs.tab_TaleCraftTab);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, 0));
+    }
 
 	/*@SideOnly(Side.CLIENT) TODO
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
@@ -41,89 +41,90 @@ public class BarrierEXTBlock extends BlockBarrier {
 		else
 			return null;
 	}*/
-	
-	@Deprecated
-	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity, boolean p_185477_7_) {
-		int type = state.getValue(TYPE).intValue();
-		boolean collide = false;
 
-		switch(type) {
-		case 0: // Everything
-			collide = true;
-			break;
+    @SuppressWarnings({"DuplicateBranchesInSwitch", "ConstantConditions", "PointlessBooleanExpression"})
+    @Deprecated
+    @Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity, boolean p_185477_7_) {
+        int type = state.getValue(TYPE);
+        boolean collide = false;
 
-		case 1: // ONLY players
-			collide |= collidingEntity instanceof EntityPlayer;
-			break;
+        switch (type) {
+            case 0: // Everything
+                collide = true;
+                break;
 
-		case 2: // ALL living
-			collide |= collidingEntity instanceof EntityLivingBase;
-			break;
+            case 1: // ONLY players
+                collide |= collidingEntity instanceof EntityPlayer;
+                break;
 
-		case 3: // ALL living EXCEPT player
-			collide |= collidingEntity instanceof EntityLiving;
-			break;
+            case 2: // ALL living
+                collide |= collidingEntity instanceof EntityLivingBase;
+                break;
 
-		case 4: // ALL monsters
-			if(collidingEntity instanceof EntityLiving) {
-				EntityLiving living = (EntityLiving) collidingEntity;
+            case 3: // ALL living EXCEPT player
+                collide |= collidingEntity instanceof EntityLiving;
+                break;
 
-				for(Object targetTask : living.targetTasks.taskEntries) {
-					if(targetTask instanceof EntityAIFindEntityNearestPlayer) {
-						collide |= true;
-						break;
-					}
-				}
-			}
-			break;
+            case 4: // ALL monsters
+                if (collidingEntity instanceof EntityLiving) {
+                    EntityLiving living = (EntityLiving) collidingEntity;
 
-		case 5: // ALL villagers
-			collide |= collidingEntity instanceof EntityVillager;
-			break;
+                    for (Object targetTask : living.targetTasks.taskEntries) {
+                        if (targetTask instanceof EntityAIFindEntityNearestPlayer) {
+                            collide |= true;
+                            break;
+                        }
+                    }
+                }
+                break;
 
-		case 6: // ALL items
-			collide |= collidingEntity instanceof EntityItem;
-			break;
+            case 5: // ALL villagers
+                collide |= collidingEntity instanceof EntityVillager;
+                break;
 
-		default: // Everything.
-			collide = true;
-			break;
-		}
+            case 6: // ALL items
+                collide |= collidingEntity instanceof EntityItem;
+                break;
 
-		if(collide) {
-			super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity, p_185477_7_);
-		}
+            default: // Everything.
+                collide = true;
+                break;
+        }
 
-	}
+        if (collide) {
+            super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity, p_185477_7_);
+        }
 
-	@Override
-	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
-		return false;
-	}
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		for (int j = 0; j < 7; ++j) {
-			list.add(new ItemStack(this, 1, j));
-		}
-	}
+    @Override
+    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+        return false;
+    }
 
-	@Deprecated
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(TYPE, Integer.valueOf(meta));
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+        for (int j = 0; j < 7; ++j) {
+            list.add(new ItemStack(this, 1, j));
+        }
+    }
 
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(TYPE).intValue();
-	}
+    @Deprecated
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(TYPE, meta);
+    }
 
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {TYPE});
-	}
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(TYPE);
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, TYPE);
+    }
 
 }

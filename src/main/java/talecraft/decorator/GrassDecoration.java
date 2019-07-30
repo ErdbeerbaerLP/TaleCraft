@@ -7,24 +7,25 @@ import net.minecraft.world.World;
 
 public class GrassDecoration extends StaticDecoration {
 
-	public GrassDecoration() {
-	}
+    public GrassDecoration() {
+    }
 
-	@Override
-	public int plant(World world, BlockPos[] positions, NBTTagCompound options) {
-		int updated = 0;
-		for(BlockPos pos : positions){
-			if(world.getBlockState(pos.down()) != null && world.getBlockState(pos.down()).isFullCube()){
-				world.setBlockState(pos, Blocks.TALLGRASS.getStateFromMeta(1));
-				updated++;
-			}
-		}
-		return updated;
-	}
+    @Override
+    public int plant(World world, BlockPos[] positions, NBTTagCompound options) {
+        int updated = 0;
+        for (BlockPos pos : positions) {
+            //noinspection ConstantConditions
+            if (world.getBlockState(pos.down()) != null && world.getBlockState(pos.down()).isFullCube()) {
+                world.setBlockState(pos, Blocks.TALLGRASS.getStateFromMeta(1));
+                updated++;
+            }
+        }
+        return updated;
+    }
 
-	@Override
-	public String name() {
-		return "Grass";
-	}
+    @Override
+    public String name() {
+        return "Grass";
+    }
 
 }

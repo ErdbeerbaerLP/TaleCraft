@@ -13,14 +13,14 @@ import talecraft.entity.projectile.EntityKnife;
 
 public class RenderKnife extends Render<EntityKnife> {
 
-	public RenderKnife(RenderManager renderManager) {
-		super(renderManager);
-	}
-	
-	@Override
-	public void doRender(EntityKnife entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GlStateManager.pushMatrix();
-        GlStateManager.translate((float)x, (float)y, (float)z);
+    public RenderKnife(RenderManager renderManager) {
+        super(renderManager);
+    }
+
+    @Override
+    public void doRender(EntityKnife entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) x, (float) y, (float) z);
         GlStateManager.enableRescaleNormal();
         bindEntityTexture(entity);
         GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
@@ -30,11 +30,11 @@ public class RenderKnife extends Render<EntityKnife> {
         Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(TaleCraftItems.knife), ItemCameraTransforms.TransformType.GROUND);
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
-	}
+    }
 
-	@Override
-	protected ResourceLocation getEntityTexture(EntityKnife entity) {
-		return TextureMap.LOCATION_BLOCKS_TEXTURE;
-	}
+    @Override
+    protected ResourceLocation getEntityTexture(EntityKnife entity) {
+        return TextureMap.LOCATION_BLOCKS_TEXTURE;
+    }
 
 }

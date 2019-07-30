@@ -1,7 +1,5 @@
 package talecraft.blocks.util;
 
-import java.util.Random;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,51 +17,53 @@ import talecraft.client.gui.blocks.GuiDelayBlock;
 import talecraft.invoke.EnumTriggerState;
 import talecraft.tileentity.DelayBlockTileEntity;
 
+import java.util.Random;
+
 public class DelayBlock extends TCBlockContainer implements TCITriggerableBlock {
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new DelayBlockTileEntity();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new DelayBlockTileEntity();
+    }
 
-	@Override
-	public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
-		if (world.isRemote)
-			return;
+    @Override
+    public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
+        if (world.isRemote)
+            return;
 
-		TileEntity tileentity = world.getTileEntity(position);
+        TileEntity tileentity = world.getTileEntity(position);
 
-		if (tileentity instanceof DelayBlockTileEntity) {
-			((DelayBlockTileEntity)tileentity).trigger(triggerState);
-		}
-	}
+        if (tileentity instanceof DelayBlockTileEntity) {
+            ((DelayBlockTileEntity) tileentity).trigger(triggerState);
+        }
+    }
 
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if (worldIn.isRemote)
-			return;
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        if (worldIn.isRemote)
+            return;
 
-		TileEntity tileentity = worldIn.getTileEntity(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
 
-		if (tileentity instanceof DelayBlockTileEntity) {
-			((DelayBlockTileEntity)tileentity).invokeFromUpdateTick();
-		}
-	}
+        if (tileentity instanceof DelayBlockTileEntity) {
+            ((DelayBlockTileEntity) tileentity).invokeFromUpdateTick();
+        }
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote)
-			return true;
-		if(!TaleCraft.proxy.isBuildMode())
-			return false;
-		if(playerIn.isSneaking())
-			return true;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote)
+            return true;
+        if (!TaleCraft.proxy.isBuildMode())
+            return false;
+        if (playerIn.isSneaking())
+            return true;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		mc.displayGuiScreen(new GuiDelayBlock((DelayBlockTileEntity)worldIn.getTileEntity(pos)));
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.displayGuiScreen(new GuiDelayBlock((DelayBlockTileEntity) worldIn.getTileEntity(pos)));
 
-		return true;
-	}
+        return true;
+    }
 
 }

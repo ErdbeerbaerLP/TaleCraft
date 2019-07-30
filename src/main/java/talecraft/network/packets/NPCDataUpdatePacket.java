@@ -11,39 +11,40 @@ import talecraft.entity.NPC.EntityNPC;
 
 public class NPCDataUpdatePacket implements IMessage {
 
-	NBTTagCompound data;
-	int id;
-	
+    NBTTagCompound data;
+    int id;
 
-	public NPCDataUpdatePacket() {
-	}
 
-	public NPCDataUpdatePacket(int id, NBTTagCompound tag) {
-		data = tag;
-		this.id = id;
-	}
+    public NPCDataUpdatePacket() {
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		data = ByteBufUtils.readTag(buf);
-		id = buf.readInt();
-	}
+    public NPCDataUpdatePacket(int id, NBTTagCompound tag) {
+        data = tag;
+        this.id = id;
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeTag(buf, data);
-		buf.writeInt(id);
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        data = ByteBufUtils.readTag(buf);
+        id = buf.readInt();
+    }
 
-	public static class Handler implements IMessageHandler<NPCDataUpdatePacket, IMessage> {
+    @Override
+    public void toBytes(ByteBuf buf) {
+        ByteBufUtils.writeTag(buf, data);
+        buf.writeInt(id);
+    }
 
-		@Override
-		public IMessage onMessage(NPCDataUpdatePacket message, MessageContext ctx) {
-			Minecraft mc = Minecraft.getMinecraft();
-			
-			EntityNPC npc = (EntityNPC) mc.world.getEntityByID(message.id);
-			npc.setNPCData(message.data);
-			return null;
-		}
-	}
+    public static class Handler implements IMessageHandler<NPCDataUpdatePacket, IMessage> {
+
+        @SuppressWarnings("ConstantConditions")
+        @Override
+        public IMessage onMessage(NPCDataUpdatePacket message, MessageContext ctx) {
+            Minecraft mc = Minecraft.getMinecraft();
+
+            EntityNPC npc = (EntityNPC) mc.world.getEntityByID(message.id);
+            npc.setNPCData(message.data);
+            return null;
+        }
+    }
 }

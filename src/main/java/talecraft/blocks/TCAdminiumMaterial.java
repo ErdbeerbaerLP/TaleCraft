@@ -8,51 +8,51 @@ import net.minecraft.block.material.Material;
  */
 public class TCAdminiumMaterial extends Material {
 
-	public static final Material instance = new TCAdminiumMaterial();
+    public static final Material instance = new TCAdminiumMaterial();
 
-	public TCAdminiumMaterial() {
-		super(MapColor.AIR);
-		setImmovableMobility();
-	}
+    public TCAdminiumMaterial() {
+        super(MapColor.AIR);
+        setImmovableMobility();
+    }
 
-	@Override
-	public boolean isLiquid() {
-		return false;
-	}
+    @Override
+    public boolean isLiquid() {
+        return false;
+    }
 
-	@Override
-	public boolean isSolid() {
-		return true;
-	}
+    @Override
+    public boolean isSolid() {
+        return true;
+    }
 
-	@Override
-	public boolean blocksLight() {
-		return true;
-	}
+    @Override
+    public boolean blocksLight() {
+        return true;
+    }
 
-	@Override
-	public boolean blocksMovement() {
-		return true;
-	}
+    @Override
+    public boolean blocksMovement() {
+        return true;
+    }
 
-	@Override
-	public boolean getCanBurn() {
-		return false;
-	}
+    @Override
+    public boolean getCanBurn() {
+        return false;
+    }
 
-	@Override
-	public boolean isReplaceable() {
-		return false;
-	}
+    @Override
+    public boolean isReplaceable() {
+        return false;
+    }
 
-	@Override
-	public boolean isOpaque() {
-		return true;
-	}
+    @Override
+    public boolean isOpaque() {
+        return true;
+    }
 
-	@Override
-	public boolean isToolNotRequired() {
-		return false;
-	}
+    @Override
+    public boolean isToolNotRequired() {
+        return false;
+    }
 
 }

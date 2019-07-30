@@ -1,39 +1,45 @@
 package talecraft.client.gui.replaced_guis.map;
 
-import java.io.IOException;
-import java.util.Random;
-
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.gui.GuiCreateWorld;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.world.GameType;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.storage.ISaveFormat;
-import talecraft.client.gui.qad.QADButton;
-import talecraft.client.gui.qad.QADColorTextField;
-import talecraft.client.gui.qad.QADGuiScreen;
-import talecraft.client.gui.qad.QADLabel;
-import talecraft.client.gui.qad.QADTextField;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
+import talecraft.client.gui.qad.*;
+
+import java.io.IOException;
+import java.util.Random;
+
 /**
  * An improved world creation gui which does not have gamemode options in it<br>
  * (used gamemode is creative)
+ *
  * @author ErdbeerbaerLP
  */
 public class MapCreator extends QADGuiScreen {
 
+    /**
+     * These filenames are known to be restricted on one or more OS's.
+     */
+    private static final String[] DISALLOWED_FILENAMES = new String[]{"CON", "COM", "PRN", "AUX", "CLOCK$", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
+    private final MapCreator newgui;
+    public String chunkProviderSettingsJson = "";
     private QADColorTextField worldNameField;
     private QADTextField worldSeedField;
     private String saveDirName;
     private boolean generateStructuresEnabled = true;
-    /** If cheats are allowed */
+    /**
+     * If cheats are allowed
+     */
     private boolean allowCheats = true;
     private boolean bonusChestEnabled;
-    /** Set to true when "hardcore" is the currently-selected gamemode */
+    /**
+     * Set to true when "hardcore" is the currently-selected gamemode
+     */
     private boolean hardCoreMode;
     private boolean alreadyGenerated;
     private QADButton btnMapFeatures;
@@ -47,39 +53,53 @@ public class MapCreator extends QADGuiScreen {
     private String worldSeed;
     private String worldName;
     private int selectedIndex;
-    public String chunkProviderSettingsJson = "";
-	private QADButton btnBack;
-	private final MapCreator newgui;
-    /** These filenames are known to be restricted on one or more OS's. */
-    private static final String[] DISALLOWED_FILENAMES = new String[] {"CON", "COM", "PRN", "AUX", "CLOCK$", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
+    private QADButton btnBack;
 
-    public MapCreator()
-    {
-    	newgui = this;
+    public MapCreator() {
+        newgui = this;
         this.worldSeed = "";
         this.worldName = "New Map";
     }
-    
+
+    /**
+     * Ensures that a proposed directory name doesn't collide with existing names.
+     * Returns the name, possibly modified to avoid collisions.
+     */
+    public static String getUncollidingSaveDirName(ISaveFormat saveLoader, String name) {
+        name = name.replaceAll("[\\./\"]", "_");
+
+        for (String s : DISALLOWED_FILENAMES) {
+            if (name.equalsIgnoreCase(s)) {
+                name = "_" + name + "_";
+            }
+        }
+
+        while (saveLoader.getWorldInfo(name) != null) {
+            name = name + "-";
+        }
+
+        return name;
+    }
+
     /**
      * Adds the buttons (and other controls) to the screen in question. Called when the GUI is displayed and when the
      * window resizes, the buttonList is cleared beforehand.
      */
     @Override
-    public void buildGui()
-    { 
-    	
-    	this.drawCursorLines = false;
+    public void buildGui() {
+
+        this.drawCursorLines = false;
         btnCreate = this.addComponent(new QADButton(this.width / 2 - 155, this.height - 38, 150, I18n.format("selectWorld.create")));
-        btnBack = this.addComponent(new QADButton(this.width / 2 + 5, this.height - 38, 150,  I18n.format("gui.cancel")));
+        btnBack = this.addComponent(new QADButton(this.width / 2 + 5, this.height - 38, 150, I18n.format("gui.cancel")));
         this.btnMapFeatures = this.addComponent(new QADButton(this.width / 2 - 155, 120, 130, I18n.format("selectWorld.mapFeatures")));
-        
-        
-        this.btnMapType = this.addComponent(new QADButton(this.width / 2 + 5, 120,100, I18n.format("selectWorld.mapType")));
-        
+
+
+        this.btnMapType = this.addComponent(new QADButton(this.width / 2 + 5, 120, 100, I18n.format("selectWorld.mapType")));
+
         this.btnAllowCommands = this.addComponent(new QADButton(this.width / 2 - 155, 145, 130, I18n.format("selectWorld.allowCommands")));
-        
-        this.btnCustomizeType = this.addComponent(new QADButton(this.width / 2 + 5, 140,100, I18n.format("selectWorld.customizeType")));
-        
+
+        this.btnCustomizeType = this.addComponent(new QADButton(this.width / 2 + 5, 140, 100, I18n.format("selectWorld.customizeType")));
+
         this.worldNameField = this.addComponent(new QADColorTextField(this.fontRenderer, this.width / 2 - 100, 60, 200, 10));
         this.worldNameField.setFocused(true);
         this.worldNameField.setText(this.worldName);
@@ -92,24 +112,23 @@ public class MapCreator extends QADGuiScreen {
         btnCustomizeType.setEnabled(false);
         this.calcSaveDirName();
         this.updateDisplayState();
-        
-        btnBack.setAction(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				mc.displayGuiScreen(new MapSelector(null));
-			}
-		});
-        btnCreate.setAction(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				mc.displayGuiScreen((GuiScreen)null);
 
-                if (alreadyGenerated)
-                {
+        btnBack.setAction(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                mc.displayGuiScreen(new MapSelector(null));
+            }
+        });
+        btnCreate.setAction(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                mc.displayGuiScreen(null);
+
+                if (alreadyGenerated) {
                     return;
                 }
 
@@ -117,20 +136,15 @@ public class MapCreator extends QADGuiScreen {
                 long i = (new Random()).nextLong();
                 String s = worldSeedField.getText();
 
-                if (!StringUtils.isEmpty(s))
-                {
-                    try
-                    {
+                if (!StringUtils.isEmpty(s)) {
+                    try {
                         long j = Long.parseLong(s);
 
-                        if (j != 0L)
-                        {
+                        if (j != 0L) {
                             i = j;
                         }
-                    }
-                    catch (NumberFormatException var7)
-                    {
-                        i = (long)s.hashCode();
+                    } catch (NumberFormatException var7) {
+                        i = (long) s.hashCode();
                     }
                 }
 
@@ -139,118 +153,114 @@ public class MapCreator extends QADGuiScreen {
                 WorldSettings worldsettings = new WorldSettings(i, GameType.CREATIVE, generateStructuresEnabled, hardCoreMode, WorldType.WORLD_TYPES[selectedIndex]);
                 worldsettings.setGeneratorOptions(chunkProviderSettingsJson);
 
-                if (bonusChestEnabled && !hardCoreMode)
-                {
+                if (bonusChestEnabled && !hardCoreMode) {
                     worldsettings.enableBonusChest();
                 }
 
-                if (allowCheats && !hardCoreMode)
-                {
+                if (allowCheats && !hardCoreMode) {
                     worldsettings.enableCommands();
                 }
 
                 mc.launchIntegratedServer(saveDirName, worldNameField.getText().trim(), worldsettings);
             }
-			
-		});
-        btnMapFeatures.setAction(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				generateStructuresEnabled = !generateStructuresEnabled;
-                updateDisplayState();
-			}
-		});
-        btnMapType.setAction(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				++selectedIndex;
 
-                if (selectedIndex >= WorldType.WORLD_TYPES.length)
-                {
+        });
+        btnMapFeatures.setAction(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                generateStructuresEnabled = !generateStructuresEnabled;
+                updateDisplayState();
+            }
+        });
+        btnMapType.setAction(new Runnable() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                ++selectedIndex;
+
+                if (selectedIndex >= WorldType.WORLD_TYPES.length) {
                     selectedIndex = 0;
                 }
 
-                while (!canSelectCurWorldType())
-                {
+                while (!canSelectCurWorldType()) {
                     ++selectedIndex;
 
-                    if (selectedIndex >= WorldType.WORLD_TYPES.length)
-                    {
+                    if (selectedIndex >= WorldType.WORLD_TYPES.length) {
                         selectedIndex = 0;
                     }
                 }
                 btnCustomizeType.setEnabled(WorldType.WORLD_TYPES[selectedIndex].isCustomizable());
-                
+
                 chunkProviderSettingsJson = "";
                 updateDisplayState();
-			}
-		});
+            }
+        });
         btnAllowCommands.setAction(new Runnable() {
-			
-			@Override
-			public void run() {
-				allowCheats = !allowCheats;
+
+            @Override
+            public void run() {
+                allowCheats = !allowCheats;
                 updateDisplayState();
-			}
-		});
+            }
+        });
         btnCustomizeType.setAction(new Runnable() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				GuiCreateWorld dummy = new GuiCreateWorld(newgui);
-				dummy.chunkProviderSettingsJson = MapCreator.this.chunkProviderSettingsJson;
-				WorldType.WORLD_TYPES[selectedIndex].onCustomizeButton(mc, dummy);
-			}
-		});
-        
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                GuiCreateWorld dummy = new GuiCreateWorld(newgui);
+                dummy.chunkProviderSettingsJson = MapCreator.this.chunkProviderSettingsJson;
+                WorldType.WORLD_TYPES[selectedIndex].onCustomizeButton(mc, dummy);
+            }
+        });
+
     }
+
     @Override
     public void updateGui() {
-    	this.btnCreate.setX(this.width / 2 - 155);
-    	this.btnCreate.setY(this.height - 38);
-    	this.btnBack.setX(this.width / 2 + 5);
-    	this.btnBack.setY(this.height - 38);
-    	this.btnMapFeatures.setX(this.width / 2 - 145);
-    	this.btnMapFeatures.setY(120);
-    	this.btnMapType.setX(this.width / 2 + 5);
-    	this.btnMapType.setY(120);
-    	this.btnAllowCommands.setX(btnMapFeatures.getX());
-    	this.btnAllowCommands.setY(145);
-    	this.worldNameField.setX(this.width / 2 - 100);
-    	this.worldNameField.setY(50);
-    	this.worldSeedField.setX(this.width / 2 - 100);
-    	this.worldSeedField.setY(80);
-    	this.btnCustomizeType.setX(btnMapType.getX());
-    	this.btnCustomizeType.setY(btnMapType.getY()+22);
-    	lblName.setPosition(worldNameField.getX(), worldNameField.getY()-10);
-    	lblSeed.setPosition(worldSeedField.getX(), worldSeedField.getY()-10);
-    	lblSeedInfo.setPosition(worldSeedField.getX(), worldSeedField.getY()+15);
-    	}
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		// TODO Auto-generated method stub
-		super.drawScreen(mouseX, mouseY, partialTicks);
-		if(!btnCustomizeType.isEnabeld() && btnCustomizeType.isMouserOver()) drawHoveringText("This world type can not be customized!", mouseX, mouseY);
-        
-	}
+        this.btnCreate.setX(this.width / 2 - 155);
+        this.btnCreate.setY(this.height - 38);
+        this.btnBack.setX(this.width / 2 + 5);
+        this.btnBack.setY(this.height - 38);
+        this.btnMapFeatures.setX(this.width / 2 - 145);
+        this.btnMapFeatures.setY(120);
+        this.btnMapType.setX(this.width / 2 + 5);
+        this.btnMapType.setY(120);
+        this.btnAllowCommands.setX(btnMapFeatures.getX());
+        this.btnAllowCommands.setY(145);
+        this.worldNameField.setX(this.width / 2 - 100);
+        this.worldNameField.setY(50);
+        this.worldSeedField.setX(this.width / 2 - 100);
+        this.worldSeedField.setY(80);
+        this.btnCustomizeType.setX(btnMapType.getX());
+        this.btnCustomizeType.setY(btnMapType.getY() + 22);
+        lblName.setPosition(worldNameField.getX(), worldNameField.getY() - 10);
+        lblSeed.setPosition(worldSeedField.getX(), worldSeedField.getY() - 10);
+        lblSeedInfo.setPosition(worldSeedField.getX(), worldSeedField.getY() + 15);
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        // TODO Auto-generated method stub
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        if (!btnCustomizeType.isEnabeld() && btnCustomizeType.isMouserOver())
+            drawHoveringText("This world type can not be customized!", mouseX, mouseY);
+
+    }
+
     /**
      * Determine a save-directory name from the world name
      */
-    private void calcSaveDirName()
-    {
+    private void calcSaveDirName() {
         this.saveDirName = this.worldNameField.getText().trim();
 
-        for (char c0 : ChatAllowedCharacters.ILLEGAL_FILE_CHARACTERS)
-        {
+        for (char c0 : ChatAllowedCharacters.ILLEGAL_FILE_CHARACTERS) {
             this.saveDirName = this.saveDirName.replace(c0, '_');
         }
 
-        if (StringUtils.isEmpty(this.saveDirName))
-        {
+        if (StringUtils.isEmpty(this.saveDirName)) {
             this.saveDirName = "World";
         }
 
@@ -260,76 +270,38 @@ public class MapCreator extends QADGuiScreen {
     /**
      * Sets displayed GUI elements according to the current settings state
      */
-    private void updateDisplayState()
-    {
+    private void updateDisplayState() {
 //        this.btnGameMode.setText(I18n.format("selectWorld.gameMode") + ": " + I18n.format("selectWorld.gameMode." + this.gameMode));
 //        this.gameModeDesc1 = I18n.format("selectWorld.gameMode." + this.gameMode + ".line1");
 //        this.gameModeDesc2 = I18n.format("selectWorld.gameMode." + this.gameMode + ".line2");
-        this.btnMapFeatures.setText( I18n.format("selectWorld.mapFeatures") + " ");
+        this.btnMapFeatures.setText(I18n.format("selectWorld.mapFeatures") + " ");
 
-        if (this.generateStructuresEnabled)
-        {
-            this.btnMapFeatures.setText(this.btnMapFeatures.getText()+ I18n.format("options.on"));
-        }
-        else
-        {
-        	this.btnMapFeatures.setText(this.btnMapFeatures.getText()+ I18n.format("options.off"));
+        if (this.generateStructuresEnabled) {
+            this.btnMapFeatures.setText(this.btnMapFeatures.getText() + I18n.format("options.on"));
+        } else {
+            this.btnMapFeatures.setText(this.btnMapFeatures.getText() + I18n.format("options.off"));
         }
 
-        this.btnMapType.setText( I18n.format("selectWorld.mapType") + " " + I18n.format(WorldType.WORLD_TYPES[this.selectedIndex].getTranslationKey()));
-        this.btnAllowCommands.setText( I18n.format("selectWorld.allowCommands") + " ");
+        this.btnMapType.setText(I18n.format("selectWorld.mapType") + " " + I18n.format(WorldType.WORLD_TYPES[this.selectedIndex].getTranslationKey()));
+        this.btnAllowCommands.setText(I18n.format("selectWorld.allowCommands") + " ");
 
-        if (this.allowCheats && !this.hardCoreMode)
-        {
+        if (this.allowCheats && !this.hardCoreMode) {
             this.btnAllowCommands.setText(this.btnAllowCommands.getText() + I18n.format("options.on"));
-        }
-        else
-        {
-            this.btnAllowCommands.setText( this.btnAllowCommands.getText() + I18n.format("options.off"));
+        } else {
+            this.btnAllowCommands.setText(this.btnAllowCommands.getText() + I18n.format("options.off"));
         }
     }
-
-    /**
-     * Ensures that a proposed directory name doesn't collide with existing names.
-     * Returns the name, possibly modified to avoid collisions.
-     */
-    public static String getUncollidingSaveDirName(ISaveFormat saveLoader, String name)
-    {
-        name = name.replaceAll("[\\./\"]", "_");
-
-        for (String s : DISALLOWED_FILENAMES)
-        {
-            if (name.equalsIgnoreCase(s))
-            {
-                name = "_" + name + "_";
-            }
-        }
-
-        while (saveLoader.getWorldInfo(name) != null)
-        {
-            name = name + "-";
-        }
-
-        return name;
-    }
-
-
 
     /**
      * Returns whether the currently-selected world type is actually acceptable for selection
      * Used to hide the "debug" world type.
      */
-    private boolean canSelectCurWorldType()
-    {
+    private boolean canSelectCurWorldType() {
         WorldType worldtype = WorldType.WORLD_TYPES[this.selectedIndex];
 
-        if (worldtype != null && worldtype.canBeCreated())
-        {
-        	if(worldtype == WorldType.DEBUG_ALL_BLOCK_STATES) return false;
-            return true;
-        }
-        else
-        {
+        if (worldtype != null && worldtype.canBeCreated()) {
+            return worldtype != WorldType.DEBUG_ALL_BLOCK_STATES;
+        } else {
             return false;
         }
     }
@@ -340,16 +312,15 @@ public class MapCreator extends QADGuiScreen {
      */
     @Override
     public void handleKeyboardInput() throws IOException {
-    	Keyboard.getEventCharacter();
-    	int keyCode = Keyboard.getEventKey();
-    	if (keyCode == 28 || keyCode == 156)
-        {
-    		btnCreate.getAction().run();
+        Keyboard.getEventCharacter();
+        int keyCode = Keyboard.getEventKey();
+        if (keyCode == 28 || keyCode == 156) {
+            btnCreate.getAction().run();
         }
-    	
-    	this.calcSaveDirName();
-    	if(keyCode==1) return;
-    	super.handleKeyboardInput();
+
+        this.calcSaveDirName();
+        if (keyCode == 1) return;
+        super.handleKeyboardInput();
     }
 
 

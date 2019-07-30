@@ -17,94 +17,94 @@ import talecraft.server.ServerMirror;
 
 public class CopyItem extends TCItem {
 
-	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		// ItemStack stack = player.getHeldItem(hand);
-		if(world.isRemote) {
-			rightClickClient(world, player);
-		} else {
-			rightClickServer(world, player);
-			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 0);
-		}
+    public static void rightClickServer(World world, EntityPlayer player) {
+        ServerMirror mirror = ServerHandler.getServerMirror(null);
+        ServerClipboard clipboard = mirror.getClipboard();
 
-		return EnumActionResult.SUCCESS;
-	}
+        int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
+        String keyString = "player." + player.getGameProfile().getId().toString();
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		if(world.isRemote)
-			rightClickClient(world, player);
-		else
-			rightClickServer(world, player);
+        if (bounds == null)
+            return;
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-	}
+        ClipboardItem item = ClipboardItem.copyRegion(bounds, world, keyString, player);
 
-	public static void rightClickServer(World world, EntityPlayer player) {
-		ServerMirror mirror = ServerHandler.getServerMirror(null);
-		ServerClipboard clipboard = mirror.getClipboard();
+        if (item != null)
+            clipboard.put(keyString, item);
+    }
 
-		int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
-		String keyString = "player."+player.getGameProfile().getId().toString();
+    public static void rightClickClient(World world, EntityPlayer player) {
+        int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
 
-		if(bounds == null)
-			return;
+        if (bounds == null)
+            return;
 
-		ClipboardItem item = ClipboardItem.copyRegion(bounds, world, keyString, player);
+        ClipboardItem item = ClipboardItem.copyRegion(bounds, world, "player.self", player);
 
-		if(item != null)
-			clipboard.put(keyString, item);
-	}
+        if (item != null) {
+            TaleCraft.asClient().setClipboard(item);
+        }
+    }
 
-	public static void rightClickClient(World world, EntityPlayer player) {
-		int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        // ItemStack stack = player.getHeldItem(hand);
+        if (world.isRemote) {
+            rightClickClient(world, player);
+        } else {
+            rightClickServer(world, player);
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 0);
+        }
 
-		if(bounds == null)
-			return;
+        return EnumActionResult.SUCCESS;
+    }
 
-		ClipboardItem item = ClipboardItem.copyRegion(bounds, world, "player.self", player);
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (world.isRemote)
+            rightClickClient(world, player);
+        else
+            rightClickServer(world, player);
 
-		if(item != null) {
-			TaleCraft.asClient().setClipboard(item);
-		}
-	}
+        return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+    }
 
-	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		World world = player.world;
-		String keyString = "player."+player.getGameProfile().getId().toString();
+    @Override
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+        World world = player.world;
+        String keyString = "player." + player.getGameProfile().getId().toString();
 
-		if(world.isRemote)
-			leftClickClient(stack, player, entity, world, keyString);
-		else
-			leftClickServer(stack, player, entity, world, keyString);
+        if (world.isRemote)
+            leftClickClient(stack, player, entity, world, keyString);
+        else
+            leftClickServer(stack, player, entity, world, keyString);
 
-		// by returning TRUE, we prevent damaging the entity being hit.
-		return true;
-	}
+        // by returning TRUE, we prevent damaging the entity being hit.
+        return true;
+    }
 
-	private void leftClickClient(ItemStack stack, EntityPlayer player, Entity entity, World world, String keyString) {
-		ClipboardItem item = ClipboardItem.copyEntity(entity.world, entity, keyString);
+    private void leftClickClient(ItemStack stack, EntityPlayer player, Entity entity, World world, String keyString) {
+        ClipboardItem item = ClipboardItem.copyEntity(entity.world, entity, keyString);
 
-		//System.out.println("Click Client");
+        //System.out.println("Click Client");
 
-		if(item != null) {
-			TaleCraft.asClient().setClipboard(item);
-		}
-	}
+        if (item != null) {
+            TaleCraft.asClient().setClipboard(item);
+        }
+    }
 
-	private void leftClickServer(ItemStack stack, EntityPlayer player, Entity entity, World world, String keyString) {
-		ServerMirror mirror = ServerHandler.getServerMirror(null);
-		ServerClipboard clipboard = mirror.getClipboard();
+    private void leftClickServer(ItemStack stack, EntityPlayer player, Entity entity, World world, String keyString) {
+        ServerMirror mirror = ServerHandler.getServerMirror(null);
+        ServerClipboard clipboard = mirror.getClipboard();
 
-		//System.out.println("Click Server");
+        //System.out.println("Click Server");
 
-		ClipboardItem item = ClipboardItem.copyEntity(entity.world, entity, keyString);
+        ClipboardItem item = ClipboardItem.copyEntity(entity.world, entity, keyString);
 
-		if(item != null) {
-			clipboard.put(keyString, item);
-		}
-	}
+        if (item != null) {
+            clipboard.put(keyString, item);
+        }
+    }
 
 }

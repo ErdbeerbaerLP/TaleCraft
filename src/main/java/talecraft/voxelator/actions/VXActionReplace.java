@@ -14,40 +14,46 @@ import talecraft.voxelator.Voxelator.ActionFactory;
 import talecraft.voxelator.params.BlockstateBrushParameter;
 
 public class VXActionReplace extends VXAction {
-	private static final BrushParameter[] PARAMS = new BrushParameter[]{
-		new BlockstateBrushParameter("state", Blocks.STONE)
-	};
-	
-	public static final ActionFactory FACTORY = new ActionFactory() {
-		@Override public String getName() {
-			return "replace";
-		}
-		
-		@Override public VXAction newAction(NBTTagCompound actionData) {
-			ItemStack stack = new ItemStack(actionData.getCompoundTag("state"));
-			Block block = Block.getBlockFromItem(stack.getItem());
-			return new VXActionReplace(block.getStateFromMeta(stack.getMetadata()));
-		}
-		@Override public NBTTagCompound newAction(String[] parameters) {
-			NBTTagCompound actionData = new NBTTagCompound();
-			actionData.setString("type", getName());
-			actionData.setString("state", parameters[0]);
-			return actionData;
-		}
-		
-		@Override
-		public BrushParameter[] getParameters() {
-			return PARAMS;
-		}
-	};
-	
-	private final IBlockState state;
-	public VXActionReplace(IBlockState state) {
-		this.state = state;
-	}
+    private static final BrushParameter[] PARAMS = new BrushParameter[]{
+            new BlockstateBrushParameter("state", Blocks.STONE)
+    };
 
-	@Override
-	public void apply(BlockPos pos,BlockPos center,MutableBlockPos offset, CachedWorldDiff fworld) {
-		fworld.setBlockState(pos, state);
-	}
+    public static final ActionFactory FACTORY = new ActionFactory() {
+        @Override
+        public String getName() {
+            return "replace";
+        }
+
+        @SuppressWarnings("deprecation")
+        @Override
+        public VXAction newAction(NBTTagCompound actionData) {
+            ItemStack stack = new ItemStack(actionData.getCompoundTag("state"));
+            Block block = Block.getBlockFromItem(stack.getItem());
+            return new VXActionReplace(block.getStateFromMeta(stack.getMetadata()));
+        }
+
+        @Override
+        public NBTTagCompound newAction(String[] parameters) {
+            NBTTagCompound actionData = new NBTTagCompound();
+            actionData.setString("type", getName());
+            actionData.setString("state", parameters[0]);
+            return actionData;
+        }
+
+        @Override
+        public BrushParameter[] getParameters() {
+            return PARAMS;
+        }
+    };
+
+    private final IBlockState state;
+
+    public VXActionReplace(IBlockState state) {
+        this.state = state;
+    }
+
+    @Override
+    public void apply(BlockPos pos, BlockPos center, MutableBlockPos offset, CachedWorldDiff fworld) {
+        fworld.setBlockState(pos, state);
+    }
 }

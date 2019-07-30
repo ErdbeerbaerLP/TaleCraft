@@ -9,13 +9,13 @@ import net.minecraft.world.World;
 
 public class ContainerNPCMerchant extends ContainerMerchant {
 
-	public ContainerNPCMerchant(InventoryPlayer playerInventory, IMerchant merchant, World worldIn) {
-		super(playerInventory, merchant, worldIn);
-	}
-	
-	@Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		return null;
-	}
+    public ContainerNPCMerchant(InventoryPlayer playerInventory, IMerchant merchant, World worldIn) {
+        super(playerInventory, merchant, worldIn);
+    }
+
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+        return null;
+    }
 
 }

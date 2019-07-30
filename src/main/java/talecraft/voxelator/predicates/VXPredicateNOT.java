@@ -10,38 +10,38 @@ import talecraft.voxelator.Voxelator;
 import talecraft.voxelator.Voxelator.FilterFactory;
 
 public final class VXPredicateNOT extends VXPredicate {
-	public static FilterFactory FACTORY = new FilterFactory() {
-		@Override
-		public String getName() {
-			return "not";
-		}
-		
-		@Override
-		public VXPredicate newFilter(NBTTagCompound filterData) {
-			VXPredicate filter = Voxelator.newFilter(filterData.getCompoundTag("filter"));
-			
-			return new VXPredicateNOT(filter);
-		}
-		
-		@Override
-		public NBTTagCompound newFilter(String[] parameters) {
-			throw new UnsupportedOperationException("Not Yet Implemented!");
-		}
-		
-		@Override
-		public BrushParameter[] getParameters() {
-			return BrushParameter.NO_PARAMETERS;
-		}
-	};
-	
-	private final VXPredicate predicate;
+    public static FilterFactory FACTORY = new FilterFactory() {
+        @Override
+        public String getName() {
+            return "not";
+        }
 
-	public VXPredicateNOT(VXPredicate predicate) {
-		this.predicate = predicate;
-	}
+        @Override
+        public VXPredicate newFilter(NBTTagCompound filterData) {
+            VXPredicate filter = Voxelator.newFilter(filterData.getCompoundTag("filter"));
 
-	@Override
-	public boolean test(BlockPos pos, BlockPos center, MutableBlockPos offset, CachedWorldDiff fworld) {
-		return !predicate.test(pos, center, offset, fworld);
-	}
+            return new VXPredicateNOT(filter);
+        }
+
+        @Override
+        public NBTTagCompound newFilter(String[] parameters) {
+            throw new UnsupportedOperationException("Not Yet Implemented!");
+        }
+
+        @Override
+        public BrushParameter[] getParameters() {
+            return BrushParameter.NO_PARAMETERS;
+        }
+    };
+
+    private final VXPredicate predicate;
+
+    public VXPredicateNOT(VXPredicate predicate) {
+        this.predicate = predicate;
+    }
+
+    @Override
+    public boolean test(BlockPos pos, BlockPos center, MutableBlockPos offset, CachedWorldDiff fworld) {
+        return !predicate.test(pos, center, offset, fworld);
+    }
 }

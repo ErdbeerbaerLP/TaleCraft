@@ -14,54 +14,54 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.TriggerFilterBlockTileEntity;
 
 public class GuiTriggerFilterBlock extends QADGuiScreen {
-	TriggerFilterBlockTileEntity tileEntity;
+    TriggerFilterBlockTileEntity tileEntity;
 
 
-	public GuiTriggerFilterBlock(TriggerFilterBlockTileEntity tileEntity) {
-		this.tileEntity = tileEntity;
-	}
+    public GuiTriggerFilterBlock(TriggerFilterBlockTileEntity tileEntity) {
+        this.tileEntity = tileEntity;
+    }
 
-	@Override
-	public void buildGui() {
-		final BlockPos position = tileEntity.getPos();
+    @Override
+    public void buildGui() {
+        final BlockPos position = tileEntity.getPos();
 
-		addComponent(new QADLabel("Trigger Filter Block @ " + position.getX() + " " + position.getY() + " " + position.getZ(), 2, 2));
-		InvokePanelBuilder.build(this, this, 2, 16, tileEntity.getTriggerInvoke(), new BlockInvokeHolder(position, "triggerInvoke"), InvokePanelBuilder.INVOKE_TYPE_EDIT_ALLOWALL);
+        addComponent(new QADLabel("Trigger Filter Block @ " + position.getX() + " " + position.getY() + " " + position.getZ(), 2, 2));
+        InvokePanelBuilder.build(this, this, 2, 16, tileEntity.getTriggerInvoke(), new BlockInvokeHolder(position, "triggerInvoke"), InvokePanelBuilder.INVOKE_TYPE_EDIT_ALLOWALL);
 
-		addComponent(new QADTickBox(2+16*0, 16+24)).setModel(new REMOTENBTTICKBOXMODEL("filter_on", tileEntity.getDoFilterOn())).setTooltip("Filter ON?");
-		addComponent(new QADTickBox(2+16*1, 16+24)).setModel(new REMOTENBTTICKBOXMODEL("filter_off", tileEntity.getDoFilterOff())).setTooltip("Filter OFF");
-		addComponent(new QADTickBox(2+16*2, 16+24)).setModel(new REMOTENBTTICKBOXMODEL("filter_invert", tileEntity.getDoFilterInvert())).setTooltip("Filter INVERT?");
-		addComponent(new QADTickBox(2+16*3, 16+24)).setModel(new REMOTENBTTICKBOXMODEL("filter_ignore", tileEntity.getDoFilterIgnore())).setTooltip("Filter IGNORE?");
-	}
+        addComponent(new QADTickBox(2, 16 + 24)).setModel(new REMOTENBTTICKBOXMODEL("filter_on", tileEntity.getDoFilterOn())).setTooltip("Filter ON?");
+        addComponent(new QADTickBox(2 + 16, 16 + 24)).setModel(new REMOTENBTTICKBOXMODEL("filter_off", tileEntity.getDoFilterOff())).setTooltip("Filter OFF");
+        addComponent(new QADTickBox(2 + 16 * 2, 16 + 24)).setModel(new REMOTENBTTICKBOXMODEL("filter_invert", tileEntity.getDoFilterInvert())).setTooltip("Filter INVERT?");
+        addComponent(new QADTickBox(2 + 16 * 3, 16 + 24)).setModel(new REMOTENBTTICKBOXMODEL("filter_ignore", tileEntity.getDoFilterIgnore())).setTooltip("Filter IGNORE?");
+    }
 
-	private class REMOTENBTTICKBOXMODEL implements TickBoxModel {
-		String tagName;
-		boolean lastKnownState;
+    private class REMOTENBTTICKBOXMODEL implements TickBoxModel {
+        String tagName;
+        boolean lastKnownState;
 
-		public REMOTENBTTICKBOXMODEL(String string, boolean doFilterOn) {
-			tagName = string;
-			lastKnownState = doFilterOn;
-		}
+        public REMOTENBTTICKBOXMODEL(String string, boolean doFilterOn) {
+            tagName = string;
+            lastKnownState = doFilterOn;
+        }
 
-		@Override
-		public void setState(boolean newState) {
-			lastKnownState = newState;
+        @Override
+        public boolean getState() {
+            return lastKnownState;
+        }
 
-			String commandString = ClientNetworkHandler.makeBlockDataMergeCommand(tileEntity.getPos());
-			NBTTagCompound commandData = new NBTTagCompound();
-			commandData.setBoolean(tagName, lastKnownState);
-			TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
-		}
+        @Override
+        public void setState(boolean newState) {
+            lastKnownState = newState;
 
-		@Override
-		public boolean getState() {
-			return lastKnownState;
-		}
+            String commandString = ClientNetworkHandler.makeBlockDataMergeCommand(tileEntity.getPos());
+            NBTTagCompound commandData = new NBTTagCompound();
+            commandData.setBoolean(tagName, lastKnownState);
+            TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
+        }
 
-		@Override
-		public void toggleState() {
-			setState(!getState());
-		}
-	}
+        @Override
+        public void toggleState() {
+            setState(!getState());
+        }
+    }
 
 }

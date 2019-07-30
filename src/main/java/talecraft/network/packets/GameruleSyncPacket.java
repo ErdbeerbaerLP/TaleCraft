@@ -10,31 +10,31 @@ import talecraft.network.handlers.client.MusicDisableGamerulePacketHandler;
 
 public class GameruleSyncPacket implements IMessage {
 
-	public NBTTagCompound gr;
+    public NBTTagCompound gr;
 
-	public GameruleSyncPacket() {
-	}
+    public GameruleSyncPacket() {
+    }
 
-	public GameruleSyncPacket(NBTTagCompound gr) {
-		this.gr = gr;
-	}
+    public GameruleSyncPacket(NBTTagCompound gr) {
+        this.gr = gr;
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		gr = ByteBufUtils.readTag(buf);
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        gr = ByteBufUtils.readTag(buf);
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeTag(buf, gr);
-	}
+    @Override
+    public void toBytes(ByteBuf buf) {
+        ByteBufUtils.writeTag(buf, gr);
+    }
 
-	public static class Handler implements IMessageHandler<GameruleSyncPacket, IMessage> {
+    public static class Handler implements IMessageHandler<GameruleSyncPacket, IMessage> {
 
-		@Override
-		public IMessage onMessage(GameruleSyncPacket message, MessageContext ctx) {
-			MusicDisableGamerulePacketHandler.handle(message);
-			return null;
-		}
-	}
+        @Override
+        public IMessage onMessage(GameruleSyncPacket message, MessageContext ctx) {
+            MusicDisableGamerulePacketHandler.handle(message);
+            return null;
+        }
+    }
 }

@@ -11,249 +11,246 @@ import talecraft.client.gui.vcui.VCUIRenderer;
 
 public class QADSlider extends QADRectangularComponent {
 
-	public static interface SliderModel<T> {
-		void setValue(T value);
-		T getValue();
-		String getValueAsText();
+    protected static final ResourceLocation buttonTextures = new ResourceLocation("minecraft:textures/gui/widgets.png");
+    private int xPos;
+    private int yPos;
+    private int width = 100;
+    private int height = 20;
+    private boolean enabled = true;
+    private boolean hovered = false;
+    private boolean focused = false;
+    private SliderModel<?> model;
+    private Runnable action;
 
-		void setSliderValue(float sliderValue);
-		float getSliderValue();
-	}
+    public QADSlider(SliderModel<?> model) {
+        if (model == null)
+            throw new IllegalArgumentException("'model' must not be null!");
 
-	protected static final ResourceLocation buttonTextures = new ResourceLocation("minecraft:textures/gui/widgets.png");
-	private int xPos;
-	private int yPos;
-	private int width = 100;
-	private int height = 20;
-	private boolean enabled = true;
-	private boolean hovered = false;
-	private boolean focused = false;
-	private SliderModel<?> model;
-	private Runnable action;
+        this.model = model;
+    }
 
-	public QADSlider(SliderModel<?> model) {
-		if(model == null)
-			throw new IllegalArgumentException("'model' must not be null!");
+    @Override
+    public int getX() {
+        return xPos;
+    }
 
-		this.model = model;
-	}
+    @Override
+    public void setX(int x) {
+        xPos = x;
+    }
 
-	@Override
-	public int getX() {
-		return xPos;
-	}
+    @Override
+    public int getY() {
+        return yPos;
+    }
 
-	@Override
-	public int getY() {
-		return yPos;
-	}
+    @Override
+    public void setY(int y) {
+        yPos = y;
+    }
 
-	@Override
-	public void setX(int x) {
-		xPos = x;
-	}
+    @Override
+    public void setPosition(int x, int y) {
+        this.xPos = x;
+        this.yPos = y;
+    }
 
-	@Override
-	public void setY(int y) {
-		yPos = y;
-	}
+    // Returns a value 0..1
+    public float getSliderValue() {
+        return model.getSliderValue();
+    }
 
-	@Override
-	public void setPosition(int x, int y) {
-		this.xPos = x;
-		this.yPos = y;
-	}
+    public void setSliderValue(float newValue) {
+        model.setSliderValue(newValue);
+    }
 
-	// Returns a value 0..1
-	public float getSliderValue() {
-		return model.getSliderValue();
-	}
+    public void setSliderAction(Runnable action) {
+        this.action = action;
+    }
 
-	public void setSliderValue(float newValue) {
-		model.setSliderValue(newValue);
-	}
+    protected int getHoverState(boolean mouseOver) {
+        byte b0 = 1;
 
-	public void setSliderAction(Runnable action) {
-		this.action = action;
-	}
+        if (!this.enabled) {
+            b0 = 0;
+        } else if (mouseOver) {
+            b0 = 2;
+        }
 
-	protected int getHoverState(boolean mouseOver) {
-		byte b0 = 1;
+        return b0;
+    }
 
-		if (!this.enabled)
-		{
-			b0 = 0;
-		}
-		else if (mouseOver)
-		{
-			b0 = 2;
-		}
+    @Override
+    public void draw(int localMouseX, int localMouseY, float partialTicks, VCUIRenderer renderer) {
+        renderer.bindTexture(buttonTextures);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        this.hovered = localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
+        int k = 0;
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.blendFunc(770, 771);
 
-		return b0;
-	}
+        if (width < 50) {
+            renderer.drawTexturedModalRectangle(this.xPos, this.yPos, 0, 46 + k * 20, this.width / 2, this.height);
+            renderer.drawTexturedModalRectangle(this.xPos + this.width / 2, this.yPos, 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
+        } else {
+            renderer.drawRectangle(this.xPos, this.yPos, this.xPos + this.width, this.yPos + this.height, 0x7F000000);
+            renderer.drawLineRectangle(this.xPos, this.yPos, this.xPos + this.width, this.yPos + this.height, 0xFFFFFFFF);
+        }
 
-	@Override
-	public void draw(int localMouseX, int localMouseY, float partialTicks, VCUIRenderer renderer) {
-		renderer.bindTexture(buttonTextures);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		this.hovered = localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
-		int k = 0;
-		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-		GlStateManager.blendFunc(770, 771);
+        // this.mouseDragged(mc, mouseX, mouseY);
 
-		if(width < 50) {
-			renderer.drawTexturedModalRectangle(this.xPos, this.yPos, 0, 46 + k * 20, this.width / 2, this.height);
-			renderer.drawTexturedModalRectangle(this.xPos + this.width / 2, this.yPos, 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
-		} else {
-			renderer.drawRectangle(this.xPos, this.yPos, this.xPos+this.width, this.yPos+this.height, 0x7F000000);
-			renderer.drawLineRectangle(this.xPos, this.yPos, this.xPos+this.width, this.yPos+this.height, 0xFFFFFFFF);
-		}
+        int sliderPos = (int) (model.getSliderValue() * width);
+        sliderPos = MathHelper.clamp(sliderPos, 2, width - 3);
 
-		// this.mouseDragged(mc, mouseX, mouseY);
+        renderer.drawVerticalLine(xPos + sliderPos - 1, yPos + 2, yPos + height - 3, 0xFF7F7F7F);
+        renderer.drawVerticalLine(xPos + sliderPos, yPos + 1, yPos + height - 2, 0xFFFFFFFF);
+        renderer.drawVerticalLine(xPos + sliderPos + 1, yPos + 2, yPos + height - 3, 0xFF7F7F7F);
 
-		int sliderPos = (int) (model.getSliderValue() * width);
-		sliderPos = MathHelper.clamp(sliderPos, 2, width-3);
+        int fontColor = 14737632;
 
-		renderer.drawVerticalLine(xPos + sliderPos-1, yPos+2, yPos+height-3, 0xFF7F7F7F);
-		renderer.drawVerticalLine(xPos + sliderPos  , yPos+1, yPos+height-2, 0xFFFFFFFF);
-		renderer.drawVerticalLine(xPos + sliderPos+1, yPos+2, yPos+height-3, 0xFF7F7F7F);
+        if (!this.enabled) {
+            fontColor = 10526880;
+        } else if (this.hovered) {
+            fontColor = 16777120;
+        }
 
-		int fontColor = 14737632;
+        renderer.drawCenteredString(model.getValueAsText(), xPos + width / 2, yPos + (height - 8) / 2, fontColor, true);
+    }
 
-		if (!this.enabled)
-		{
-			fontColor = 10526880;
-		}
-		else if (this.hovered)
-		{
-			fontColor = 16777120;
-		}
+    @Override
+    public void onMouseClicked(int localMouseX, int localMouseY, int mouseButton) {
+        boolean mouseOver = localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
+        if (!mouseOver) return;
+        updateSlider(localMouseX);
+    }
 
-		renderer.drawCenteredString(model.getValueAsText(), xPos + width / 2, yPos + (height - 8) / 2, fontColor, true);
-	}
+    @Override
+    public void onMouseReleased(int localMouseX, int localMouseY, int state) {
+        boolean mouseOver = localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
+        if (!mouseOver) return;
+        updateSlider(localMouseX);
+        playPressSound();
+    }
 
-	@Override
-	public void onMouseClicked(int localMouseX, int localMouseY, int mouseButton) {
-		boolean mouseOver = localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
-		if(!mouseOver) return;
-		updateSlider(localMouseX);
-	}
+    @Override
+    public void onMouseClickMove(int localMouseX, int localMouseY, int clickedMouseButton, long timeSinceLastClick) {
+        boolean mouseOver = localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
+        if (!mouseOver) return;
+        updateSlider(localMouseX);
+    }
 
-	@Override
-	public void onMouseReleased(int localMouseX, int localMouseY, int state) {
-		boolean mouseOver = localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
-		if(!mouseOver) return;
-		updateSlider(localMouseX);
-		playPressSound();
-	}
+    private void updateSlider(int localMouseX) {
+        float newSliderValue = (float) localMouseX / (width - 1);
+        float oldSliderValue = model.getSliderValue();
 
-	@Override
-	public void onMouseClickMove(int localMouseX, int localMouseY, int clickedMouseButton, long timeSinceLastClick) {
-		boolean mouseOver = localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
-		if(!mouseOver) return;
-		updateSlider(localMouseX);
-	}
+        if (newSliderValue != oldSliderValue) {
+            model.setSliderValue(newSliderValue);
 
-	private void updateSlider(int localMouseX) {
-		float newSliderValue = (float)localMouseX / (width-1);
-		float oldSliderValue = model.getSliderValue();
+            if (action != null) {
+                action.run();
+            }
+        }
+    }
 
-		if(newSliderValue != oldSliderValue) {
-			model.setSliderValue(newSliderValue);
+    public void playPressSound() {
+        SoundHandler soundHandler = Minecraft.getMinecraft().getSoundHandler();
+        float pitch = enabled ? 1f : 0.5f;
+        soundHandler.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, pitch));
+    }
 
-			if(action != null) {
-				action.run();
-			}
-		}
-	}
+    @Override
+    public void onKeyTyped(char typedChar, int typedCode) {
+        // ignore
+    }
 
-	public void playPressSound() {
-		SoundHandler soundHandler = Minecraft.getMinecraft().getSoundHandler();
-		float pitch = enabled ? 1f : 0.5f;
-		soundHandler.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, pitch));
-	}
+    @Override
+    public void onTickUpdate() {
+        // ignore
+    }
 
-	@Override
-	public void onKeyTyped(char typedChar, int typedCode) {
-		// ignore
-	}
+    @Override
+    public boolean isPointInside(int mouseX, int mouseY) {
+        int localMouseX = mouseX - xPos;
+        int localMouseY = mouseY - yPos;
+        return localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
+    }
 
-	@Override
-	public void onTickUpdate() {
-		// ignore
-	}
+    @Override
+    public int getWidth() {
+        return width;
+    }
 
-	@Override
-	public boolean isPointInside(int mouseX, int mouseY) {
-		int localMouseX = mouseX - xPos;
-		int localMouseY = mouseY - yPos;
-		return localMouseX >= 0 && localMouseY >= 0 && localMouseX < this.width && localMouseY < this.height;
-	}
+    @Override
+    public void setWidth(int newWidth) {
+        this.width = newWidth;
+    }
 
-	@Override
-	public int getWidth() {
-		return width;
-	}
+    @Override
+    public int getHeight() {
+        return height;
+    }
 
-	@Override
-	public int getHeight() {
-		return height;
-	}
+    @Override
+    public void setHeight(int newHeight) {
+        this.height = newHeight;
+    }
 
-	@Override
-	public boolean canResize() {
-		return true;
-	}
+    @Override
+    public boolean canResize() {
+        return true;
+    }
 
-	@Override
-	public void setWidth(int newWidth) {
-		this.width = newWidth;
-	}
+    @Override
+    public void setSize(int newWidth, int newHeight) {
+        this.width = newWidth;
+        this.height = newHeight;
+    }
 
-	@Override
-	public void setHeight(int newHeight) {
-		this.height = newHeight;
-	}
+    public SliderModel<?> getModel() {
+        return this.model;
+    }
 
-	@Override
-	public void setSize(int newWidth, int newHeight) {
-		this.width = newWidth;
-		this.height = newHeight;
-	}
+    public void setModel(SliderModel<?> newModel) {
+        this.model = newModel;
+    }
 
-	public void setModel(SliderModel<?> newModel) {
-		this.model = newModel;
-	}
+    @Override
+    public QADEnumComponentClass getComponentClass() {
+        return QADEnumComponentClass.INPUT;
+    }
 
-	public SliderModel<?> getModel() {
-		return this.model;
-	}
+    @Override
+    public boolean transferFocus() {
+        if (focused) {
+            focused = false;
+            return false;
+        } else {
+            focused = true;
+            return true;
+        }
+    }
 
-	@Override
-	public QADEnumComponentClass getComponentClass() {
-		return QADEnumComponentClass.INPUT;
-	}
+    @Override
+    public boolean isFocused() {
+        return focused;
+    }
 
-	@Override
-	public boolean transferFocus() {
-		if(focused) {
-			focused = false;
-			return false;
-		} else {
-			focused = true;
-			return true;
-		}
-	}
+    @Override
+    public void removeFocus() {
+        focused = false;
+    }
 
-	@Override
-	public boolean isFocused() {
-		return focused;
-	}
+    public interface SliderModel<T> {
+        T getValue();
 
-	@Override
-	public void removeFocus() {
-		focused = false;
-	}
+        void setValue(T value);
+
+        String getValueAsText();
+
+        float getSliderValue();
+
+        void setSliderValue(float sliderValue);
+    }
 
 }

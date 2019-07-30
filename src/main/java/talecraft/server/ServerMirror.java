@@ -6,53 +6,53 @@ import talecraft.invoke.IInvoke;
 import talecraft.invoke.IInvokeSource;
 
 public class ServerMirror {
-	private MinecraftServer server;
-	private PlayerList players;
-	private ServerClipboard clipboard;
-	private ServerFileSystem fileSystem;
-	private boolean trackInvokes;
+    private MinecraftServer server;
+    private PlayerList players;
+    private ServerClipboard clipboard;
+    private ServerFileSystem fileSystem;
+    private boolean trackInvokes;
 
-	public MinecraftServer getServer() {
-		return server;
-	}
+    public static ServerMirror instance() {
+        return ServerHandler.getServerMirror(null);
+    }
 
-	public void create(MinecraftServer server) {
-		TaleCraft.logger.info("Creating Server Mirror: " + server);
+    public MinecraftServer getServer() {
+        return server;
+    }
 
-		this.server = server;
-		this.players = new PlayerList();
-		this.clipboard = new ServerClipboard();
-		this.fileSystem = new ServerFileSystem();
-		this.trackInvokes = true;
-	}
+    public void create(MinecraftServer server) {
+        TaleCraft.logger.info("Creating Server Mirror: " + server);
 
-	public void destroy() {
-		TaleCraft.logger.info("Destroying Server Mirror: " + server);
-		this.players.destroy();
-	}
+        this.server = server;
+        this.players = new PlayerList();
+        this.clipboard = new ServerClipboard();
+        this.fileSystem = new ServerFileSystem();
+        this.trackInvokes = true;
+    }
 
-	public PlayerList playerList() {
-		return players;
-	}
+    public void destroy() {
+        TaleCraft.logger.info("Destroying Server Mirror: " + server);
+        this.players.destroy();
+    }
 
-	public ServerClipboard getClipboard() {
-		return clipboard;
-	}
+    public PlayerList playerList() {
+        return players;
+    }
 
-	public ServerFileSystem getFileSystem() {
-		return fileSystem;
-	}
+    public ServerClipboard getClipboard() {
+        return clipboard;
+    }
 
-	public static ServerMirror instance() {
-		return ServerHandler.getServerMirror(null);
-	}
+    public ServerFileSystem getFileSystem() {
+        return fileSystem;
+    }
 
-	public void trackInvoke(IInvokeSource source, IInvoke invoke) {
-		if(!trackInvokes) return;
+    public void trackInvoke(IInvokeSource source, IInvoke invoke) {
+        if (!trackInvokes) return;
 
-		for(PlayerMirror playerMirror : players.getBackingList()) {
-			playerMirror.trackInvoke(source, invoke);
-		}
-	}
+        for (PlayerMirror playerMirror : players.getBackingList()) {
+            playerMirror.trackInvoke(source, invoke);
+        }
+    }
 
 }

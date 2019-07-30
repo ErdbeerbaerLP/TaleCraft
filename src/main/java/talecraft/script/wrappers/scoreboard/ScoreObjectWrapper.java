@@ -1,52 +1,52 @@
 package talecraft.script.wrappers.scoreboard;
 
-import java.util.List;
-
 import net.minecraft.scoreboard.Score;
 import talecraft.TaleCraft;
 import talecraft.script.wrappers.IObjectWrapper;
 
+import java.util.List;
+
 public class ScoreObjectWrapper implements IObjectWrapper {
-	private Score score;
+    private Score score;
 
-	public ScoreObjectWrapper(Score score) {
-		this.score = score;
-	}
+    public ScoreObjectWrapper(Score score) {
+        this.score = score;
+    }
 
-	@Override
-	public Score internal() {
-		return score;
-	}
+    @Override
+    public Score internal() {
+        return score;
+    }
 
-	@Override
-	public List<String> getOwnPropertyNames() {
-		return TaleCraft.globalScriptManager.getOwnPropertyNames(this);
-	}
+    @Override
+    public List<String> getOwnPropertyNames() {
+        return TaleCraft.globalScriptManager.getOwnPropertyNames(this);
+    }
 
-	public String getHolderName() {
-		return score.getPlayerName();
-	}
+    public String getHolderName() {
+        return score.getPlayerName();
+    }
 
-	public int getScore() {
-		return score.getScorePoints();
-	}
+    public int getScore() {
+        return score.getScorePoints();
+    }
 
-	public void setScore(int value) {
-		if(!score.getObjective().getCriteria().isReadOnly())
-			score.setScorePoints(value);
-	}
+    public void setScore(int value) {
+        if (!score.getObjective().getCriteria().isReadOnly())
+            score.setScorePoints(value);
+    }
 
-	public void increaseScore(int amount) {
-		if(!score.getObjective().getCriteria().isReadOnly())
-			score.increaseScore(amount);
-	}
+    public void increaseScore(int amount) {
+        if (!score.getObjective().getCriteria().isReadOnly())
+            score.increaseScore(amount);
+    }
 
-	public void decreaseScore(int amount) {
-		if(!score.getObjective().getCriteria().isReadOnly())
-			score.decreaseScore(amount);
-	}
-	
-	public boolean isReadOnly(){
-		return score.getObjective().getCriteria().isReadOnly();
-	}
+    public void decreaseScore(int amount) {
+        if (!score.getObjective().getCriteria().isReadOnly())
+            score.decreaseScore(amount);
+    }
+
+    public boolean isReadOnly() {
+        return score.getObjective().getCriteria().isReadOnly();
+    }
 }

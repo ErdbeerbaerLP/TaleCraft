@@ -1,21 +1,7 @@
 package talecraft.clipboard;
 
-import static talecraft.clipboard.ClipboardTagNames.$ENTITY;
-import static talecraft.clipboard.ClipboardTagNames.$OFFSET;
-import static talecraft.clipboard.ClipboardTagNames.$REGION;
-import static talecraft.clipboard.ClipboardTagNames.$REGION_DATA;
-import static talecraft.clipboard.ClipboardTagNames.$REGION_DYNAMIC_DATA;
-import static talecraft.clipboard.ClipboardTagNames.$REGION_HEIGHT;
-import static talecraft.clipboard.ClipboardTagNames.$REGION_LENGTH;
-import static talecraft.clipboard.ClipboardTagNames.$REGION_PALLET;
-import static talecraft.clipboard.ClipboardTagNames.$REGION_WIDTH;
-
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.ICommandSender;
@@ -37,285 +23,290 @@ import talecraft.TaleCraft;
 import talecraft.util.GObjectTypeHelper;
 import talecraft.util.NBTHelper;
 
+import java.util.List;
+import java.util.Map;
+
+import static talecraft.clipboard.ClipboardTagNames.*;
+
 public class ClipboardItem {
-	private NBTTagCompound data;
+    private NBTTagCompound data;
 
-	public NBTTagCompound getData() {
-		return data;
-	}
+    public static void pasteRegion(ClipboardItem item, BlockPos pos, World world, ICommandSender player) {
+        NBTTagCompound tagCompound = item.data;
 
-	public static void pasteRegion(ClipboardItem item, BlockPos pos, World world, ICommandSender player) {
-		NBTTagCompound tagCompound = item.data;
+        NBTTagCompound blocks = NBTHelper.getOrNull(tagCompound, $REGION);
+        if (blocks != null) {
+            int regionWidth = blocks.getInteger($REGION_WIDTH);
+            int regionHeight = blocks.getInteger($REGION_HEIGHT);
+            int regionLength = blocks.getInteger($REGION_LENGTH);
 
-		NBTTagCompound blocks = NBTHelper.getOrNull(tagCompound, $REGION);
-		if(blocks != null) {
-			int regionWidth = blocks.getInteger($REGION_WIDTH);
-			int regionHeight = blocks.getInteger($REGION_HEIGHT);
-			int regionLength = blocks.getInteger($REGION_LENGTH);
+            if (regionWidth * regionHeight * regionLength <= 0) {
+                TaleCraft.logger.error("Clipboard region volume is <= zero!");
+                return;
+            }
 
-			if(regionWidth * regionHeight * regionLength <= 0) {
-				TaleCraft.logger.error("Clipboard region volume is <= zero!");
-				return;
-			}
+            // Decode the Pallet
+            NBTTagList pallet = blocks.getTagList($REGION_PALLET, new NBTTagString().getId());
+            IBlockState[] palletRaw = new IBlockState[pallet.tagCount()];
 
-			// Decode the Pallet
-			NBTTagList pallet = blocks.getTagList($REGION_PALLET, new NBTTagString().getId());
-			IBlockState[] palletRaw = new IBlockState[pallet.tagCount()];
+            for (int i = 0; i < pallet.tagCount(); i++) {
+                String typeString = pallet.getStringTagAt(i);
+                IBlockState state = palletRaw[i] = GObjectTypeHelper.findBlockState(typeString);
 
-			for(int i = 0; i < pallet.tagCount(); i++) {
-				String typeString = pallet.getStringTagAt(i);
-				IBlockState state = palletRaw[i] = GObjectTypeHelper.findBlockState(typeString);
+                if (state != null) {
+                    // Dont do a thing.
+                } else {
+                    System.out.println("Could not locate block type: " + typeString + " -> " + i);
+                }
 
-				if(state != null) {
-					// Dont do a thing.
-				} else {
-					System.out.println("Could not locate block type: " + typeString + " -> " + i);
-				}
+            }
 
-			}
-			
-			// Structure Void BlockState
-			IBlockState structureVoid = Block.getBlockFromName("minecraft:structure_void").getDefaultState();
+            // Structure Void BlockState
+            IBlockState structureVoid = Block.getBlockFromName("minecraft:structure_void").getDefaultState();
 
-			// Place all the blocks...
-			int[] blockData = blocks.getIntArray($REGION_DATA);
+            // Place all the blocks...
+            int[] blockData = blocks.getIntArray($REGION_DATA);
 
-			for(int Yx = 0; Yx < regionHeight; Yx++) {
-				for(int Zx = 0; Zx < regionLength; Zx++) {
-					for(int Xx = 0; Xx < regionWidth; Xx++) {
-						int index = (Yx*regionWidth*regionLength) + (Zx*regionWidth) + (Xx);
-						int type = blockData[index];
-						IBlockState state = palletRaw[type];
-						
-						if(!state.equals(structureVoid))
-							world.setBlockState(pos.add(Xx, Yx, Zx), state);
-					}
-				}
-			}
+            for (int Yx = 0; Yx < regionHeight; Yx++) {
+                for (int Zx = 0; Zx < regionLength; Zx++) {
+                    for (int Xx = 0; Xx < regionWidth; Xx++) {
+                        int index = (Yx * regionWidth * regionLength) + (Zx * regionWidth) + (Xx);
+                        int type = blockData[index];
+                        IBlockState state = palletRaw[type];
 
-			NBTTagList tes = blocks.getTagList($REGION_DYNAMIC_DATA, blocks.getId());
+                        if (!state.equals(structureVoid))
+                            world.setBlockState(pos.add(Xx, Yx, Zx), state);
+                    }
+                }
+            }
 
-			for(int i = 0; i < tes.tagCount(); i++) {
-				NBTTagCompound compound = (NBTTagCompound) tes.getCompoundTagAt(i).copy();
+            NBTTagList tes = blocks.getTagList($REGION_DYNAMIC_DATA, blocks.getId());
 
-				int newPosX = pos.getX() + compound.getInteger("x");
-				int newPosY = pos.getY() + compound.getInteger("y");
-				int newPosZ = pos.getZ() + compound.getInteger("z");
-				compound.setInteger("x", newPosX);
-				compound.setInteger("y", newPosY);
-				compound.setInteger("z", newPosZ);
+            for (int i = 0; i < tes.tagCount(); i++) {
+                NBTTagCompound compound = tes.getCompoundTagAt(i).copy();
 
-				TileEntity entity = world.getTileEntity(new BlockPos(newPosX, newPosY, newPosZ));
-				if(entity != null) {
-					entity.readFromNBT(compound);
-				}
-			}
+                int newPosX = pos.getX() + compound.getInteger("x");
+                int newPosY = pos.getY() + compound.getInteger("y");
+                int newPosZ = pos.getZ() + compound.getInteger("z");
+                compound.setInteger("x", newPosX);
+                compound.setInteger("y", newPosY);
+                compound.setInteger("z", newPosZ);
 
-		}else{
-			TaleCraft.logger.error("No block data in clipboard!");
-		}
+                TileEntity entity = world.getTileEntity(new BlockPos(newPosX, newPosY, newPosZ));
+                if (entity != null) {
+                    entity.readFromNBT(compound);
+                }
+            }
 
-	}
+        } else {
+            TaleCraft.logger.error("No block data in clipboard!");
+        }
 
-	public static ClipboardItem copyRegion(int[] bounds, World world, String name, ICommandSender player) {
-		int regionWidth = bounds[3] - bounds[0] + 1;
-		int regionHeight = bounds[4] - bounds[1] + 1;
-		int regionLength = bounds[5] - bounds[2] + 1;
-		int regionVolume = regionWidth*regionHeight*regionLength;
+    }
 
-		// TaleCraft.logger.info("Copy Region: ");
-		// TaleCraft.logger.info("-      Name: " + name);
-		// TaleCraft.logger.info("-      Size: " + regionWidth + " " + regionHeight + " " + regionLength);
-		// TaleCraft.logger.info("-     World: " + world.toString());
-		// TaleCraft.logger.info("-    Player: " + player.toString());
+    public static ClipboardItem copyRegion(int[] bounds, World world, String name, ICommandSender player) {
+        int regionWidth = bounds[3] - bounds[0] + 1;
+        int regionHeight = bounds[4] - bounds[1] + 1;
+        int regionLength = bounds[5] - bounds[2] + 1;
+        int regionVolume = regionWidth * regionHeight * regionLength;
 
-		NBTTagCompound tagCompound = new NBTTagCompound();
+        // TaleCraft.logger.info("Copy Region: ");
+        // TaleCraft.logger.info("-      Name: " + name);
+        // TaleCraft.logger.info("-      Size: " + regionWidth + " " + regionHeight + " " + regionLength);
+        // TaleCraft.logger.info("-     World: " + world.toString());
+        // TaleCraft.logger.info("-    Player: " + player.toString());
 
-		// Copy Blocks
+        NBTTagCompound tagCompound = new NBTTagCompound();
 
-		NBTTagCompound blocksCompound = NBTHelper.getOrCreate(tagCompound, $REGION);
-		NBTTagList tileentitiesList = new NBTTagList();
+        // Copy Blocks
 
-		IBlockState[] blocksRaw = new IBlockState[regionVolume];
+        NBTTagCompound blocksCompound = NBTHelper.getOrCreate(tagCompound, $REGION);
+        NBTTagList tileentitiesList = new NBTTagList();
 
-		blocksCompound.setInteger($REGION_WIDTH, regionWidth);
-		blocksCompound.setInteger($REGION_HEIGHT, regionHeight);
-		blocksCompound.setInteger($REGION_LENGTH, regionLength);
+        IBlockState[] blocksRaw = new IBlockState[regionVolume];
 
-		NBTTagCompound offsetCompound = NBTHelper.getOrCreate(tagCompound, $OFFSET);
-		offsetCompound.setFloat("x", -regionWidth/2);
-		offsetCompound.setFloat("y", -regionHeight/2);
-		offsetCompound.setFloat("z", -regionLength/2);
+        blocksCompound.setInteger($REGION_WIDTH, regionWidth);
+        blocksCompound.setInteger($REGION_HEIGHT, regionHeight);
+        blocksCompound.setInteger($REGION_LENGTH, regionLength);
 
-		// Create a snapshot of the region
-		for(int Y = bounds[1], Yx = 0; Y <= bounds[4]; Y++, Yx++) {
-			for(int Z = bounds[2], Zx = 0; Z <= bounds[5]; Z++, Zx++) {
-				for(int X = bounds[0], Xx = 0; X <= bounds[3]; X++, Xx++) {
-					int index = (Yx*regionWidth*regionLength) + (Zx*regionWidth) + (Xx);
-					BlockPos pos = new BlockPos(X, Y, Z);
-					blocksRaw[index] = world.getBlockState(pos);
-					TileEntity entity = world.getTileEntity(pos);
+        NBTTagCompound offsetCompound = NBTHelper.getOrCreate(tagCompound, $OFFSET);
+        offsetCompound.setFloat("x", -regionWidth / 2);
+        offsetCompound.setFloat("y", -regionHeight / 2);
+        offsetCompound.setFloat("z", -regionLength / 2);
 
-					if(entity != null) {
-						NBTTagCompound tileEntityCompound = new NBTTagCompound();
-						entity.writeToNBT(tileEntityCompound);
+        // Create a snapshot of the region
+        for (int Y = bounds[1], Yx = 0; Y <= bounds[4]; Y++, Yx++) {
+            for (int Z = bounds[2], Zx = 0; Z <= bounds[5]; Z++, Zx++) {
+                for (int X = bounds[0], Xx = 0; X <= bounds[3]; X++, Xx++) {
+                    int index = (Yx * regionWidth * regionLength) + (Zx * regionWidth) + (Xx);
+                    BlockPos pos = new BlockPos(X, Y, Z);
+                    blocksRaw[index] = world.getBlockState(pos);
+                    TileEntity entity = world.getTileEntity(pos);
 
-						tileEntityCompound.setInteger("x", tileEntityCompound.getInteger("x") - bounds[0]);
-						tileEntityCompound.setInteger("y", tileEntityCompound.getInteger("y") - bounds[1]);
-						tileEntityCompound.setInteger("z", tileEntityCompound.getInteger("z") - bounds[2]);
+                    if (entity != null) {
+                        NBTTagCompound tileEntityCompound = new NBTTagCompound();
+                        entity.writeToNBT(tileEntityCompound);
 
-						tileentitiesList.appendTag(tileEntityCompound);
-					}
-				}
-			}
-		}
+                        tileEntityCompound.setInteger("x", tileEntityCompound.getInteger("x") - bounds[0]);
+                        tileEntityCompound.setInteger("y", tileEntityCompound.getInteger("y") - bounds[1]);
+                        tileEntityCompound.setInteger("z", tileEntityCompound.getInteger("z") - bounds[2]);
 
-		// Visit all blocks, convert them to numbers, and create a Pallet
-		int[] blocks = new int[regionVolume];
-		Map<String,Integer> pallet_map = Maps.newHashMap();
-		List<String> pallet_list = Lists.newArrayList();
-		int palletIndexCounter = 0;
+                        tileentitiesList.appendTag(tileEntityCompound);
+                    }
+                }
+            }
+        }
 
-		for(int ix = 0; ix < blocksRaw.length; ix++) {
-			IBlockState state = blocksRaw[ix];
-			Block block = state.getBlock();
-			ResourceLocation identifier = block.getRegistryName();
-			String typeName = identifier.getResourceDomain() + ":" + identifier.getResourcePath();
-			int typeMeta = block.getMetaFromState(state);
+        // Visit all blocks, convert them to numbers, and create a Pallet
+        int[] blocks = new int[regionVolume];
+        Map<String, Integer> pallet_map = Maps.newHashMap();
+        List<String> pallet_list = Lists.newArrayList();
+        int palletIndexCounter = 0;
 
-			String typeString = typeName + "/" + typeMeta;
+        for (int ix = 0; ix < blocksRaw.length; ix++) {
+            IBlockState state = blocksRaw[ix];
+            Block block = state.getBlock();
+            ResourceLocation identifier = block.getRegistryName();
+            String typeName = identifier.getResourceDomain() + ":" + identifier.getResourcePath();
+            int typeMeta = block.getMetaFromState(state);
 
-			if(pallet_map.containsKey(typeString)) {
-				blocks[ix] = pallet_map.get(typeString);
-			} else {
-				pallet_map.put(typeString, Integer.valueOf(palletIndexCounter));
-				pallet_list.add(typeString);
-				blocks[ix] = palletIndexCounter;
-				palletIndexCounter++;
-			}
+            String typeString = typeName + "/" + typeMeta;
 
-			// System.out.println("copy: " + typeString + " = " + blocks[ix]);
-		}
+            if (pallet_map.containsKey(typeString)) {
+                blocks[ix] = pallet_map.get(typeString);
+            } else {
+                pallet_map.put(typeString, Integer.valueOf(palletIndexCounter));
+                pallet_list.add(typeString);
+                blocks[ix] = palletIndexCounter;
+                palletIndexCounter++;
+            }
 
-		// System.out.println("Pallet Built: " + pallet_map.size() + " different block types found");
-		// System.out.println("Tile Entities: " + tileentitiesList.tagCount());
-		// System.out.println("Blocks: " + blocks.length);
+            // System.out.println("copy: " + typeString + " = " + blocks[ix]);
+        }
 
-		NBTTagList palletTagList = new NBTTagList();
-		for(String string : pallet_list) {
-			palletTagList.appendTag(new NBTTagString(string));
-		}
+        // System.out.println("Pallet Built: " + pallet_map.size() + " different block types found");
+        // System.out.println("Tile Entities: " + tileentitiesList.tagCount());
+        // System.out.println("Blocks: " + blocks.length);
 
-		blocksCompound.setTag($REGION_DYNAMIC_DATA, tileentitiesList);
-		blocksCompound.setTag($REGION_PALLET, palletTagList);
-		blocksCompound.setIntArray($REGION_DATA, blocks);
+        NBTTagList palletTagList = new NBTTagList();
+        for (String string : pallet_list) {
+            palletTagList.appendTag(new NBTTagString(string));
+        }
 
-		// System.out.println("BLOCKS = " + blocksCompound);
+        blocksCompound.setTag($REGION_DYNAMIC_DATA, tileentitiesList);
+        blocksCompound.setTag($REGION_PALLET, palletTagList);
+        blocksCompound.setIntArray($REGION_DATA, blocks);
 
-		if(!world.isRemote && name != null) {
-			StringBuilder builder = new StringBuilder();
-			builder.append(TextFormatting.GREEN);
-			builder.append("Copied ").append(regionVolume).append(regionVolume==1?" block":" blocks").append(" to the clipboard. ");
-			builder.append("(").append(pallet_list.size()).append(" types)");
+        // System.out.println("BLOCKS = " + blocksCompound);
 
-			player.sendMessage(new TextComponentString(builder.toString()));
-			player.sendMessage(new TextComponentString("Key: " + name));
-		}
+        if (!world.isRemote && name != null) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(TextFormatting.GREEN);
+            builder.append("Copied ").append(regionVolume).append(regionVolume == 1 ? " block" : " blocks").append(" to the clipboard. ");
+            builder.append("(").append(pallet_list.size()).append(" types)");
 
-		ClipboardItem item = new ClipboardItem();
-		item.data = tagCompound;
-		return item;
-	}
+            player.sendMessage(new TextComponentString(builder.toString()));
+            player.sendMessage(new TextComponentString("Key: " + name));
+        }
 
-	public static ClipboardItem copyEntity(World worldObj, Entity entity, String keyString) {
-		System.out.println("Copy Entity: " + entity);
+        ClipboardItem item = new ClipboardItem();
+        item.data = tagCompound;
+        return item;
+    }
 
-		// Write entity to compound.
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		entity.writeToNBT(tagCompound);
+    public static ClipboardItem copyEntity(World worldObj, Entity entity, String keyString) {
+        System.out.println("Copy Entity: " + entity);
 
-		// Remove UUID.
-		tagCompound.removeTag("UUIDMost");
-		tagCompound.removeTag("UUIDLeast");
+        // Write entity to compound.
+        NBTTagCompound tagCompound = new NBTTagCompound();
+        entity.writeToNBT(tagCompound);
 
-		// Remove others.
-		tagCompound.removeTag("Pos");
-		tagCompound.removeTag("Dimension");
+        // Remove UUID.
+        tagCompound.removeTag("UUIDMost");
+        tagCompound.removeTag("UUIDLeast");
 
-		// Add ID (if missing!)
-		if(!tagCompound.hasKey("id")) {
-			tagCompound.setString("id", EntityList.getEntityString(entity));
-		}
+        // Remove others.
+        tagCompound.removeTag("Pos");
+        tagCompound.removeTag("Dimension");
 
-		tagCompound.setFloat("tc_width", entity.width);
-		tagCompound.setFloat("tc_height", entity.height);
+        // Add ID (if missing!)
+        if (!tagCompound.hasKey("id")) {
+            tagCompound.setString("id", EntityList.getEntityString(entity));
+        }
 
-		ClipboardItem item = new ClipboardItem();
-		item.data = new NBTTagCompound();
-		item.data.setTag($ENTITY, tagCompound);
+        tagCompound.setFloat("tc_width", entity.width);
+        tagCompound.setFloat("tc_height", entity.height);
 
-		System.out.println("Created copy of entity: " + item.data);
+        ClipboardItem item = new ClipboardItem();
+        item.data = new NBTTagCompound();
+        item.data.setTag($ENTITY, tagCompound);
 
-		return item;
-	}
+        System.out.println("Created copy of entity: " + item.data);
 
-	public static void pasteEntity(ClipboardItem item, Vec3d plantPos, World worldIn, EntityPlayer playerIn) {
-		double posX = plantPos.x;
-		double posY = plantPos.y;
-		double posZ = plantPos.z;
+        return item;
+    }
 
-		// Create the entity, merge the existing NBT into it, then spawn the entity.
-		NBTTagCompound entityNBT = item.getData().getCompoundTag($ENTITY);
-		// String typeStr = entityNBT.getString("id");
-		Entity entity = EntityList.createEntityFromNBT(entityNBT, worldIn);
-		entity.setLocationAndAngles(posX, posY, posZ, entity.rotationYaw, entity.rotationPitch);
-		worldIn.spawnEntity(entity);
+    public static void pasteEntity(ClipboardItem item, Vec3d plantPos, World worldIn, EntityPlayer playerIn) {
+        double posX = plantPos.x;
+        double posY = plantPos.y;
+        double posZ = plantPos.z;
 
-		int spawnCount = 1;
+        // Create the entity, merge the existing NBT into it, then spawn the entity.
+        NBTTagCompound entityNBT = item.getData().getCompoundTag($ENTITY);
+        // String typeStr = entityNBT.getString("id");
+        Entity entity = EntityList.createEntityFromNBT(entityNBT, worldIn);
+        entity.setLocationAndAngles(posX, posY, posZ, entity.rotationYaw, entity.rotationPitch);
+        worldIn.spawnEntity(entity);
 
-		// This takes care of 'riding' entities.
-		{
-			Entity mountEntity = entity;
+        int spawnCount = 1;
 
-			for (
-					NBTTagCompound mountEntityNBT = entityNBT;
-					mountEntity != null && mountEntityNBT.hasKey("Riding", 10);
-					mountEntityNBT = mountEntityNBT.getCompoundTag("Riding")
-					) {
-				Entity ridingEntity = EntityList.createEntityFromNBT(mountEntityNBT.getCompoundTag("Riding"), worldIn);
+        // This takes care of 'riding' entities.
+        {
+            Entity mountEntity = entity;
 
-				if (ridingEntity != null) {
-					ridingEntity.setLocationAndAngles(posX, posY, posZ, ridingEntity.rotationYaw, ridingEntity.rotationPitch);
-					worldIn.spawnEntity(ridingEntity);
-					mountEntity.startRiding(ridingEntity);
-					spawnCount++;
-				}
+            for (
+                    NBTTagCompound mountEntityNBT = entityNBT;
+                    mountEntity != null && mountEntityNBT.hasKey("Riding", 10);
+                    mountEntityNBT = mountEntityNBT.getCompoundTag("Riding")
+            ) {
+                Entity ridingEntity = EntityList.createEntityFromNBT(mountEntityNBT.getCompoundTag("Riding"), worldIn);
 
-				mountEntity = ridingEntity;
-			}
-		}
+                if (ridingEntity != null) {
+                    ridingEntity.setLocationAndAngles(posX, posY, posZ, ridingEntity.rotationYaw, ridingEntity.rotationPitch);
+                    worldIn.spawnEntity(ridingEntity);
+                    mountEntity.startRiding(ridingEntity);
+                    spawnCount++;
+                }
 
-		if(spawnCount == 1) {
-			chat(playerIn, TextFormatting.GREEN+"Spawned " + spawnCount + " entity from clipboard.");
-		} else {
-			chat(playerIn, TextFormatting.GREEN+"Spawned " + spawnCount + " entities from clipboard.");
-		}
+                mountEntity = ridingEntity;
+            }
+        }
 
-	}
+        if (spawnCount == 1) {
+            chat(playerIn, TextFormatting.GREEN + "Spawned " + spawnCount + " entity from clipboard.");
+        } else {
+            chat(playerIn, TextFormatting.GREEN + "Spawned " + spawnCount + " entities from clipboard.");
+        }
 
-	// TODO: Move these two methods into a helper class... ?
-	private static void chat(EntityPlayer player, String message) {
-		chat(player, new TextComponentString(message));
-	}
+    }
 
-	private static void chat(EntityPlayer player, ITextComponent message) {
-		player.sendMessage(message);
-	}
+    // TODO: Move these two methods into a helper class... ?
+    private static void chat(EntityPlayer player, String message) {
+        chat(player, new TextComponentString(message));
+    }
 
-	public static ClipboardItem fromNBT(NBTTagCompound compoundTag) {
-		ClipboardItem item = new ClipboardItem();
-		item.data = compoundTag;
-		return item;
-	}
+    private static void chat(EntityPlayer player, ITextComponent message) {
+        player.sendMessage(message);
+    }
+
+    public static ClipboardItem fromNBT(NBTTagCompound compoundTag) {
+        ClipboardItem item = new ClipboardItem();
+        item.data = compoundTag;
+        return item;
+    }
+
+    public NBTTagCompound getData() {
+        return data;
+    }
 
 }

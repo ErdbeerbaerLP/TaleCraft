@@ -6,22 +6,23 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class PlayerHelper {
 
-	public static final boolean isOp(EntityPlayerMP player) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean isOp(EntityPlayerMP player) {
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
-		if(server.isSinglePlayer()) {
-			return true;
-		}
+        if (server.isSinglePlayer()) {
+            return true;
+        }
 
-		String name = player.getName();
-		String[] listOps = server.getPlayerList().getOppedPlayerNames();
+        String name = player.getName();
+        String[] listOps = server.getPlayerList().getOppedPlayerNames();
 
-		for(String string : listOps) {
-			if(string.equals(name))
-				return true;
-		}
+        for (String string : listOps) {
+            if (string.equals(name))
+                return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

@@ -1,8 +1,8 @@
 package talecraft.client.gui.qad;
 
-import java.util.List;
-
 import talecraft.util.Vec2i;
+
+import java.util.List;
 
 /*
 	(Abstract interface for declaring layout managers)
@@ -11,7 +11,7 @@ import talecraft.util.Vec2i;
 	according to coded in rules and parameters given to the layout-manager.
 */
 public interface QADLayoutManager {
-	
-	public void layout(QADComponentContainer container, List<QADComponent> components,Vec2i newContainerSize);
-	
+
+    void layout(QADComponentContainer container, List<QADComponent> components, Vec2i newContainerSize);
+
 }

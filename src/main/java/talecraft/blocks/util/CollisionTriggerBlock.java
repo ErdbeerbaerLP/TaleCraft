@@ -20,43 +20,44 @@ import talecraft.tileentity.CollisionTriggerBlockTileEntity;
 
 public class CollisionTriggerBlock extends TCBlockContainer {
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new CollisionTriggerBlockTileEntity();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new CollisionTriggerBlockTileEntity();
+    }
 
-	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		if(entityIn instanceof EntityPlayerMP) {
-			EntityPlayerMP p = (EntityPlayerMP) entityIn;
-			if(p.capabilities.isCreativeMode)return;
-		}else return;
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+    @SuppressWarnings("ConditionCoveredByFurtherCondition")
+    @Override
+    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+        if (entityIn instanceof EntityPlayerMP) {
+            EntityPlayerMP p = (EntityPlayerMP) entityIn;
+            if (p.capabilities.isCreativeMode) return;
+        } else return;
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
 
-		if(tileEntity != null && tileEntity instanceof CollisionTriggerBlockTileEntity) {
-			((CollisionTriggerBlockTileEntity)tileEntity).collision(entityIn);
-		}
-	}
+        if (tileEntity != null && tileEntity instanceof CollisionTriggerBlockTileEntity) {
+            ((CollisionTriggerBlockTileEntity) tileEntity).collision(entityIn);
+        }
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote)
-			return true;
-		if(!TaleCraft.proxy.isBuildMode())
-			return false;
-		if(playerIn.isSneaking())
-			return true;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote)
+            return true;
+        if (!TaleCraft.proxy.isBuildMode())
+            return false;
+        if (playerIn.isSneaking())
+            return true;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		mc.displayGuiScreen(new GuiCollisionTriggerBlock((CollisionTriggerBlockTileEntity)worldIn.getTileEntity(pos)));
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.displayGuiScreen(new GuiCollisionTriggerBlock((CollisionTriggerBlockTileEntity) worldIn.getTileEntity(pos)));
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
-		return true;
-	}
+    @Override
+    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+        return true;
+    }
 
 }

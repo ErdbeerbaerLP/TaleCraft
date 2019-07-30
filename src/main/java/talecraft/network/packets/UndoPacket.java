@@ -7,35 +7,35 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import talecraft.util.UndoTask;
 
 public class UndoPacket implements IMessage {
-	
-	public int index;
-	
-	public UndoPacket() {
-	}
-	
-	public UndoPacket(int index){
-		this.index = index;
-	}
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		index = buf.readInt();
-	}
+    public int index;
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(index);
-	}
-	
-	public static class Handler implements IMessageHandler<UndoPacket, IMessage> {
-		@Override
-		public IMessage onMessage(UndoPacket message, MessageContext ctx) {
-			UndoTask task = UndoTask.TASKS.get(message.index);
-			task.undo();
-			UndoTask.TASKS.remove(task);
-			return null;
-		}
-	}
+    public UndoPacket() {
+    }
+
+    public UndoPacket(int index) {
+        this.index = index;
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        index = buf.readInt();
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(index);
+    }
+
+    public static class Handler implements IMessageHandler<UndoPacket, IMessage> {
+        @Override
+        public IMessage onMessage(UndoPacket message, MessageContext ctx) {
+            UndoTask task = UndoTask.TASKS.get(message.index);
+            task.undo();
+            UndoTask.TASKS.remove(task);
+            return null;
+        }
+    }
 
 
 }

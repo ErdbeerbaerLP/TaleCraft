@@ -1,25 +1,24 @@
 package talecraft.invoke;
 
-import java.util.List;
-
-import org.mozilla.javascript.Scriptable;
-
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.mozilla.javascript.Scriptable;
+
+import java.util.List;
 
 public interface IInvokeSource {
 
-	public Scriptable getInvokeScriptScope();
+    Scriptable getInvokeScriptScope();
 
-	public ICommandSender getInvokeAsCommandSender();
+    ICommandSender getInvokeAsCommandSender();
 
-	public BlockPos getInvokePosition();
+    BlockPos getInvokePosition();
 
-	public World getInvokeWorld();
+    World getInvokeWorld();
 
-	public void getInvokes(List<IInvoke> invokes);
+    void getInvokes(List<IInvoke> invokes);
 
-	public void getInvokeColor(float[] color);
+    void getInvokeColor(float[] color);
 
 }

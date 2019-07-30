@@ -10,12 +10,12 @@ import talecraft.entity.projectile.EntityBombArrow;
 
 public class BombArrowItem extends ItemArrow {
 
-	public BombArrowItem() {
-		this.setCreativeTab(TaleCraftTabs.tab_TaleCraftWeaponTab);
-	}
+    public BombArrowItem() {
+        this.setCreativeTab(TaleCraftTabs.tab_TaleCraftWeaponTab);
+    }
 
     @Override
-		public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter){
+    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
         return new EntityBombArrow(worldIn, shooter);
     }
 

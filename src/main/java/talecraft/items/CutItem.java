@@ -19,68 +19,68 @@ import talecraft.util.WorldHelper;
 
 public class CutItem extends TCItem {
 
-	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if(world.isRemote) {
-			rightClickClient(world, player);
-		} else {
-			rightClickServer(world, player);
-			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 0);
-		}
+    public static void rightClickServer(World world, EntityPlayer player) {
+        ServerMirror mirror = ServerHandler.getServerMirror(null);
+        ServerClipboard clipboard = mirror.getClipboard();
 
-		return EnumActionResult.SUCCESS;
-	}
+        int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
+        String keyString = "player." + player.getGameProfile().getId().toString();
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		if(world.isRemote)
-			rightClickClient(world, player);
-		else
-			rightClickServer(world, player);
+        if (bounds == null)
+            return;
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-	}
+        ClipboardItem item = ClipboardItem.copyRegion(bounds, world, keyString, player);
 
-	public static void rightClickServer(World world, EntityPlayer player) {
-		ServerMirror mirror = ServerHandler.getServerMirror(null);
-		ServerClipboard clipboard = mirror.getClipboard();
+        if (item != null) {
+            clipboard.put(keyString, item);
+            WorldHelper.fill(world, bounds, Blocks.AIR.getDefaultState());
+        }
+    }
 
-		int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
-		String keyString = "player."+player.getGameProfile().getId().toString();
+    public static void rightClickClient(World world, EntityPlayer player) {
+        int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
 
-		if(bounds == null)
-			return;
+        if (bounds == null)
+            return;
 
-		ClipboardItem item = ClipboardItem.copyRegion(bounds, world, keyString, player);
+        ClipboardItem item = ClipboardItem.copyRegion(bounds, world, "player.self", player);
 
-		if(item != null) {
-			clipboard.put(keyString, item);
-			WorldHelper.fill(world, bounds, Blocks.AIR.getDefaultState());
-		}
-	}
+        if (item != null) {
+            TaleCraft.asClient().setClipboard(item);
+        }
+    }
 
-	public static void rightClickClient(World world, EntityPlayer player) {
-		int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (world.isRemote) {
+            rightClickClient(world, player);
+        } else {
+            rightClickServer(world, player);
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 0);
+        }
 
-		if(bounds == null)
-			return;
+        return EnumActionResult.SUCCESS;
+    }
 
-		ClipboardItem item = ClipboardItem.copyRegion(bounds, world, "player.self", player);
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (world.isRemote)
+            rightClickClient(world, player);
+        else
+            rightClickServer(world, player);
 
-		if(item != null) {
-			TaleCraft.asClient().setClipboard(item);
-		}
-	}
+        return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+    }
 
-	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		// cut entity to clipboard!
+    @Override
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+        // cut entity to clipboard!
 
-		// ClipboardItem.copyEntity();
+        // ClipboardItem.copyEntity();
 
-		// by returning TRUE, we prevent damaging the entity being hit.
-		return true;
-	}
+        // by returning TRUE, we prevent damaging the entity being hit.
+        return true;
+    }
 
 }

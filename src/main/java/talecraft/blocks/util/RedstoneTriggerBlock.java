@@ -1,9 +1,6 @@
 package talecraft.blocks.util;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -24,104 +21,106 @@ import talecraft.client.gui.blocks.GuiRedstoneTriggerBlock;
 import talecraft.invoke.EnumTriggerState;
 import talecraft.tileentity.RedstoneTriggerBlockTileEntity;
 
+import java.util.Random;
+
+@SuppressWarnings("deprecation")
 public class RedstoneTriggerBlock extends TCBlockContainer implements TCITriggerableBlock {
-	public static final PropertyBool TRIGGERED = PropertyBool.create("triggered");
+    public static final PropertyBool TRIGGERED = PropertyBool.create("triggered");
 
-	public RedstoneTriggerBlock() {
-		super();
-		setDefaultState(this.blockState.getBaseState().withProperty(TRIGGERED, Boolean.valueOf(false)));
-	}
+    public RedstoneTriggerBlock() {
+        super();
+        setDefaultState(this.blockState.getBaseState().withProperty(TRIGGERED, Boolean.FALSE));
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new RedstoneTriggerBlockTileEntity();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new RedstoneTriggerBlockTileEntity();
+    }
 
-	@Deprecated
-	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from) {
-		if (!worldIn.isRemote) {
-			boolean flag = worldIn.isBlockPowered(pos);
-			boolean flag1 = state.getValue(TRIGGERED).booleanValue();
+    @Deprecated
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from) {
+        if (!worldIn.isRemote) {
+            boolean flag = worldIn.isBlockPowered(pos);
+            boolean flag1 = state.getValue(TRIGGERED);
 
-			if (flag && !flag1) {
-				worldIn.setBlockState(pos, state.withProperty(TRIGGERED, Boolean.valueOf(true)), 4);
-				worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-			} else if (!flag && flag1) {
-				worldIn.setBlockState(pos, state.withProperty(TRIGGERED, Boolean.valueOf(false)), 4);
-				worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-			}
-		}
-	}
+            if (flag && !flag1) {
+                worldIn.setBlockState(pos, state.withProperty(TRIGGERED, Boolean.TRUE), 4);
+                worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+            } else if (!flag && flag1) {
+                worldIn.setBlockState(pos, state.withProperty(TRIGGERED, Boolean.FALSE), 4);
+                worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+            }
+        }
+    }
 
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if (worldIn.isRemote)
-			return;
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        if (worldIn.isRemote)
+            return;
 
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		boolean flag1 = state.getValue(TRIGGERED).booleanValue();
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        boolean flag1 = state.getValue(TRIGGERED);
 
-		if (tileentity instanceof RedstoneTriggerBlockTileEntity) {
-			((RedstoneTriggerBlockTileEntity)tileentity).invokeFromUpdateTick(EnumTriggerState.IGNORE, flag1);
-		}
-	}
+        if (tileentity instanceof RedstoneTriggerBlockTileEntity) {
+            ((RedstoneTriggerBlockTileEntity) tileentity).invokeFromUpdateTick(EnumTriggerState.IGNORE, flag1);
+        }
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote)
-			return true;
-		if(!TaleCraft.proxy.isBuildMode())
-			return false;
-		if(playerIn.isSneaking())
-			return true;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote)
+            return true;
+        if (!TaleCraft.proxy.isBuildMode())
+            return false;
+        if (playerIn.isSneaking())
+            return true;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		mc.displayGuiScreen(new GuiRedstoneTriggerBlock((RedstoneTriggerBlockTileEntity)worldIn.getTileEntity(pos)));
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.displayGuiScreen(new GuiRedstoneTriggerBlock((RedstoneTriggerBlockTileEntity) worldIn.getTileEntity(pos)));
 
-		return true;
-	}
+        return true;
+    }
 
-	@Deprecated
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(TRIGGERED, Boolean.valueOf((meta & 1) > 0));
-	}
+    @Deprecated
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(TRIGGERED, (meta & 1) > 0);
+    }
 
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		int i = 0;
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        int i = 0;
 
-		if (state.getValue(TRIGGERED).booleanValue())
-		{
-			i |= 1;
-		}
+        if (state.getValue(TRIGGERED)) {
+            i |= 1;
+        }
 
-		return i;
-	}
+        return i;
+    }
 
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {TRIGGERED});
-	}
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, TRIGGERED);
+    }
 
-	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return this.getDefaultState().withProperty(TRIGGERED, Boolean.valueOf(false));
-	}
+    @Override
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return this.getDefaultState().withProperty(TRIGGERED, Boolean.FALSE);
+    }
 
-	@Override
-	public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
-		if (world.isRemote)
-			return;
+    @Override
+    public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
+        if (world.isRemote)
+            return;
 
-		TileEntity tileentity = world.getTileEntity(position);
+        TileEntity tileentity = world.getTileEntity(position);
 
-		if (tileentity instanceof RedstoneTriggerBlockTileEntity) {
-			((RedstoneTriggerBlockTileEntity)tileentity).invokeFromUpdateTick(triggerState, true);
-			((RedstoneTriggerBlockTileEntity)tileentity).invokeFromUpdateTick(triggerState, false);
-		}
-	}
+        if (tileentity instanceof RedstoneTriggerBlockTileEntity) {
+            ((RedstoneTriggerBlockTileEntity) tileentity).invokeFromUpdateTick(triggerState, true);
+            ((RedstoneTriggerBlockTileEntity) tileentity).invokeFromUpdateTick(triggerState, false);
+        }
+    }
 
 }

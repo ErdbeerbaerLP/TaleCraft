@@ -13,64 +13,65 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import talecraft.TaleCraft;
 
 public class WorldCommandSender implements ICommandSender {
-	private World world;
+    private World world;
 
-	public WorldCommandSender(World world) {
-		this.world = world;
-	}
+    public WorldCommandSender(World world) {
+        this.world = world;
+    }
 
-	@Override
-	public String getName() {
-		return "World";
-	}
+    @Override
+    public String getName() {
+        return "World";
+    }
 
-	@Override
-	public ITextComponent getDisplayName() {
-		return new TextComponentString(getName());
-	}
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TextComponentString(getName());
+    }
 
-	@Override
-	public void sendMessage(ITextComponent message) {
-		TaleCraft.logger.info("WorldCommandSender :: " + message.getUnformattedText());
-	}
-	@Override
-	public BlockPos getPosition() {
-		return new MutableBlockPos(0,0,0);
-	}
+    @Override
+    public void sendMessage(ITextComponent message) {
+        TaleCraft.logger.info("WorldCommandSender :: " + message.getUnformattedText());
+    }
 
-	@Override
-	public Vec3d getPositionVector() {
-		return new Vec3d(0, 0, 0);
-	}
+    @Override
+    public BlockPos getPosition() {
+        return new MutableBlockPos(0, 0, 0);
+    }
 
-	@Override
-	public World getEntityWorld() {
-		return world;
-	}
+    @Override
+    public Vec3d getPositionVector() {
+        return new Vec3d(0, 0, 0);
+    }
 
-	@Override
-	public Entity getCommandSenderEntity() {
-		return null;
-	}
+    @Override
+    public World getEntityWorld() {
+        return world;
+    }
 
-	@Override
-	public boolean sendCommandFeedback() {
-		return true;
-	}
+    @Override
+    public Entity getCommandSenderEntity() {
+        return null;
+    }
 
-	@Override
-	public void setCommandStat(Type type, int amount) {
-		// no
-	}
+    @Override
+    public boolean sendCommandFeedback() {
+        return true;
+    }
 
-	@Override
-	public boolean canUseCommand(int permLevel, String commandName) {
-		return true;
-	}
+    @Override
+    public void setCommandStat(Type type, int amount) {
+        // no
+    }
 
-	@Override
-	public MinecraftServer getServer() {
-		return FMLCommonHandler.instance().getMinecraftServerInstance();
-	}
+    @Override
+    public boolean canUseCommand(int permLevel, String commandName) {
+        return true;
+    }
+
+    @Override
+    public MinecraftServer getServer() {
+        return FMLCommonHandler.instance().getMinecraftServerInstance();
+    }
 
 }

@@ -8,14 +8,14 @@ import net.minecraft.nbt.NBTTagCompound;
  **/
 public interface IInvokeHolder {
 
-	/**
-	 * In case of block: blockDataMarge X Y Z
-	 * In case of entity: entityDataMerge UUID
-	 **/
-	void sendInvokeUpdate(NBTTagCompound newInvokeData);
+    /**
+     * In case of block: blockDataMarge X Y Z
+     * In case of entity: entityDataMerge UUID
+     **/
+    void sendInvokeUpdate(NBTTagCompound newInvokeData);
 
-	void sendCommand(String command, NBTTagCompound commandData);
+    void sendCommand(String command, NBTTagCompound commandData);
 
-	void switchInvokeType(String type);
+    void switchInvokeType(String type);
 
 }

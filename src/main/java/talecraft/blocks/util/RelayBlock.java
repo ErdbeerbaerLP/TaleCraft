@@ -19,37 +19,37 @@ import talecraft.tileentity.RelayBlockTileEntity;
 
 public class RelayBlock extends TCBlockContainer implements TCITriggerableBlock {
 
-	public RelayBlock() {
-		super();
-	}
+    public RelayBlock() {
+        super();
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new RelayBlockTileEntity();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new RelayBlockTileEntity();
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote)
-			return true;
-		if(!TaleCraft.proxy.isBuildMode())
-			return false;
-		if(playerIn.isSneaking())
-			return true;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote)
+            return true;
+        if (!TaleCraft.proxy.isBuildMode())
+            return false;
+        if (playerIn.isSneaking())
+            return true;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		mc.displayGuiScreen(new GuiRelayBlock((RelayBlockTileEntity)worldIn.getTileEntity(pos)));
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.displayGuiScreen(new GuiRelayBlock((RelayBlockTileEntity) worldIn.getTileEntity(pos)));
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
-		RelayBlockTileEntity tEntity = (RelayBlockTileEntity)world.getTileEntity(position);
-		if(tEntity != null) {
-			tEntity.triggerRelayInvoke(triggerState);
-		}
-	}
+    @Override
+    public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
+        RelayBlockTileEntity tEntity = (RelayBlockTileEntity) world.getTileEntity(position);
+        if (tEntity != null) {
+            tEntity.triggerRelayInvoke(triggerState);
+        }
+    }
 
 }

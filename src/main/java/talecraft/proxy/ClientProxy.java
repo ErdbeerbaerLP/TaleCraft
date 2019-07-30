@@ -1,7 +1,5 @@
 package talecraft.proxy;
 
-import java.util.concurrent.ConcurrentLinkedDeque;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMerchant;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -26,12 +24,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import talecraft.TaleCraft;
 import talecraft.TaleCraftItems;
-import talecraft.client.ClientKeyboardHandler;
-import talecraft.client.ClientNetworkHandler;
-import talecraft.client.ClientRenderer;
-import talecraft.client.ClientSettings;
-import talecraft.client.InfoBar;
-import talecraft.client.InvokeTracker;
+import talecraft.client.*;
 import talecraft.client.commands.TaleCraftClientCommands;
 import talecraft.client.environment.Environments;
 import talecraft.client.gui.entity.npc.GuiNPCMerchant;
@@ -43,218 +36,216 @@ import talecraft.clipboard.ClipboardItem;
 import talecraft.entity.NPC.NPCShop;
 import talecraft.util.ReflectionUtil;
 
+import java.util.concurrent.ConcurrentLinkedDeque;
+
 public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
-	// All the singletons!
-	public static final Minecraft mc = Minecraft.getMinecraft();
-	public static final ClientSettings settings = new ClientSettings();
-	public static ClientProxy proxy = (ClientProxy) TaleCraft.proxy;
+    // All the singletons!
+    public static final Minecraft mc = Minecraft.getMinecraft();
+    public static final ClientSettings settings = new ClientSettings();
+    public static ClientProxy proxy = (ClientProxy) TaleCraft.proxy;
+    //Client settings
+    public GameRules gamerules;
+    // tc internals
+    private ClipboardItem currentClipboardItem;
+    private InfoBar infoBarInstance;
+    private InvokeTracker invokeTracker;
+    private ClientNetworkHandler clientNetworkHandler;
+    private ClientKeyboardHandler clientKeyboardHandler;
+    private ClientRenderer clientRenderer;
+    private ConcurrentLinkedDeque<Runnable> clientTickQeue;
+    private NPCShop lastOpened;
 
-	// tc internals
-	private ClipboardItem currentClipboardItem;
-	private InfoBar infoBarInstance;
-	private InvokeTracker invokeTracker;
-	private ClientNetworkHandler clientNetworkHandler;
-	private ClientKeyboardHandler clientKeyboardHandler;
-	private ClientRenderer clientRenderer;
-	private ConcurrentLinkedDeque<Runnable> clientTickQeue;
-	
-	//Client settings
-	public GameRules gamerules;
+    /****/
+    public static final boolean isInBuildMode() {
+        if (proxy == null)
+            proxy = TaleCraft.proxy.asClient();
 
-	@Override
-	public void preInit(FMLPreInitializationEvent event) {
-		super.preInit(event);
+        return proxy.isBuildMode();
+    }
 
-		settings.init();
+    public static void shedule(Runnable runnable) {
+        proxy.sheduleClientTickTask(runnable);
+    }
 
-		MinecraftForge.EVENT_BUS.register(this);
+    @Override
+    public void preInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
 
-		clientKeyboardHandler = new ClientKeyboardHandler(this);
-		TaleCraftClientCommands.init();
+        settings.init();
 
-		IReloadableResourceManager resManager = (IReloadableResourceManager) mc.getResourceManager();
-		resManager.registerReloadListener(this);
-		
-		clientTickQeue = new ConcurrentLinkedDeque<Runnable>();
-		clientRenderer = new ClientRenderer(this);
-		clientRenderer.preInit();
-	}
+        MinecraftForge.EVENT_BUS.register(this);
 
-	@Override
-	public void init(FMLInitializationEvent event) {
-		super.init(event);
+        clientKeyboardHandler = new ClientKeyboardHandler(this);
+        TaleCraftClientCommands.init();
 
-		// create client network'er
-		clientNetworkHandler = new ClientNetworkHandler(this);
+        IReloadableResourceManager resManager = (IReloadableResourceManager) mc.getResourceManager();
+        resManager.registerReloadListener(this);
 
-		// add all static renderers
-		clientRenderer.addStaticRenderer(new SelectionBoxRenderer());
-		
-		ReflectionUtil.replaceMusicTicker();
-		
-	} // init(..){}
+        clientTickQeue = new ConcurrentLinkedDeque<Runnable>();
+        clientRenderer = new ClientRenderer(this);
+        clientRenderer.preInit();
+    }
 
-	@Override
-	public void postInit(FMLPostInitializationEvent event) {
-		super.postInit(event);
+    @Override
+    public void init(FMLInitializationEvent event) {
+        super.init(event);
 
-		// Create the InfoBar Instance
-		infoBarInstance = new InfoBar();
+        // create client network'er
+        clientNetworkHandler = new ClientNetworkHandler(this);
 
-		// Create the invoke tracker instance
-		invokeTracker = new InvokeTracker();
-		
-		ItemMetaWorldRenderer.ITEM_RENDERS.put(TaleCraftItems.paste, new PasteItemRender());
-		ItemMetaWorldRenderer.ITEM_RENDERS.put(TaleCraftItems.custompainting, new CustomPaintingRender());
-		
-		gamerules = new GameRules();
-	}
+        // add all static renderers
+        clientRenderer.addStaticRenderer(new SelectionBoxRenderer());
 
-	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager) {
-		Environments.reload(resourceManager);
-	}
+        ReflectionUtil.replaceMusicTicker();
 
-	@SubscribeEvent
-	public void worldPass(RenderWorldLastEvent event) {
-		clientRenderer.on_render_world_post(event);
-	}
-	
-	private NPCShop lastOpened;
-	
-	
-	@SubscribeEvent
-	public void npcTradeOpen(GuiOpenEvent event){
-		if(event.getGui() instanceof GuiMerchant){
-			if(((GuiMerchant) event.getGui()).getMerchant() instanceof NPCShop){
-				lastOpened = (NPCShop) ((GuiMerchant) event.getGui()).getMerchant();
-			}else{
-				Minecraft mc = Minecraft.getMinecraft();
-				event.setGui(new GuiNPCMerchant(mc.player.inventory, lastOpened, mc.world));
-			}
-		}
-	}
+    } // init(..){}
 
-	@SubscribeEvent
-	public void worldPostRenderHand(RenderHandEvent event) {
-		clientRenderer.on_render_world_hand_post(event);
-	}
+    @Override
+    public void postInit(FMLPostInitializationEvent event) {
+        super.postInit(event);
 
-	/**
-	 * This method is called when the world is unloaded.
-	 **/
-	@Override
-	public void unloadWorld(World world) {
-		if(world instanceof WorldClient) {
-			// the client is either changing dimensions or leaving the server.
-			// reset all temporary world related settings here
-			// delete all temporary world related objects here
+        // Create the InfoBar Instance
+        infoBarInstance = new InfoBar();
 
-			clientRenderer.on_world_unload();
+        // Create the invoke tracker instance
+        invokeTracker = new InvokeTracker();
 
-			// This is stupid but,
-			// Save the TaleCraft settings on World unload.
-			// Just to be sure...
-			settings.save();
-		}
-	}
+        ItemMetaWorldRenderer.ITEM_RENDERS.put(TaleCraftItems.paste, new PasteItemRender());
+        ItemMetaWorldRenderer.ITEM_RENDERS.put(TaleCraftItems.custompainting, new CustomPaintingRender());
 
-	/**
-	 * @return TRUE, if the client is in build-mode (aka: creative-mode), FALSE if not.
-	 **/
-	@Override
-	public boolean isBuildMode() {
-		return mc.playerController != null && mc.playerController.isInCreativeMode();
-	}
-	
-	@Override
-	public void tick(TickEvent event) {
-		super.tick(event);
+        gamerules = new GameRules();
+    }
 
-		if(event instanceof ClientTickEvent) {
-			while(!clientTickQeue.isEmpty())
-				clientTickQeue.poll().run();
-		}
-		if(event instanceof RenderTickEvent) {
-			RenderTickEvent revt = (RenderTickEvent) event;
+    @Override
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+        Environments.reload(resourceManager);
+    }
 
-			// Pre-Scene Render
-			if(revt.phase == Phase.START) {
-				clientRenderer.on_render_world_terrain_pre(revt);
-			} else
-				// Post-World >> Pre-HUD Render
-				if(revt.phase == Phase.END) {
-					clientRenderer.on_render_world_terrain_post(revt);
-				}
-		}
-	}
+    @SubscribeEvent
+    public void worldPass(RenderWorldLastEvent event) {
+        clientRenderer.on_render_world_post(event);
+    }
 
-	/***********************************/
-	/**                               **/
-	/**                               **/
-	/**                               **/
-	/***********************************/
+    @SubscribeEvent
+    public void npcTradeOpen(GuiOpenEvent event) {
+        if (event.getGui() instanceof GuiMerchant) {
+            if (((GuiMerchant) event.getGui()).getMerchant() instanceof NPCShop) {
+                lastOpened = (NPCShop) ((GuiMerchant) event.getGui()).getMerchant();
+            } else {
+                Minecraft mc = Minecraft.getMinecraft();
+                event.setGui(new GuiNPCMerchant(mc.player.inventory, lastOpened, mc.world));
+            }
+        }
+    }
 
-	/****/
-	@Override
-	public NBTTagCompound getSettings(EntityPlayer playerIn) {
-		return getSettings().getNBT();
-	}
+    @SubscribeEvent
+    public void worldPostRenderHand(RenderHandEvent event) {
+        clientRenderer.on_render_world_hand_post(event);
+    }
 
-	/****/
-	public ClientSettings getSettings() {
-		return settings;
-	}
+    /**
+     * This method is called when the world is unloaded.
+     **/
+    @Override
+    public void unloadWorld(World world) {
+        if (world instanceof WorldClient) {
+            // the client is either changing dimensions or leaving the server.
+            // reset all temporary world related settings here
+            // delete all temporary world related objects here
 
-	public InfoBar getInfoBar() {
-		return infoBarInstance;
-	}
+            clientRenderer.on_world_unload();
 
-	public InvokeTracker getInvokeTracker() {
-		return invokeTracker;
-	}
+            // This is stupid but,
+            // Save the TaleCraft settings on World unload.
+            // Just to be sure...
+            settings.save();
+        }
+    }
 
-	public ClientNetworkHandler getNetworkHandler() {
-		return clientNetworkHandler;
-	}
+    /***********************************/
+    /**                               **/
+    /**                               **/
+    /**                               **/
+    /***********************************/
 
-	public ClientRenderer getRenderer() {
-		return clientRenderer;
-	}
+    /**
+     * @return TRUE, if the client is in build-mode (aka: creative-mode), FALSE if not.
+     **/
+    @Override
+    public boolean isBuildMode() {
+        return mc.playerController != null && mc.playerController.isInCreativeMode();
+    }
 
-	/****/
-	public void setClipboard(ClipboardItem item) {
-		currentClipboardItem = item;
-	}
+    @Override
+    public void tick(TickEvent event) {
+        super.tick(event);
 
-	/****/
-	public ClipboardItem getClipboard() {
-		return currentClipboardItem;
-	}
+        if (event instanceof ClientTickEvent) {
+            while (!clientTickQeue.isEmpty())
+                clientTickQeue.poll().run();
+        }
+        if (event instanceof RenderTickEvent) {
+            RenderTickEvent revt = (RenderTickEvent) event;
 
-	/****/
-	public static final boolean isInBuildMode() {
-		if(proxy == null)
-			proxy = TaleCraft.proxy.asClient();
+            // Pre-Scene Render
+            if (revt.phase == Phase.START) {
+                clientRenderer.on_render_world_terrain_pre(revt);
+            } else
+                // Post-World >> Pre-HUD Render
+                if (revt.phase == Phase.END) {
+                    clientRenderer.on_render_world_terrain_post(revt);
+                }
+        }
+    }
 
-		return proxy.isBuildMode();
-	}
+    /****/
+    @Override
+    public NBTTagCompound getSettings(EntityPlayer playerIn) {
+        return getSettings().getNBT();
+    }
 
-	/****/
-	public void sendChatMessage(String message) {
-		mc.player.sendChatMessage(message);
-	}
+    /****/
+    public ClientSettings getSettings() {
+        return settings;
+    }
 
-	public void sheduleClientTickTask(Runnable runnable) {
-		this.clientTickQeue.push(runnable);
-	}
+    public InfoBar getInfoBar() {
+        return infoBarInstance;
+    }
 
-	public static void shedule(Runnable runnable) {
-		proxy.sheduleClientTickTask(runnable);
-	}
+    public InvokeTracker getInvokeTracker() {
+        return invokeTracker;
+    }
 
-	public ClientKeyboardHandler getKeyboardHandler() {
-		return clientKeyboardHandler;
-	}
+    public ClientNetworkHandler getNetworkHandler() {
+        return clientNetworkHandler;
+    }
+
+    public ClientRenderer getRenderer() {
+        return clientRenderer;
+    }
+
+    /****/
+    public ClipboardItem getClipboard() {
+        return currentClipboardItem;
+    }
+
+    /****/
+    public void setClipboard(ClipboardItem item) {
+        currentClipboardItem = item;
+    }
+
+    /****/
+    public void sendChatMessage(String message) {
+        mc.player.sendChatMessage(message);
+    }
+
+    public void sheduleClientTickTask(Runnable runnable) {
+        this.clientTickQeue.push(runnable);
+    }
+
+    public ClientKeyboardHandler getKeyboardHandler() {
+        return clientKeyboardHandler;
+    }
 
 }

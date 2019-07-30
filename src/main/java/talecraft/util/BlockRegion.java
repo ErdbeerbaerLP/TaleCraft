@@ -1,191 +1,191 @@
 package talecraft.util;
 
-import java.util.Iterator;
-
 import net.minecraft.util.math.BlockPos;
 
-public final class BlockRegion implements Iterable<BlockPos>{
-	private final int minX;
-	private final int minY;
-	private final int minZ;
-	private final int maxX;
-	private final int maxY;
-	private final int maxZ;
-	private final int width;
-	private final int height;
-	private final int length;
-	private final float centerX;
-	private final float centerY;
-	private final float centerZ;
-	private final BlockPos center;
-	private final BlockPos min;
-	private final BlockPos max;
+import java.util.Iterator;
 
-	public BlockRegion(int[] bounds) {
-		this.minX = Math.min(bounds[0], bounds[3]);
-		this.minY = Math.min(bounds[1], bounds[4]);
-		this.minZ = Math.min(bounds[2], bounds[5]);
-		this.maxX = Math.max(bounds[0], bounds[3]);
-		this.maxY = Math.max(bounds[1], bounds[4]);
-		this.maxZ = Math.max(bounds[2], bounds[5]);
-		this.width = maxX - minX;
-		this.height = maxY - minY;
-		this.length = maxZ - minZ;
-		this.centerX = (minX + maxX) / 2f;
-		this.centerY = (minY + maxY) / 2f;
-		this.centerZ = (minZ + maxZ) / 2f;
-		this.center = new BlockPos(centerX, centerY, centerZ);
-		this.min = new BlockPos(minX, minY, minZ);
-		this.max = new BlockPos(maxX, maxY, maxZ);
-	}
+public final class BlockRegion implements Iterable<BlockPos> {
+    private final int minX;
+    private final int minY;
+    private final int minZ;
+    private final int maxX;
+    private final int maxY;
+    private final int maxZ;
+    private final int width;
+    private final int height;
+    private final int length;
+    private final float centerX;
+    private final float centerY;
+    private final float centerZ;
+    private final BlockPos center;
+    private final BlockPos min;
+    private final BlockPos max;
 
-	public BlockRegion(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-		this.minX = minX;
-		this.minY = minY;
-		this.minZ = minZ;
-		this.maxX = maxX;
-		this.maxY = maxY;
-		this.maxZ = maxZ;
-		this.width = maxX - minX;
-		this.height = maxY - minY;
-		this.length = maxZ - minZ;
-		this.centerX = (minX + maxX) / 2f;
-		this.centerY = (minY + maxY) / 2f;
-		this.centerZ = (minZ + maxZ) / 2f;
-		this.center = new BlockPos(centerX, centerY, centerZ);
-		this.min = new BlockPos(minX, minY, minZ);
-		this.max = new BlockPos(maxX, maxY, maxZ);
-	}
+    public BlockRegion(int[] bounds) {
+        this.minX = Math.min(bounds[0], bounds[3]);
+        this.minY = Math.min(bounds[1], bounds[4]);
+        this.minZ = Math.min(bounds[2], bounds[5]);
+        this.maxX = Math.max(bounds[0], bounds[3]);
+        this.maxY = Math.max(bounds[1], bounds[4]);
+        this.maxZ = Math.max(bounds[2], bounds[5]);
+        this.width = maxX - minX;
+        this.height = maxY - minY;
+        this.length = maxZ - minZ;
+        this.centerX = (minX + maxX) / 2f;
+        this.centerY = (minY + maxY) / 2f;
+        this.centerZ = (minZ + maxZ) / 2f;
+        this.center = new BlockPos(centerX, centerY, centerZ);
+        this.min = new BlockPos(minX, minY, minZ);
+        this.max = new BlockPos(maxX, maxY, maxZ);
+    }
 
-	public BlockRegion(BlockPos center, int extent) {
-		this.center = center;
-		this.centerX = center.getX();
-		this.centerY = center.getY();
-		this.centerZ = center.getZ();
-		this.width  = extent*2+1;
-		this.height = extent*2+1;
-		this.length = extent*2+1;
+    public BlockRegion(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+        this.minX = minX;
+        this.minY = minY;
+        this.minZ = minZ;
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.maxZ = maxZ;
+        this.width = maxX - minX;
+        this.height = maxY - minY;
+        this.length = maxZ - minZ;
+        this.centerX = (minX + maxX) / 2f;
+        this.centerY = (minY + maxY) / 2f;
+        this.centerZ = (minZ + maxZ) / 2f;
+        this.center = new BlockPos(centerX, centerY, centerZ);
+        this.min = new BlockPos(minX, minY, minZ);
+        this.max = new BlockPos(maxX, maxY, maxZ);
+    }
 
-		this.min = new BlockPos(centerX-extent, centerY-extent, centerZ-extent);
-		this.max = new BlockPos(centerX+extent, centerY+extent, centerZ+extent);
-		this.minX = min.getX();
-		this.minY = min.getY();
-		this.minZ = min.getZ();
-		this.maxX = max.getX();
-		this.maxY = max.getY();
-		this.maxZ = max.getZ();
-	}
+    public BlockRegion(BlockPos center, int extent) {
+        this.center = center;
+        this.centerX = center.getX();
+        this.centerY = center.getY();
+        this.centerZ = center.getZ();
+        this.width = extent * 2 + 1;
+        this.height = extent * 2 + 1;
+        this.length = extent * 2 + 1;
 
-	public BlockRegion(BlockPos position, int width, int height, int length) {
-		this(position.getX(), position.getY(), position.getZ(), position.getX() + width, position.getY() + height, position.getZ() + length);
-	}
+        this.min = new BlockPos(centerX - extent, centerY - extent, centerZ - extent);
+        this.max = new BlockPos(centerX + extent, centerY + extent, centerZ + extent);
+        this.minX = min.getX();
+        this.minY = min.getY();
+        this.minZ = min.getZ();
+        this.maxX = max.getX();
+        this.maxY = max.getY();
+        this.maxZ = max.getZ();
+    }
 
-	public final int getMinX() {
-		return minX;
-	}
+    public BlockRegion(BlockPos position, int width, int height, int length) {
+        this(position.getX(), position.getY(), position.getZ(), position.getX() + width, position.getY() + height, position.getZ() + length);
+    }
 
-	public final int getMinY() {
-		return minY;
-	}
+    public final int getMinX() {
+        return minX;
+    }
 
-	public final int getMinZ() {
-		return minZ;
-	}
+    public final int getMinY() {
+        return minY;
+    }
 
-	public final int getMaxX() {
-		return maxX;
-	}
+    public final int getMinZ() {
+        return minZ;
+    }
 
-	public final int getMaxY() {
-		return maxY;
-	}
+    public final int getMaxX() {
+        return maxX;
+    }
 
-	public final int getMaxZ() {
-		return maxZ;
-	}
+    public final int getMaxY() {
+        return maxY;
+    }
 
-	public final BlockPos getMin() {
-		return min;
-	}
+    public final int getMaxZ() {
+        return maxZ;
+    }
 
-	public final BlockPos getMax() {
-		return max;
-	}
+    public final BlockPos getMin() {
+        return min;
+    }
 
-	public final float getCenterX() {
-		return centerX;
-	}
+    public final BlockPos getMax() {
+        return max;
+    }
 
-	public final float getCenterY() {
-		return centerY;
-	}
+    public final float getCenterX() {
+        return centerX;
+    }
 
-	public final float getCenterZ() {
-		return centerZ;
-	}
+    public final float getCenterY() {
+        return centerY;
+    }
 
-	public final BlockPos getCenter() {
-		return center;
-	}
+    public final float getCenterZ() {
+        return centerZ;
+    }
 
-	public final int getWidth() {
-		return width;
-	}
+    public final BlockPos getCenter() {
+        return center;
+    }
 
-	public final int getHeight() {
-		return height;
-	}
+    public final int getWidth() {
+        return width;
+    }
 
-	public final int getLength() {
-		return length;
-	}
-	
-	public final int getVolume(){
-		return getWidth()*getHeight()*getLength();
-	}
+    public final int getHeight() {
+        return height;
+    }
 
-	@Override
-	public Iterator<BlockPos> iterator() {
-		return new BlockRegionIterator();
-	}
+    public final int getLength() {
+        return length;
+    }
 
-	public final class BlockRegionIterator implements Iterator<BlockPos> {
-		private final MutableBlockPos XYZ;
+    public final int getVolume() {
+        return getWidth() * getHeight() * getLength();
+    }
 
-		private BlockRegionIterator() {
-			this.XYZ = new MutableBlockPos(0,0,0);
-		}
+    @Override
+    public Iterator<BlockPos> iterator() {
+        return new BlockRegionIterator();
+    }
 
-		@Override
-		public boolean hasNext() {
-			// Get current position.
-			int x = this.XYZ.getX();
-			int y = this.XYZ.getY();
-			int z = this.XYZ.getZ();
+    public final class BlockRegionIterator implements Iterator<BlockPos> {
+        private final MutableBlockPos XYZ;
 
-			// Compute next step!
-			if (x < maxX) {
-				++x;
-			} else if (y < maxY) {
-				x = minX;
-				++y;
-			} else if (z < maxZ) {
-				x = minX;
-				y = minY;
-				++z;
-			}else{
-				return false;
-			}
+        private BlockRegionIterator() {
+            this.XYZ = new MutableBlockPos(0, 0, 0);
+        }
 
-			// Mutate position.
-			XYZ.set(x, y, z);
-			return true;
-		}
+        @Override
+        public boolean hasNext() {
+            // Get current position.
+            int x = this.XYZ.getX();
+            int y = this.XYZ.getY();
+            int z = this.XYZ.getZ();
 
-		@Override
-		public BlockPos next() {
-			return XYZ;
-		}
-	}
+            // Compute next step!
+            if (x < maxX) {
+                ++x;
+            } else if (y < maxY) {
+                x = minX;
+                ++y;
+            } else if (z < maxZ) {
+                x = minX;
+                y = minY;
+                ++z;
+            } else {
+                return false;
+            }
+
+            // Mutate position.
+            XYZ.set(x, y, z);
+            return true;
+        }
+
+        @Override
+        public BlockPos next() {
+            return XYZ;
+        }
+    }
 
 }

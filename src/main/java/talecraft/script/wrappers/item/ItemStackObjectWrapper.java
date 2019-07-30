@@ -1,7 +1,5 @@
 package talecraft.script.wrappers.item;
 
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -9,101 +7,103 @@ import talecraft.TaleCraft;
 import talecraft.script.wrappers.IObjectWrapper;
 import talecraft.script.wrappers.nbt.CompoundTagWrapper;
 
+import java.util.List;
+
 public class ItemStackObjectWrapper implements IObjectWrapper {
-	private ItemStack stack;
+    private ItemStack stack;
 
-	public ItemStackObjectWrapper(ItemStack stack) {
-		this.stack = stack;
-	}
-	
-	public static ItemStackObjectWrapper[] createArray(NonNullList<ItemStack> stacks){
-		ItemStackObjectWrapper[] newList = new ItemStackObjectWrapper[stacks.size()];
-		for(int i = 0; i < stacks.size(); i++){
-			newList[i] = new ItemStackObjectWrapper(stacks.get(i));
-		}
-		return newList;
-	}
+    public ItemStackObjectWrapper(ItemStack stack) {
+        this.stack = stack;
+    }
 
-	@Override
-	public ItemStack internal() {
-		return this.stack;
-	}
+    public static ItemStackObjectWrapper[] createArray(NonNullList<ItemStack> stacks) {
+        ItemStackObjectWrapper[] newList = new ItemStackObjectWrapper[stacks.size()];
+        for (int i = 0; i < stacks.size(); i++) {
+            newList[i] = new ItemStackObjectWrapper(stacks.get(i));
+        }
+        return newList;
+    }
 
-	@Override
-	public List<String> getOwnPropertyNames() {
-		return TaleCraft.globalScriptManager.getOwnPropertyNames(this);
-	}
+    @Override
+    public ItemStack internal() {
+        return this.stack;
+    }
 
-	
-	public ItemObjectWrapper getItem(){
-		return new ItemObjectWrapper(stack.getItem());
-	}
+    @Override
+    public List<String> getOwnPropertyNames() {
+        return TaleCraft.globalScriptManager.getOwnPropertyNames(this);
+    }
 
-	public String getInternalName() {
-		return stack.getUnlocalizedName();
-	}
 
-	public String getName() {
-		return stack.getDisplayName();
-	}
+    public ItemObjectWrapper getItem() {
+        return new ItemObjectWrapper(stack.getItem());
+    }
 
-	public void setName(String name) {
-		stack.setStackDisplayName(name);
-	}
+    public String getInternalName() {
+        return stack.getUnlocalizedName();
+    }
 
-	public int getMaxStackSize() {
-		return stack.getMaxStackSize();
-	}
+    public String getName() {
+        return stack.getDisplayName();
+    }
 
-	public int getStackSize() {
-		return stack.getCount();
-	}
+    public void setName(String name) {
+        stack.setStackDisplayName(name);
+    }
 
-	public void setStackSize(int size) {
-		stack.setCount(size);
-	}
-	
-	public void incStackSize(int amount){
-		setStackSize(getStackSize() + amount);
-	}
+    public int getMaxStackSize() {
+        return stack.getMaxStackSize();
+    }
 
-	public boolean isStackable() {
-		return stack.isStackable();
-	}
+    public int getStackSize() {
+        return stack.getCount();
+    }
 
-	public int getDamage() {
-		return stack.getItemDamage();
-	}
+    public void setStackSize(int size) {
+        stack.setCount(size);
+    }
 
-	public void setDamage(int meta) {
-		stack.setItemDamage(meta);
-	}
+    public void incStackSize(int amount) {
+        setStackSize(getStackSize() + amount);
+    }
 
-	public boolean isDamaged() {
-		return stack.isItemDamaged();
-	}
+    public boolean isStackable() {
+        return stack.isStackable();
+    }
 
-	public boolean isEnchanted() {
-		return stack.isItemEnchanted();
-	}
+    public int getDamage() {
+        return stack.getItemDamage();
+    }
 
-	public void merge(CompoundTagWrapper tagwrap) {
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		stack.writeToNBT(tagCompound);
-		tagCompound.merge(tagwrap.internal());
-		stack = new ItemStack(tagCompound);
-	}
+    public void setDamage(int meta) {
+        stack.setItemDamage(meta);
+    }
 
-	public CompoundTagWrapper getNBT(){
-		return new CompoundTagWrapper(stack.getTagCompound());
-	}
-	
-	public boolean hasNBT(){
-		return stack.hasTagCompound();
-	}
-	
-	public void setNBT(CompoundTagWrapper nbt){
-		stack.setTagCompound(nbt.internal());
-	}
-	
+    public boolean isDamaged() {
+        return stack.isItemDamaged();
+    }
+
+    public boolean isEnchanted() {
+        return stack.isItemEnchanted();
+    }
+
+    public void merge(CompoundTagWrapper tagwrap) {
+        NBTTagCompound tagCompound = new NBTTagCompound();
+        stack.writeToNBT(tagCompound);
+        tagCompound.merge(tagwrap.internal());
+        stack = new ItemStack(tagCompound);
+    }
+
+    public CompoundTagWrapper getNBT() {
+        return new CompoundTagWrapper(stack.getTagCompound());
+    }
+
+    public void setNBT(CompoundTagWrapper nbt) {
+        stack.setTagCompound(nbt.internal());
+    }
+
+    public boolean hasNBT() {
+        return stack.hasTagCompound();
+    }
+
 }

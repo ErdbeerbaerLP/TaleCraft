@@ -6,6 +6,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface ITemporaryRenderable extends IRenderable {
 
-	boolean canRemove();
+    boolean canRemove();
 
 }

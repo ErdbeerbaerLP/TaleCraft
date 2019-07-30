@@ -5,71 +5,74 @@ import talecraft.TaleCraft;
 
 public interface IInvoke {
 
-	public String getType();
-	public void getColor(float[] color_out);
+    String getType();
 
-	public void writeToNBT(NBTTagCompound compound);
-	public void readFromNBT(NBTTagCompound compound);
+    void getColor(float[] color_out);
 
-	public static class Serializer {
+    void writeToNBT(NBTTagCompound compound);
 
-		public static final NBTTagCompound write(IInvoke invoke) {
-			NBTTagCompound compound = new NBTTagCompound();
-			compound.setString("type", invoke.getType());
-			invoke.writeToNBT(compound);
-			return compound;
-		}
+    void readFromNBT(NBTTagCompound compound);
 
-		public static final IScriptInvoke readSI(NBTTagCompound compoundTag) {
-			IInvoke invoke = read(compoundTag);
+    class Serializer {
 
-			if(invoke instanceof IScriptInvoke) {
-				// TaleCraft.logger.info("Loaded IScriptInvoke : " + invoke.getType() + " : " + ((IScriptInvoke)invoke).getScriptName());
-				return (IScriptInvoke) invoke;
-			}
+        public static NBTTagCompound write(IInvoke invoke) {
+            NBTTagCompound compound = new NBTTagCompound();
+            compound.setString("type", invoke.getType());
+            invoke.writeToNBT(compound);
+            return compound;
+        }
 
-			TaleCraft.logger.error("Invalid Invoke Object! Required is IScriptInvoke, given is " + invoke.getType() + "!");
-			return new EmbeddedScriptInvoke("");
-		}
+        public static IScriptInvoke readSI(NBTTagCompound compoundTag) {
+            IInvoke invoke = read(compoundTag);
 
-		public static final IInvoke read(NBTTagCompound compoundTag) {
-			String type = compoundTag.getString("type");
+            if (invoke instanceof IScriptInvoke) {
+                // TaleCraft.logger.info("Loaded IScriptInvoke : " + invoke.getType() + " : " + ((IScriptInvoke)invoke).getScriptName());
+                return (IScriptInvoke) invoke;
+            }
 
-			if(type == null || type.isEmpty())
-				return NullInvoke.instance;
+            TaleCraft.logger.error("Invalid Invoke Object! Required is IScriptInvoke, given is " + invoke.getType() + "!");
+            return new EmbeddedScriptInvoke("");
+        }
 
-			if("NullInvoke".equals(type)) {
-				return NullInvoke.instance;
-			}
+        public static IInvoke read(NBTTagCompound compoundTag) {
+            String type = compoundTag.getString("type");
 
-			if("BlockTriggerInvoke".equals(type)) {
-				BlockTriggerInvoke invoke = new BlockTriggerInvoke();
-				invoke.readFromNBT(compoundTag);
-				return invoke;
-			}
+            //noinspection ConstantConditions
+            if (type == null || type.isEmpty())
+                return NullInvoke.instance;
 
-			if("FileScriptInvoke".equals(type)) {
-				FileScriptInvoke invoke = new FileScriptInvoke();
-				invoke.readFromNBT(compoundTag);
-				return invoke;
-			}
+            if ("NullInvoke".equals(type)) {
+                return NullInvoke.instance;
+            }
 
-			if("EmbeddedScriptInvoke".equals(type)) {
-				EmbeddedScriptInvoke invoke = new EmbeddedScriptInvoke();
-				invoke.readFromNBT(compoundTag);
-				return invoke;
-			}
+            if ("BlockTriggerInvoke".equals(type)) {
+                BlockTriggerInvoke invoke = new BlockTriggerInvoke();
+                invoke.readFromNBT(compoundTag);
+                return invoke;
+            }
 
-			if("CommandInvoke".equals(type)) {
-				CommandInvoke invoke = new CommandInvoke();
-				invoke.readFromNBT(compoundTag);
-				return invoke;
-			}
+            if ("FileScriptInvoke".equals(type)) {
+                FileScriptInvoke invoke = new FileScriptInvoke();
+                invoke.readFromNBT(compoundTag);
+                return invoke;
+            }
 
-			TaleCraft.logger.error("(FATAL) Corrupted or unknown Invoke Data found: " + compoundTag + ".");
-			return NullInvoke.instance;
-		}
+            if ("EmbeddedScriptInvoke".equals(type)) {
+                EmbeddedScriptInvoke invoke = new EmbeddedScriptInvoke();
+                invoke.readFromNBT(compoundTag);
+                return invoke;
+            }
 
-	}
+            if ("CommandInvoke".equals(type)) {
+                CommandInvoke invoke = new CommandInvoke();
+                invoke.readFromNBT(compoundTag);
+                return invoke;
+            }
+
+            TaleCraft.logger.error("(FATAL) Corrupted or unknown Invoke Data found: " + compoundTag + ".");
+            return NullInvoke.instance;
+        }
+
+    }
 
 }

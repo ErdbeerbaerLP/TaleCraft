@@ -19,42 +19,51 @@ import talecraft.tileentity.ClockBlockTileEntity;
 
 public class ClockBlock extends TCBlockContainer implements TCITriggerableBlock {
 
-	public ClockBlock() {
-		super();
-	}
+    public ClockBlock() {
+        super();
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new ClockBlockTileEntity();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new ClockBlockTileEntity();
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote)
-			return true;
-		if(!TaleCraft.proxy.isBuildMode())
-			return false;
-		if(playerIn.isSneaking())
-			return true;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote)
+            return true;
+        if (!TaleCraft.proxy.isBuildMode())
+            return false;
+        if (playerIn.isSneaking())
+            return true;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		mc.displayGuiScreen(new GuiClockBlock((ClockBlockTileEntity)worldIn.getTileEntity(pos)));
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.displayGuiScreen(new GuiClockBlock((ClockBlockTileEntity) worldIn.getTileEntity(pos)));
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
-		ClockBlockTileEntity tEntity = (ClockBlockTileEntity)world.getTileEntity(position);
-		if(tEntity != null) {
-			switch(triggerState) {
-			case ON: tEntity.clockStart(); break;
-			case OFF: tEntity.clockStop(); break;
-			case INVERT: tEntity.clockPause(); break;
-			case IGNORE: if(tEntity.isClockRunning()) tEntity.clockStop(); else tEntity.clockStart(); break;
-			}
-		}
-	}
+    @Override
+    public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
+        ClockBlockTileEntity tEntity = (ClockBlockTileEntity) world.getTileEntity(position);
+        if (tEntity != null) {
+            switch (triggerState) {
+                case ON:
+                    tEntity.clockStart();
+                    break;
+                case OFF:
+                    tEntity.clockStop();
+                    break;
+                case INVERT:
+                    tEntity.clockPause();
+                    break;
+                case IGNORE:
+                    if (tEntity.isClockRunning()) tEntity.clockStop();
+                    else tEntity.clockStart();
+                    break;
+            }
+        }
+    }
 
 }

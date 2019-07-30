@@ -13,40 +13,40 @@ import talecraft.client.entity.RenderBombArrow;
 
 public class EntityBombArrow extends EntityArrow {
 
-	public EntityBombArrow(World worldIn) {
-		super(worldIn);
-	}
+    public EntityBombArrow(World worldIn) {
+        super(worldIn);
+    }
 
-	public EntityBombArrow(World worldIn, EntityLivingBase shooter) {
-		super(worldIn, shooter);
-	}
+    public EntityBombArrow(World worldIn, EntityLivingBase shooter) {
+        super(worldIn, shooter);
+    }
 
-	public EntityBombArrow(World worldIn, double x, double y, double z) {
-		super(worldIn, x, y, z);
-	}
+    public EntityBombArrow(World worldIn, double x, double y, double z) {
+        super(worldIn, x, y, z);
+    }
 
-	@Override
-	protected ItemStack getArrowStack() {
-		return new ItemStack(TaleCraftItems.bombArrow);
-	}
-	
-	@Override
-	protected void onHit(RayTraceResult result) {
-		super.onHit(result);
-		if(!world.isRemote){
-			EntityBomb bomb = new EntityBomb(world, this.posX, this.posY, this.posZ);
-			bomb.setFuse(0);
-			world.spawnEntity(bomb);
-			setDead();
-		}
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public static class EntityBombArrowRenderFactory implements IRenderFactory{
-		@Override
-		public Render createRenderFor(RenderManager manager) {
-			return new RenderBombArrow(manager);
-		}
-	}
+    @Override
+    protected ItemStack getArrowStack() {
+        return new ItemStack(TaleCraftItems.bombArrow);
+    }
+
+    @Override
+    protected void onHit(RayTraceResult result) {
+        super.onHit(result);
+        if (!world.isRemote) {
+            EntityBomb bomb = new EntityBomb(world, this.posX, this.posY, this.posZ);
+            bomb.setFuse(0);
+            world.spawnEntity(bomb);
+            setDead();
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static class EntityBombArrowRenderFactory implements IRenderFactory {
+        @Override
+        public Render createRenderFor(RenderManager manager) {
+            return new RenderBombArrow(manager);
+        }
+    }
 
 }

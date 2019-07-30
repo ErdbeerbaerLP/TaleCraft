@@ -10,41 +10,41 @@ import net.minecraft.util.SoundCategory;
 import talecraft.client.sound.ConstantSound;
 import talecraft.network.packets.SoundsPacket;
 
-public class SoundsPacketHandler{
-	
-	public static void handle(SoundsPacket message){
-		Minecraft mc = Minecraft.getMinecraft();
-		if (message.mute) {
-			mc.getSoundHandler().stopSounds();
-		} else {
-			EntityPlayer player = mc.player;
+public class SoundsPacketHandler {
 
-			ISound record = null;
+    public static void handle(SoundsPacket message) {
+        Minecraft mc = Minecraft.getMinecraft();
+        if (message.mute) {
+            mc.getSoundHandler().stopSounds();
+        } else {
+            EntityPlayer player = mc.player;
 
-			ResourceLocation soundName = message.sound.getSoundEvent().getSoundName();
-			SoundCategory category = SoundCategory.MUSIC;
-			boolean repeat = message.repeat;
-			int delay = message.delay;
-			AttenuationType attenuation = message.constant ? AttenuationType.NONE : AttenuationType.LINEAR;
+            ISound record;
 
-			if (message.constant) {
-				ConstantSound c = new ConstantSound(soundName);
-				record = c;
+            @SuppressWarnings("ConstantConditions") ResourceLocation soundName = message.sound.getSoundEvent().getSoundName();
+            SoundCategory category = SoundCategory.MUSIC;
+            boolean repeat = message.repeat;
+            int delay = message.delay;
+            AttenuationType attenuation = message.constant ? AttenuationType.NONE : AttenuationType.LINEAR;
 
-				if (repeat)
-					c.setRepeating(delay);
-				else
-					c.setNonRepeating();
+            if (message.constant) {
+                ConstantSound c = new ConstantSound(soundName);
+                record = c;
 
-				c.setVolume(1);
-				c.setPitch(1);
-			} else {
-				record = new PositionedSoundRecord(soundName, category, 1F, 1F, repeat, delay, attenuation,
-						(float) player.posX, (float) player.posY, (float) player.posZ);
-			}
+                if (repeat)
+                    c.setRepeating(delay);
+                else
+                    c.setNonRepeating();
 
-			mc.getSoundHandler().playSound(record);
-		}
-	}
-	
+                c.setVolume(1);
+                c.setPitch(1);
+            } else {
+                record = new PositionedSoundRecord(soundName, category, 1F, 1F, repeat, delay, attenuation,
+                        (float) player.posX, (float) player.posY, (float) player.posZ);
+            }
+
+            mc.getSoundHandler().playSound(record);
+        }
+    }
+
 }

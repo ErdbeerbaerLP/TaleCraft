@@ -20,92 +20,92 @@ import talecraft.TaleCraftBlocks;
 import talecraft.TaleCraftTabs;
 import talecraft.blocks.TCBlock;
 
+@SuppressWarnings("deprecation")
 public class BlankBlock extends TCBlock {
-	public static final IProperty<Integer> SUB = PropertyInteger.create("sub", 0, 15);
-	public int blockLayer = 0;
-	public boolean ignoreSimilarity = true;
+    public static final IProperty<Integer> SUB = PropertyInteger.create("sub", 0, 15);
+    public int blockLayer = 0;
+    public boolean ignoreSimilarity = true;
 
-	public BlankBlock(SoundType sound) {
-		this.setCreativeTab(TaleCraftTabs.tab_TaleCraftDecorationTab);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(SUB, Integer.valueOf(0)));
-		this.setSoundType(sound);
-	}
+    public BlankBlock(SoundType sound) {
+        this.setCreativeTab(TaleCraftTabs.tab_TaleCraftDecorationTab);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(SUB, 0));
+        this.setSoundType(sound);
+    }
 
-	@Override
-	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
-		return false;
-	}
+    @Override
+    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+        return false;
+    }
 
-	@Override
-	public int damageDropped(IBlockState state) {
-		return state.getValue(SUB).intValue();
-	}
+    @Override
+    public int damageDropped(IBlockState state) {
+        return state.getValue(SUB);
+    }
 
-	@Deprecated
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(SUB, Integer.valueOf(meta));
-	}
+    @Deprecated
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(SUB, meta);
+    }
 
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(SUB).intValue();
-	}
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(SUB);
+    }
 
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {SUB});
-	}
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, SUB);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		for (int j = 0; j < 16; ++j) {
-			list.add(new ItemStack(this, 1, j));
-		}
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+        for (int j = 0; j < 16; ++j) {
+            list.add(new ItemStack(this, 1, j));
+        }
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
-		return blockLayer == 0 ? BlockRenderLayer.SOLID : BlockRenderLayer.CUTOUT;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer() {
+        return blockLayer == 0 ? BlockRenderLayer.SOLID : BlockRenderLayer.CUTOUT;
+    }
 
-	@Deprecated
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-		IBlockState iblockstate = worldIn.getBlockState(pos);
-		Block block = iblockstate.getBlock();
+    @Deprecated
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        Block block = iblockstate.getBlock();
 
-		if (this == TaleCraftBlocks.deco_glass_a) {
-			if (worldIn.getBlockState(pos.offset(side.getOpposite())).getBlock() != this) {
-				return true;
-			}
+        if (this == TaleCraftBlocks.deco_glass_a) {
+            if (worldIn.getBlockState(pos.offset(side.getOpposite())).getBlock() != this) {
+                return true;
+            }
 
-			if (block == this)
-			{
-				return false;
-			}
-		}
+            if (block == this) {
+                return false;
+            }
+        }
 
-		return !this.ignoreSimilarity && block == this ? false : super.shouldSideBeRendered(state, worldIn, pos, side);
-	}
+        return (this.ignoreSimilarity || block != this) && super.shouldSideBeRendered(state, worldIn, pos, side);
+    }
 
-	@Override
-	public boolean isFullCube(IBlockState state) {
-		return blockLayer == 0;
-	}
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return blockLayer == 0;
+    }
 
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return blockLayer == 0;
-	}
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return blockLayer == 0;
+    }
 
-	@Deprecated
-	@Override //TODO Doesn't work
-	public EnumPushReaction getMobilityFlag(IBlockState state) {
-		return EnumPushReaction.NORMAL; // Can be moved by pistons
-	}
+    @Deprecated
+    @Override //TODO Doesn't work
+    public EnumPushReaction getMobilityFlag(IBlockState state) {
+        return EnumPushReaction.NORMAL; // Can be moved by pistons
+    }
 
 }

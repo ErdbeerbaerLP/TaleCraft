@@ -8,11 +8,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import talecraft.entity.projectile.EntityBombArrow;
 
 @SideOnly(Side.CLIENT)
-public class RenderBombArrow extends RenderArrow<EntityBombArrow>
-{
+public class RenderBombArrow extends RenderArrow<EntityBombArrow> {
     public static final ResourceLocation RES_ARROW = new ResourceLocation("talecraft:textures/entity/projectiles/bombarrow.png");
 
-    public RenderBombArrow(RenderManager manager){
+    public RenderBombArrow(RenderManager manager) {
         super(manager);
     }
 
@@ -20,8 +19,7 @@ public class RenderBombArrow extends RenderArrow<EntityBombArrow>
      * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
      */
     @Override
-		protected ResourceLocation getEntityTexture(EntityBombArrow entity)
-    {
+    protected ResourceLocation getEntityTexture(EntityBombArrow entity) {
         return RES_ARROW;
     }
 }

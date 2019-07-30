@@ -20,46 +20,46 @@ import talecraft.tileentity.BlockUpdateDetectorTileEntity;
 
 public class BlockUpdateDetector extends TCBlockContainer implements TCITriggerableBlock {
 
-	public BlockUpdateDetector() {
-		super();
-	}
+    public BlockUpdateDetector() {
+        super();
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote)
-			return true;
-		if(!TaleCraft.proxy.isBuildMode())
-			return false;
-		if(playerIn.isSneaking())
-			return true;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote)
+            return true;
+        if (!TaleCraft.proxy.isBuildMode())
+            return false;
+        if (playerIn.isSneaking())
+            return true;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		mc.displayGuiScreen(new GuiUpdateDetectorBlock((BlockUpdateDetectorTileEntity)worldIn.getTileEntity(pos)));
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.displayGuiScreen(new GuiUpdateDetectorBlock((BlockUpdateDetectorTileEntity) worldIn.getTileEntity(pos)));
 
-		return true;
-	}
-	
-	@Deprecated
-	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from) {
-		BlockUpdateDetectorTileEntity tEntity = (BlockUpdateDetectorTileEntity)worldIn.getTileEntity(pos);
-		if(tEntity != null) {
-			tEntity.triggerUpdateInvoke(EnumTriggerState.ON);
-		}
-	}
+        return true;
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new BlockUpdateDetectorTileEntity();
-	}
+    @Deprecated
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from) {
+        BlockUpdateDetectorTileEntity tEntity = (BlockUpdateDetectorTileEntity) worldIn.getTileEntity(pos);
+        if (tEntity != null) {
+            tEntity.triggerUpdateInvoke(EnumTriggerState.ON);
+        }
+    }
 
-	@Override
-	public void trigger(World world, BlockPos position, EnumTriggerState triggerState){
-		BlockUpdateDetectorTileEntity tEntity = (BlockUpdateDetectorTileEntity)world.getTileEntity(position);
-		if(tEntity != null) {
-			tEntity.triggerUpdateInvoke(triggerState);
-		}
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new BlockUpdateDetectorTileEntity();
+    }
+
+    @Override
+    public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
+        BlockUpdateDetectorTileEntity tEntity = (BlockUpdateDetectorTileEntity) world.getTileEntity(position);
+        if (tEntity != null) {
+            tEntity.triggerUpdateInvoke(triggerState);
+        }
+    }
 
 }

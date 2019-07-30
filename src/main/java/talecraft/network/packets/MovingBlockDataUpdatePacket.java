@@ -11,39 +11,39 @@ import talecraft.entity.EntityMovingBlock;
 
 public class MovingBlockDataUpdatePacket implements IMessage {
 
-	NBTTagCompound data;
-	int id;
-	
+    NBTTagCompound data;
+    int id;
 
-	public MovingBlockDataUpdatePacket() {
-	}
 
-	public MovingBlockDataUpdatePacket(int id, NBTTagCompound tag) {
-		data = tag;
-		this.id = id;
-	}
+    public MovingBlockDataUpdatePacket() {
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		data = ByteBufUtils.readTag(buf);
-		id = buf.readInt();
-	}
+    public MovingBlockDataUpdatePacket(int id, NBTTagCompound tag) {
+        data = tag;
+        this.id = id;
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeTag(buf, data);
-		buf.writeInt(id);
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        data = ByteBufUtils.readTag(buf);
+        id = buf.readInt();
+    }
 
-	public static class Handler implements IMessageHandler<MovingBlockDataUpdatePacket, IMessage> {
+    @Override
+    public void toBytes(ByteBuf buf) {
+        ByteBufUtils.writeTag(buf, data);
+        buf.writeInt(id);
+    }
 
-		@Override
-		public IMessage onMessage(MovingBlockDataUpdatePacket message, MessageContext ctx) {
-			Minecraft mc = Minecraft.getMinecraft();
-			
-			EntityMovingBlock moving = (EntityMovingBlock) mc.world.getEntityByID(message.id);
-			if(moving != null)moving.updateData(message.data);
-			return null;
-		}
-	}
+    public static class Handler implements IMessageHandler<MovingBlockDataUpdatePacket, IMessage> {
+
+        @Override
+        public IMessage onMessage(MovingBlockDataUpdatePacket message, MessageContext ctx) {
+            Minecraft mc = Minecraft.getMinecraft();
+
+            EntityMovingBlock moving = (EntityMovingBlock) mc.world.getEntityByID(message.id);
+            if (moving != null) moving.updateData(message.data);
+            return null;
+        }
+    }
 }

@@ -5,5 +5,5 @@ import net.minecraft.world.World;
 import talecraft.invoke.EnumTriggerState;
 
 public interface TCITriggerableBlock {
-	void trigger(World world, BlockPos position, EnumTriggerState triggerState);
+    void trigger(World world, BlockPos position, EnumTriggerState triggerState);
 }

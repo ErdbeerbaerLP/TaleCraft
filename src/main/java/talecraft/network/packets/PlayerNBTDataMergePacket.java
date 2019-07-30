@@ -10,32 +10,32 @@ import talecraft.network.handlers.client.PlayerNBTDataMergePacketHandler;
 
 public class PlayerNBTDataMergePacket implements IMessage {
 
-	public NBTTagCompound data;
+    public NBTTagCompound data;
 
-	public PlayerNBTDataMergePacket() {
-		data = new NBTTagCompound();
-	}
+    public PlayerNBTDataMergePacket() {
+        data = new NBTTagCompound();
+    }
 
-	public PlayerNBTDataMergePacket(NBTTagCompound in) {
-		data = in;
-	}
+    public PlayerNBTDataMergePacket(NBTTagCompound in) {
+        data = in;
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		data = ByteBufUtils.readTag(buf);
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        data = ByteBufUtils.readTag(buf);
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeTag(buf, data);
-	}
+    @Override
+    public void toBytes(ByteBuf buf) {
+        ByteBufUtils.writeTag(buf, data);
+    }
 
-	public static class Handler implements IMessageHandler<PlayerNBTDataMergePacket, IMessage> {
+    public static class Handler implements IMessageHandler<PlayerNBTDataMergePacket, IMessage> {
 
-		@Override
-		public IMessage onMessage(PlayerNBTDataMergePacket message, MessageContext ctx) {
-			PlayerNBTDataMergePacketHandler.handle(message);
-			return null;
-		}
-	}
+        @Override
+        public IMessage onMessage(PlayerNBTDataMergePacket message, MessageContext ctx) {
+            PlayerNBTDataMergePacketHandler.handle(message);
+            return null;
+        }
+    }
 }

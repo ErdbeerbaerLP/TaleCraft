@@ -7,6 +7,6 @@ import talecraft.proxy.ClientProxy;
 
 public interface IRenderable {
 
-	void render(Minecraft mc, ClientProxy clientProxy, Tessellator tessellator, BufferBuilder vertexbuffer, double partialTicks);
+    void render(Minecraft mc, ClientProxy clientProxy, Tessellator tessellator, BufferBuilder vertexbuffer, double partialTicks);
 
 }

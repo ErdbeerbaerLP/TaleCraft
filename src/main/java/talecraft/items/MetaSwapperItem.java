@@ -17,72 +17,65 @@ import talecraft.util.WorldHelper.BlockRegionIterator;
 
 public class MetaSwapperItem extends TCItem {
 
-	private static final BlockRegionIterator swapFunctionINCR = new BlockRegionIterator() {
-		@Override
-		public void $(World world, IBlockState state, BlockPos pos) {
-			IBlockState oldState = state;
-			Block block = oldState.getBlock();
+    private static final BlockRegionIterator swapFunctionINCR = (world, state, pos) -> {
+        Block block = state.getBlock();
 
-			int oldMeta = block.getMetaFromState(oldState);
-			int newMeta = (oldMeta + 1) & 0xF;
+        int oldMeta = block.getMetaFromState(state);
+        int newMeta = (oldMeta + 1) & 0xF;
 
-			IBlockState newState = block.getStateFromMeta(newMeta);
-			world.setBlockState(pos, newState);
-		}
-	};
+        @SuppressWarnings("deprecation") IBlockState newState = block.getStateFromMeta(newMeta);
+        world.setBlockState(pos, newState);
+    };
 
-	private static final BlockRegionIterator swapFunctionDECR = new BlockRegionIterator() {
-		@Override
-		public void $(World world, IBlockState state, BlockPos pos) {
-			IBlockState oldState = state;
-			Block block = oldState.getBlock();
+    private static final BlockRegionIterator swapFunctionDECR = (world, state, pos) -> {
+        Block block = state.getBlock();
 
-			int oldMeta = block.getMetaFromState(oldState);
-			int newMeta = (oldMeta - 1) & 0xF;
+        int oldMeta = block.getMetaFromState(state);
+        int newMeta = (oldMeta - 1) & 0xF;
 
-			IBlockState newState = block.getStateFromMeta(newMeta);
-			world.setBlockState(pos, newState);
-		}
-	};
+        @SuppressWarnings("deprecation") IBlockState newState = block.getStateFromMeta(newMeta);
+        world.setBlockState(pos, newState);
+    };
 
-	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.getHeldItem(hand);
-		if(worldIn.isRemote)
-			return EnumActionResult.PASS;
-		
-		if(!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
-		}
-		
-		if(hand.equals(EnumHand.OFF_HAND)) {
-			swapFunctionDECR.$(worldIn, worldIn.getBlockState(pos), pos);
-		} else {
-			swapFunctionINCR.$(worldIn, worldIn.getBlockState(pos), pos);
-		}
-		
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (worldIn.isRemote)
+            return EnumActionResult.PASS;
 
-		return EnumActionResult.SUCCESS;
-	}
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		if(world.isRemote)
-			return ActionResult.newResult(EnumActionResult.PASS, stack);
+        if (hand.equals(EnumHand.OFF_HAND)) {
+            swapFunctionDECR.$(worldIn, worldIn.getBlockState(pos), pos);
+        } else {
+            swapFunctionINCR.$(worldIn, worldIn.getBlockState(pos), pos);
+        }
 
-		if(player.isSneaking()) {
-			int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
 
-			if(bounds == null) {
-				player.sendMessage(new TextComponentString("No region selected with wand."));
-			}
-			
-			WorldHelper.foreach(world, bounds, hand.equals(EnumHand.OFF_HAND) ? swapFunctionDECR : swapFunctionINCR);
-			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-		}
-		
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-	}
+        return EnumActionResult.SUCCESS;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (world.isRemote)
+            return ActionResult.newResult(EnumActionResult.PASS, stack);
+
+        if (player.isSneaking()) {
+            int[] bounds = WandItem.getBoundsFromPlayerOrNull(player);
+
+            if (bounds == null) {
+                player.sendMessage(new TextComponentString("No region selected with wand."));
+            }
+
+            WorldHelper.foreach(world, bounds, hand.equals(EnumHand.OFF_HAND) ? swapFunctionDECR : swapFunctionINCR);
+            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+        }
+
+        return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+    }
 
 }

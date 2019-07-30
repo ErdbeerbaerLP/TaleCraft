@@ -10,8 +10,8 @@ import net.minecraft.util.math.BlockPos;
 
 public interface IMetadataRender {
 
-	public void render(Item item, ItemStack stack,
-			Tessellator tessellator, BufferBuilder buffer, double partialTick,
-			BlockPos playerPos, EntityPlayerSP player, WorldClient world);
-	
+    void render(Item item, ItemStack stack,
+                Tessellator tessellator, BufferBuilder buffer, double partialTick,
+                BlockPos playerPos, EntityPlayerSP player, WorldClient world);
+
 }
