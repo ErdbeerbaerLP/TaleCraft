@@ -46,17 +46,14 @@ public class ClassTransformer implements IClassTransformer {
     private static void transformMinecraft(ClassNode classNode, boolean isObfuscated) {
         for (MethodNode method : classNode.methods) {
             if (method.name.equals("<clinit>")) {
-                System.out.println("clinit");
                 for (AbstractInsnNode instruction : method.instructions.toArray()) {
                     //replace mojang logo
                     if (instruction instanceof LdcInsnNode) {
                         System.out.println(((LdcInsnNode) instruction).cst);
                         if (((LdcInsnNode) instruction).cst.equals("textures/gui/title/mojang.png")) {
-                            System.out.println("Replacing...");
                             LdcInsnNode ldc = new LdcInsnNode("talecraft:textures/talecraft_loading.png");
                             method.instructions.insert(instruction, ldc);
                             method.instructions.remove(instruction);
-                            System.out.println("done");
                         }
                     }
                 }
@@ -70,18 +67,15 @@ public class ClassTransformer implements IClassTransformer {
 
         for (MethodNode method : classNode.methods) {
             if (method.name.equals("start")) {
-                System.out.println("start");
                 for (AbstractInsnNode instruction : method.instructions.toArray()) {
 
                     //replace mojang logo
                     if (instruction instanceof LdcInsnNode) {
                         System.out.println(((LdcInsnNode) instruction).cst);
                         if (((LdcInsnNode) instruction).cst.equals("textures/gui/title/mojang.png")) {
-                            System.out.println("Replacing...");
                             LdcInsnNode ldc = new LdcInsnNode("talecraft:textures/talecraft_loading.png");
                             method.instructions.insert(instruction, ldc);
                             method.instructions.remove(instruction);
-                            System.out.println("done");
                         }
 
                         //Permanently remove memory bar from loading screen (because it is above the talecraft logo)
@@ -100,7 +94,6 @@ public class ClassTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] classBeingTransformed) {
-
         boolean isObfuscated = !name.equals(transformedName);
         int index = Arrays.asList(classesBeingTransformed).indexOf(transformedName);
         return index != -1 ? transform(index, classBeingTransformed, isObfuscated) : classBeingTransformed;
