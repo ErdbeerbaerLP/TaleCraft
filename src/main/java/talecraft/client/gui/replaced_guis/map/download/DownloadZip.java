@@ -20,7 +20,7 @@ public class DownloadZip extends Observable implements Runnable {
     public static final int ERROR = 4;
     // Max size of download buffer.
     private static final int MAX_BUFFER_SIZE = 1024;
-    private URL url; // download URL
+    private final URL url; // download URL
     private int size; // size of download in bytes
     private int downloaded; // number of bytes downloaded
     private int status; // current status of download
@@ -173,6 +173,7 @@ public class DownloadZip extends Observable implements Runnable {
             //Delete file when not found
             if (e instanceof FileNotFoundException) {
                 try {
+                    //noinspection ConstantConditions
                     file.close();
                     this.outputFile.delete();
                 } catch (IOException e1) {
@@ -185,7 +186,7 @@ public class DownloadZip extends Observable implements Runnable {
             if (file != null) {
                 try {
                     file.close();
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
 
@@ -193,7 +194,7 @@ public class DownloadZip extends Observable implements Runnable {
             if (stream != null) {
                 try {
                     stream.close();
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
         }

@@ -155,28 +155,21 @@ public class NudgeItem extends TCItem {
 
         // Lets by terribly lazy and use an existing minecraft command to do the actual movement.
 
-        StringBuilder builder = new StringBuilder(128);
-
-        builder.append("/clone ");
-
-        builder.append(ix).append(' ');
-        builder.append(iy).append(' ');
-        builder.append(iz).append(' ');
-
-        builder.append(ax).append(' ');
-        builder.append(ay).append(' ');
-        builder.append(az).append(' ');
-
-        builder.append(new_ix).append(' ');
-        builder.append(new_iy).append(' ');
-        builder.append(new_iz).append(' ');
-
-        builder.append("replace");
-        builder.append(' ');
-        builder.append("move");
-
         // player.sendMessage(new ChatComponentText(EnumChatFormatting.GOLD+builder.toString()));
-        FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(player, builder.toString());
+        String builder = "/clone " +
+                ix + ' ' +
+                iy + ' ' +
+                iz + ' ' +
+                ax + ' ' +
+                ay + ' ' +
+                az + ' ' +
+                new_ix + ' ' +
+                new_iy + ' ' +
+                new_iz + ' ' +
+                "replace" +
+                ' ' +
+                "move";
+        FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(player, builder);
 
         ix += moveX;
         iy += moveY;

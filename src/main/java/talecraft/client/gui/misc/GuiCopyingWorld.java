@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiScreen;
 
 public class GuiCopyingWorld extends GuiScreen {
     boolean drawn = false;
-    private String text;
+    private final String text;
 
     public GuiCopyingWorld(String text) {
         this.text = text;

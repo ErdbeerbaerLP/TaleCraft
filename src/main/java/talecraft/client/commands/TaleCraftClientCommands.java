@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TaleCraftClientCommands {
     private static final List<CommandBase> commands = new ArrayList<>();
-    private static ClientCommandHandler instance = ClientCommandHandler.instance;
+    private static final ClientCommandHandler instance = ClientCommandHandler.instance;
 
     public static void init() {
         register(new ResourceReloadCommand());

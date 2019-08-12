@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 
 public class ConstantSound implements ISound {
-    private ResourceLocation soundLocation;
+    private final ResourceLocation soundLocation;
     private SoundEventAccessor soundEvent;
     private Sound sound;
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InvokeTracker {
-    List<TrackedInvoke> trackedInvokes;
+    final List<TrackedInvoke> trackedInvokes;
 
     public InvokeTracker() {
         trackedInvokes = Lists.newArrayList();
@@ -48,18 +48,17 @@ public class InvokeTracker {
         final int BAWI = mc.displayWidth;
         final int BAHE = mc.fontRenderer.FONT_HEIGHT;
         final int BAYM = BASEY + BAHE;
-        final int BAYI = BASEY;
 
-        Gui.drawRect(0, BAYI, BAWI, BAYM, 0xAA000000);
+        Gui.drawRect(0, BASEY, BAWI, BAYM, 0xAA000000);
 
         int wi = 8;
         int he = BAHE - 1;
         int he2 = he / 2;
         int incrX = 0;
 
-        for (TrackedInvoke invoke : Lists.reverse(new ArrayList<TrackedInvoke>(trackedInvokes))) {
-            Gui.drawRect(incrX, BAYI + 1, incrX + wi, BAYM - he2, invoke.is);
-            Gui.drawRect(incrX, BAYI + 1 + he2, incrX + wi, BAYM - 1, invoke.it);
+        for (TrackedInvoke invoke : Lists.reverse(new ArrayList<>(trackedInvokes))) {
+            Gui.drawRect(incrX, BASEY + 1, incrX + wi, BAYM - he2, invoke.is);
+            Gui.drawRect(incrX, BASEY + 1 + he2, incrX + wi, BAYM - 1, invoke.it);
             incrX += wi + 1;
 
             if (incrX > BAWI) break;

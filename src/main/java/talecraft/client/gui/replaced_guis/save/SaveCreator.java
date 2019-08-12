@@ -25,7 +25,7 @@ public class SaveCreator extends GuiScreen {
     /**
      * The screen to return to when this closes (always Main Menu).
      */
-    protected GuiScreen prevScreen;
+    protected final GuiScreen prevScreen;
     protected String title = "Select Map";
     /**
      * Tooltip displayed a world whose version is different from this client's
@@ -36,7 +36,7 @@ public class SaveCreator extends GuiScreen {
     /**
      * Used to determine the world´s folder
      */
-    private String worldPathName = "saves/.TC_MAPS";
+    private final String worldPathName = "saves/.TC_MAPS";
 
     public SaveCreator(GuiScreen screenIn) {
         this.prevScreen = screenIn;
@@ -70,7 +70,7 @@ public class SaveCreator extends GuiScreen {
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
      */
-    protected void actionPerformed(GuiButton button) throws IOException {
+    protected void actionPerformed(GuiButton button) {
         if (button.enabled) {
             GuiListSaveCreatorEntry guilistworldselectionentry = this.selectionList.getSelectedWorld();
 
@@ -123,8 +123,7 @@ public class SaveCreator extends GuiScreen {
     }
 
     public void selectWorld(@Nullable GuiListSaveCreatorEntry newGuiListWorldSelectionEntry) {
-        boolean flag = newGuiListWorldSelectionEntry != null;
-        this.selectButton.enabled = flag;
+        this.selectButton.enabled = newGuiListWorldSelectionEntry != null;
     }
 
 

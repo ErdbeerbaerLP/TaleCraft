@@ -10,8 +10,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class ClientSettings {
-    NBTTagCompound settings = new NBTTagCompound();
-    Minecraft mc = Minecraft.getMinecraft();
+    final NBTTagCompound settings = new NBTTagCompound();
+    final Minecraft mc = Minecraft.getMinecraft();
 
     public void init() {
         {
@@ -43,6 +43,7 @@ public class ClientSettings {
 
         try {
             NBTTagCompound comp = CompressedStreamTools.read(settingsFile);
+            //noinspection ConstantConditions
             settings.merge(comp);
         } catch (IOException e) {
             e.printStackTrace();

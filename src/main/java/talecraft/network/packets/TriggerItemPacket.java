@@ -42,6 +42,7 @@ public class TriggerItemPacket implements IMessage {
             EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(message.uuid);
 
             ItemStack item = player.inventory.getCurrentItem();
+            //noinspection ConstantConditions
             if (item != null && item.getItem() instanceof TCITriggerableItem) {
                 ((TCITriggerableItem) item.getItem()).trigger(player.world, player, item);
             }

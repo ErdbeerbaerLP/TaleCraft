@@ -60,7 +60,7 @@ public class TriggerItem extends TCItem implements TCITriggerableItem {
     @Override
     public void trigger(World world, EntityPlayerMP player, ItemStack stack) {
         NBTTagCompound tag = stack.getTagCompound();
-        int current = tag.getInteger("trigger");
+        @SuppressWarnings("ConstantConditions") int current = tag.getInteger("trigger");
         current++;
         if (current >= EnumTriggerState.values().length) current = 0;
         player.sendMessage(new TextComponentString("Changed trigger to: " + EnumTriggerState.values()[current]));

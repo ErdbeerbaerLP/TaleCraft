@@ -39,11 +39,11 @@ public class CustomMainMenu extends GuiScreen {
      * Timer used to rotate the panorama, increases every tick.
      */
     private float panoramaTimer;
-    private ResourceLocation backgroundTexture;
+    private final ResourceLocation backgroundTexture;
     /**
      * Texture allocated for the current viewport of the main menu's panorama background.
      */
-    private DynamicTexture viewportTexture;
+    private final DynamicTexture viewportTexture;
 
     public CustomMainMenu() {
 
@@ -57,6 +57,7 @@ public class CustomMainMenu extends GuiScreen {
     public void initGui() {
         File savesDir = new File(this.mc.mcDataDir, "saves");
         final String[] savesList = savesDir.list();
+        //noinspection ConstantConditions
         for (String s : savesList) {
             if (s.startsWith(".TC")) continue;
             s.contains("@SAV");
@@ -65,7 +66,7 @@ public class CustomMainMenu extends GuiScreen {
         }
         int j = this.height / 4 + 48;
         this.addButton(new GuiButtonExt(1, this.width / 2 - 100, j, "Create new Map"));
-        this.addButton(new GuiButtonExt(2, this.width / 2 - 100, j + 24 * 1, "Play Map"));
+        this.addButton(new GuiButtonExt(2, this.width / 2 - 100, j + 24, "Play Map"));
         this.addButton(new GuiButtonExt(3, this.width / 2, j + 24 * 2, 100, 20, "Download Maps"));
         this.addButton(new GuiButtonExt(4, this.width / 2, j + 24 * 3, 100, 20, I18n.format("menu.quit")));
         this.addButton(new GuiButtonExt(5, this.width / 2 - 100, j + 24 * 3, 100, 20, I18n.format("menu.options")));

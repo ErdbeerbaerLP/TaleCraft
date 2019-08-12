@@ -14,7 +14,7 @@ public class NPCDialogue {
     private final String name;
     private String title;
     private String text;
-    private List<NPCDialogueOption> options;
+    private final List<NPCDialogueOption> options;
 
     public NPCDialogue(String name) {
         this.name = name;
@@ -89,7 +89,7 @@ public class NPCDialogue {
     }
 
     public static class NPCDialogueOption {
-        public String option;
+        public final String option;
         public String destination;
         public String action;
 

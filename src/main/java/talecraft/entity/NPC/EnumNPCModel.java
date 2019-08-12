@@ -12,7 +12,7 @@ public enum EnumNPCModel {
 
     public final float width;
     public final float height;
-    private String defaultSkin;
+    private final String defaultSkin;
 
     EnumNPCModel(float width, float height, String defaultSkin) {
         this.width = width;

@@ -44,6 +44,7 @@ public class NPCDataPacket implements IMessage {
         public IMessage onMessage(NPCDataPacket message, MessageContext ctx) {
             MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
             EntityNPC npc = (EntityNPC) server.getEntityFromUuid(message.uuid);
+            //noinspection ConstantConditions
             npc.setNPCData(message.data);
             return null;
         }

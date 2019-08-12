@@ -8,8 +8,8 @@ import java.util.List;
 
 public class WorldDescGui extends GuiScreen {
 
-    List<String> lines;
-    String world_title;
+    final List<String> lines;
+    final String world_title;
 
     public WorldDescGui(List<String> lines, String world_title) {
         this.lines = lines;
@@ -86,10 +86,10 @@ public class WorldDescGui extends GuiScreen {
     }
 
     private class ColoredString {
-        int x;
-        int y;
-        int color;
-        String str;
+        final int x;
+        final int y;
+        final int color;
+        final String str;
 
         public ColoredString(int x, int y, int color, String str) {
             this.x = x;

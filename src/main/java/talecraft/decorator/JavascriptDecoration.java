@@ -42,8 +42,8 @@ public class JavascriptDecoration implements Decoration {
 
     private class InvokeSource implements IInvokeSource, ICommandSender {
 
-        World world;
-        BlockPos[] positions;
+        final World world;
+        final BlockPos[] positions;
 
         InvokeSource(World world, BlockPos[] positions) {
             this.world = world;

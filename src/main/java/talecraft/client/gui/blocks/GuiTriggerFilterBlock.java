@@ -14,7 +14,7 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.TriggerFilterBlockTileEntity;
 
 public class GuiTriggerFilterBlock extends QADGuiScreen {
-    TriggerFilterBlockTileEntity tileEntity;
+    final TriggerFilterBlockTileEntity tileEntity;
 
 
     public GuiTriggerFilterBlock(TriggerFilterBlockTileEntity tileEntity) {
@@ -35,7 +35,7 @@ public class GuiTriggerFilterBlock extends QADGuiScreen {
     }
 
     private class REMOTENBTTICKBOXMODEL implements TickBoxModel {
-        String tagName;
+        final String tagName;
         boolean lastKnownState;
 
         public REMOTENBTTICKBOXMODEL(String string, boolean doFilterOn) {

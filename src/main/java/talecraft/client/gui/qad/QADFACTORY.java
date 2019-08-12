@@ -43,7 +43,7 @@ public class QADFACTORY {
         return textField;
     }
 
-    public static final QADTextField createTextField(float number, int x, int y, int width) {
+    public static QADTextField createTextField(float number, int x, int y, int width) {
         QADTextField textField = new QADTextField(Minecraft.getMinecraft().fontRenderer, x, y, width, 16);
         textField.setText(Float.toString(number));
         return textField;
@@ -72,7 +72,7 @@ public class QADFACTORY {
         QADTextField textField = new QADTextField(Minecraft.getMinecraft().fontRenderer, x, y, width, 16);
         textField.setText(Integer.toString(number));
         textField.textChangedListener = new TextChangeListener() {
-            int max = MAX;
+            final int max = MAX;
 
             @Override
             public void call(QADTextField qadTextField, String text) {
@@ -100,8 +100,8 @@ public class QADFACTORY {
         QADTextField textField = new QADTextField(Minecraft.getMinecraft().fontRenderer, x, y, width, 16);
         textField.setText(Integer.toString(number));
         textField.textChangedListener = new TextChangeListener() {
-            int max = MAX;
-            int min = MIN;
+            final int max = MAX;
+            final int min = MIN;
 
             @Override
             public void call(QADTextField qadTextField, String text) {

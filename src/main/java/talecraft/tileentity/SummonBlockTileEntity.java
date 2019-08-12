@@ -314,6 +314,7 @@ public class SummonBlockTileEntity extends TCTileEntity {
                 return;
             }
 
+            //noinspection ConstantConditions
             summonData.merge(entityData);
         }
 

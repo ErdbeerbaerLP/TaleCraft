@@ -18,6 +18,7 @@ import talecraft.client.gui.blocks.GuiUpdateDetectorBlock;
 import talecraft.invoke.EnumTriggerState;
 import talecraft.tileentity.BlockUpdateDetectorTileEntity;
 
+@SuppressWarnings("deprecation")
 public class BlockUpdateDetector extends TCBlockContainer implements TCITriggerableBlock {
 
     public BlockUpdateDetector() {

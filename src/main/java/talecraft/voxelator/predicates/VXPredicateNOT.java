@@ -10,7 +10,7 @@ import talecraft.voxelator.Voxelator;
 import talecraft.voxelator.Voxelator.FilterFactory;
 
 public final class VXPredicateNOT extends VXPredicate {
-    public static FilterFactory FACTORY = new FilterFactory() {
+    public static final FilterFactory FACTORY = new FilterFactory() {
         @Override
         public String getName() {
             return "not";

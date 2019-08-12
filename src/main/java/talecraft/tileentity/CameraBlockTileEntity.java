@@ -18,7 +18,7 @@ import java.util.List;
 public class CameraBlockTileEntity extends TCTileEntity {
     // private boolean mute;
     private static final double moveSpeed = 0.01;
-    private List<CameraPos> cpos;
+    private final List<CameraPos> cpos;
 
     public CameraBlockTileEntity() {
         cpos = Lists.newArrayList();
@@ -130,6 +130,7 @@ public class CameraBlockTileEntity extends TCTileEntity {
         }
     }
 
+    @SuppressWarnings("FieldCanBeLocal")
     public class CameraThread extends Thread {
 
         private EntityPlayer player;

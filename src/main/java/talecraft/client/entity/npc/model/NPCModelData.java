@@ -8,15 +8,15 @@ import java.util.HashMap;
 
 public class NPCModelData {
 
-    public HashMap<String, NPCModelPatternPart> parts = new HashMap<>();
-    public HashMap<String, ModelRenderer> animation = new HashMap<>();
+    public final HashMap<String, NPCModelPatternPart> parts = new HashMap<>();
+    public final HashMap<String, ModelRenderer> animation = new HashMap<>();
 
     public NPCModelPattern currentModel;
 
     public int textureHeight;
     public int textureWidth;
 
-    private NPCModel npcmodel;
+    private final NPCModel npcmodel;
 
     public NPCModelData(NPCModel model) {
         this.npcmodel = model;

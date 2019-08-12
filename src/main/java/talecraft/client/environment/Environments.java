@@ -26,7 +26,7 @@ public class Environments {
     private static final ResourceLocation environmentRes = new ResourceLocation("talecraft:environment.json");
     private static final Map<String, Environment> mapping = new HashMap<>();
     private static final Gson gson = new Gson();
-    private static String currentEnvironment = null;
+    private static final String currentEnvironment = null;
 
     public static Environment getCurrent() {
         Environment env = currentEnvironment == null ? null : mapping.get(currentEnvironment);

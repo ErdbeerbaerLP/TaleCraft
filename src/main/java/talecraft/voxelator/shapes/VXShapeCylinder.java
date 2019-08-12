@@ -19,7 +19,7 @@ public class VXShapeCylinder extends VXShape {
             new BooleanBrushParameter("hollow", false)
     };
 
-    public static ShapeFactory FACTORY = new ShapeFactory() {
+    public static final ShapeFactory FACTORY = new ShapeFactory() {
         @Override
         public String getName() {
             return "cylinder";
@@ -45,6 +45,7 @@ public class VXShapeCylinder extends VXShape {
                 shapeData.setString("type", getName());
                 shapeData.setFloat("radius", Float.parseFloat(parameters[0]));
                 shapeData.setInteger("height", Integer.parseInt(parameters[1]));
+                //noinspection ConstantConditions
                 shapeData.setBoolean("hollow", Boolean.parseBoolean(parameters[2]));
                 return shapeData;
             }

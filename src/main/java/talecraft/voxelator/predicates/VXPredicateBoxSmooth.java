@@ -15,7 +15,7 @@ public final class VXPredicateBoxSmooth extends VXPredicate {
             new IntegerBrushParameter("range", 2, 9, 6)
     };
 
-    public static FilterFactory FACTORY = new FilterFactory() {
+    public static final FilterFactory FACTORY = new FilterFactory() {
         @Override
         public String getName() {
             return "boxsmooth";

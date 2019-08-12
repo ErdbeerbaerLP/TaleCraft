@@ -8,8 +8,8 @@ import talecraft.client.ClientNetworkHandler;
 import talecraft.network.packets.StringNBTCommandPacket;
 
 public class BlockInvokeHolder implements IInvokeHolder {
-    BlockPos blockPosition;
-    String invokeName;
+    final BlockPos blockPosition;
+    final String invokeName;
 
     public BlockInvokeHolder(BlockPos position, String invokeName) {
         this.blockPosition = position;

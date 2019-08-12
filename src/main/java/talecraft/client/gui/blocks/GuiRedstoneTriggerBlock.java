@@ -8,7 +8,7 @@ import talecraft.client.gui.qad.QADLabel;
 import talecraft.tileentity.RedstoneTriggerBlockTileEntity;
 
 public class GuiRedstoneTriggerBlock extends QADGuiScreen {
-    RedstoneTriggerBlockTileEntity tileEntity;
+    final RedstoneTriggerBlockTileEntity tileEntity;
 
     public GuiRedstoneTriggerBlock(RedstoneTriggerBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;

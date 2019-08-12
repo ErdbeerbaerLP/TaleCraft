@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class WrapperClassCache {
 
-    private Map<IObjectWrapper, Cache> cache = new HashMap<>();
+    private final Map<IObjectWrapper, Cache> cache = new HashMap<>();
 
     /**
      * Gets the cache for the wrapper and if one is not cached

@@ -17,7 +17,7 @@ public final class VXPredicateIsType extends VXPredicate {
             new BlockstateBrushParameter("state", Blocks.AIR)
     };
 
-    public static FilterFactory FACTORY = new FilterFactory() {
+    public static final FilterFactory FACTORY = new FilterFactory() {
         @Override
         public String getName() {
             return "is_type";

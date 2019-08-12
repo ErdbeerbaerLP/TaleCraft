@@ -50,17 +50,14 @@ public class RightClickCommand extends CommandBase {
 
         final BlockPos pos = new BlockPos(xCoord, yCoord, zCoord);
 
-        ClientProxy.shedule(new Runnable() {
-            @Override
-            public void run() {
-                WorldClient world = Minecraft.getMinecraft().world;
-                EntityPlayerSP player = Minecraft.getMinecraft().player;
+        ClientProxy.shedule(() -> {
+            WorldClient world = Minecraft.getMinecraft().world;
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
 
-                IBlockState state = world.getBlockState(pos);
-                Block block = state.getBlock();
+            IBlockState state = world.getBlockState(pos);
+            Block block = state.getBlock();
 
-                block.onBlockActivated(world, pos, state, player, EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
-            }
+            block.onBlockActivated(world, pos, state, player, EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
         });
     }
 }

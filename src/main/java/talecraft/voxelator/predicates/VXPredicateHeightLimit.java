@@ -14,7 +14,7 @@ public final class VXPredicateHeightLimit extends VXPredicate {
             new IntegerBrushParameter("height", 0, 255, 5)
     };
 
-    public static FilterFactory FACTORY = new FilterFactory() {
+    public static final FilterFactory FACTORY = new FilterFactory() {
         @Override
         public String getName() {
             return "limit_height";

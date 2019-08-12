@@ -69,12 +69,7 @@ public class GuiVoxelator extends QADGuiScreen {
 
             // Apply Button
             QADButton apply_button = (QADButton) QADFACTORY.createButton("Apply", 2, 0, 80).setEnabled(true).setName("apply");
-            apply_button.setAction(new Runnable() {
-                @Override
-                public void run() {
-                    applyChanges();
-                }
-            });
+            apply_button.setAction(() -> applyChanges());
             panel.addComponent(apply_button);
         }
 
@@ -106,7 +101,7 @@ public class GuiVoxelator extends QADGuiScreen {
 
                 int yOffset = 2;
                 for (BrushParameter param : params) {
-                    QADRectangularComponent comp = getCompForType(param, 0, yOffset, width / 3 - 3, shape$$);
+                    QADRectangularComponent comp = getCompForType(param, yOffset, width / 3 - 3, shape$$);
 
                     pan_shape.addComponent(comp);
                     yOffset += 22;
@@ -138,7 +133,7 @@ public class GuiVoxelator extends QADGuiScreen {
 
                 int yOffset = 2;
                 for (BrushParameter param : params) {
-                    QADRectangularComponent comp = getCompForType(param, 0, yOffset, width / 3 - 3, filter$$);
+                    QADRectangularComponent comp = getCompForType(param, yOffset, width / 3 - 3, filter$$);
 
                     pan_filter.addComponent(comp);
                     yOffset += 22;
@@ -169,7 +164,7 @@ public class GuiVoxelator extends QADGuiScreen {
 
                 int yOffset = 2;
                 for (BrushParameter param : params) {
-                    QADRectangularComponent comp = getCompForType(param, 0, yOffset, width / 3 - 3, action$$);
+                    QADRectangularComponent comp = getCompForType(param, yOffset, width / 3 - 3, action$$);
 
                     pan_action.addComponent(comp);
                     yOffset += 22;
@@ -200,16 +195,16 @@ public class GuiVoxelator extends QADGuiScreen {
         int columnWidth = getContainerWidth() / columns;
         int columnHeight = getContainerHeight() - tbbxheight - 2;
 
-        box_shape.setBounds(columnWidth * 0 + 1, tbHeight, columnWidth - 2, bxHeight);
-        box_filter.setBounds(columnWidth * 1 + 1, tbHeight, columnWidth - 2, bxHeight);
+        box_shape.setBounds(1, tbHeight, columnWidth - 2, bxHeight);
+        box_filter.setBounds(columnWidth + 1, tbHeight, columnWidth - 2, bxHeight);
         box_action.setBounds(columnWidth * 2 + 1, tbHeight, columnWidth - 2, bxHeight);
 
-        pan_shape.setBounds(columnWidth * 0 + 1, tbbxheight + 1, columnWidth - 2, columnHeight);
-        pan_filter.setBounds(columnWidth * 1 + 1, tbbxheight + 1, columnWidth - 2, columnHeight);
+        pan_shape.setBounds(1, tbbxheight + 1, columnWidth - 2, columnHeight);
+        pan_filter.setBounds(columnWidth + 1, tbbxheight + 1, columnWidth - 2, columnHeight);
         pan_action.setBounds(columnWidth * 2 + 1, tbbxheight + 1, columnWidth - 2, columnHeight);
     }
 
-    private QADRectangularComponent getCompForType(BrushParameter param, int x, int y, int width, NBTTagCompound compound) {
+    private QADRectangularComponent getCompForType(BrushParameter param, int y, int width, NBTTagCompound compound) {
         BPType type = param.getType();
         if (type == BPType.INTEGER) {
             QADSlider slider = new QADSlider(new IntegerSliderModel(compound, param.asIntegerParameter()));
@@ -249,23 +244,20 @@ public class GuiVoxelator extends QADGuiScreen {
                 }
                 QADButton button = new QADButton("Add");
                 button.setBounds(0, taglist.tagCount() * 22, width, 20);
-                button.setAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        taglist.appendTag(new ItemStack(Blocks.STONE).serializeNBT());
-                        GuiVoxelator.this.forceRebuildAll();
-                    }
+                button.setAction(() -> {
+                    taglist.appendTag(new ItemStack(Blocks.STONE).serializeNBT());
+                    GuiVoxelator.this.forceRebuildAll();
                 });
                 panel.addComponent(button);
             }
             return panel;
         }
-        return new QADButton(x, y, width, "error");
+        return new QADButton(0, y, width, "error");
     }
 
 
     public class ShapeItem implements ListModelItem {
-        ShapeFactory factory;
+        final ShapeFactory factory;
 
         private ShapeItem(ShapeFactory fac) {
             this.factory = fac;
@@ -278,7 +270,7 @@ public class GuiVoxelator extends QADGuiScreen {
     }
 
     public class FilterItem implements ListModelItem {
-        FilterFactory factory;
+        final FilterFactory factory;
 
         private FilterItem(FilterFactory fac) {
             this.factory = fac;
@@ -291,7 +283,7 @@ public class GuiVoxelator extends QADGuiScreen {
     }
 
     public class ActionItem implements ListModelItem {
-        ActionFactory factory;
+        final ActionFactory factory;
 
         private ActionItem(ActionFactory fac) {
             this.factory = fac;
@@ -309,11 +301,11 @@ public class GuiVoxelator extends QADGuiScreen {
         final List<ListModelItem> filteredList;
 
         {
-            list = new ArrayList<ListModelItem>();
+            list = new ArrayList<>();
             for (ShapeFactory sf : Voxelator.shapes.values()) {
                 list.add(new ShapeItem(sf));
             }
-            filteredList = new ArrayList<ListModelItem>();
+            filteredList = new ArrayList<>();
             filteredList.addAll(list);
         }
 
@@ -372,11 +364,11 @@ public class GuiVoxelator extends QADGuiScreen {
         final List<ListModelItem> filteredList;
 
         {
-            list = new ArrayList<ListModelItem>();
+            list = new ArrayList<>();
             for (FilterFactory sf : Voxelator.filters.values()) {
                 list.add(new FilterItem(sf));
             }
-            filteredList = new ArrayList<ListModelItem>();
+            filteredList = new ArrayList<>();
             filteredList.addAll(list);
         }
 
@@ -435,11 +427,11 @@ public class GuiVoxelator extends QADGuiScreen {
         final List<ListModelItem> filteredList;
 
         {
-            list = new ArrayList<ListModelItem>();
+            list = new ArrayList<>();
             for (ActionFactory sf : Voxelator.actions.values()) {
                 list.add(new ActionItem(sf));
             }
-            filteredList = new ArrayList<ListModelItem>();
+            filteredList = new ArrayList<>();
             filteredList.addAll(list);
         }
 

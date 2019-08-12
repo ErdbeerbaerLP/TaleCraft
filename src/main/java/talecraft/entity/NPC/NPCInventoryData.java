@@ -9,7 +9,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class NPCInventoryData {
@@ -42,9 +41,7 @@ public class NPCInventoryData {
     public static List<ItemStack> getAcceptableItems(EntityEquipmentSlot slot) {
         List<ItemStack> items = Lists.newArrayList();
 
-        Iterator<Item> iter = Item.REGISTRY.iterator();
-        while (iter.hasNext()) {
-            Item item = iter.next();
+        for (Item item : Item.REGISTRY) {
             if (isAcceptable(slot, item)) items.add(new ItemStack(item));
         }
         return items;
@@ -55,7 +52,8 @@ public class NPCInventoryData {
             if (item instanceof ItemArmor) {
                 ItemArmor armor = (ItemArmor) item;
                 if (armor.armorType == slot) return true;
-                else return slot == EntityEquipmentSlot.HEAD && item instanceof ItemBlock;
+                else //noinspection ConstantConditions
+                    return slot == EntityEquipmentSlot.HEAD && item instanceof ItemBlock;
             } else return false;
         } else {
             return true;
@@ -132,7 +130,6 @@ public class NPCInventoryData {
                 return;
             case OFFHAND:
                 offHand = item;
-                return;
         }
     }
 

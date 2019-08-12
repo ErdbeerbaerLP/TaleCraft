@@ -8,10 +8,10 @@ import java.util.List;
 
 public class QADDropdownBox extends QADRectangularComponent {
 
-    private boolean isVisible = true;
+    private final boolean isVisible = true;
     private boolean isFocused = false;
 
-    private boolean fieldbox_visible = true;
+    private final boolean fieldbox_visible = true;
     private int fieldbox_width = 100;
     private int fieldbox_height = 20;
     private int fieldbox_x = 0;
@@ -26,10 +26,10 @@ public class QADDropdownBox extends QADRectangularComponent {
 
     private int dropbox_scroll = 0;
 
-    private int dropbox_rowcount = 7;
-    private int dropbox_rowheight = 20;
+    private final int dropbox_rowcount = 7;
+    private final int dropbox_rowheight = 20;
     // private int dropbox_highlight = -1;
-    private ListModel dropbox_model;
+    private final ListModel dropbox_model;
     private String dropbox_filterstr = "";
     private ListModelItem dropbox_selected = null;
 

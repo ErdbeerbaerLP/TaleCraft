@@ -76,6 +76,7 @@ public class DecoratorPacket implements IMessage {
                 tag.setString("decor", message.decoration);
                 tag.setInteger("amount", message.amount);
                 tag.setInteger("radius", message.radius);
+                //noinspection ConstantConditions
                 item.getTagCompound().setTag("decorator_data", tag);
             } else TaleCraft.logger.error("Currently Held Item Is Not A Decorator");
             return null;

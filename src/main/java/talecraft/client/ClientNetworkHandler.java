@@ -57,7 +57,7 @@ public class ClientNetworkHandler {
             // Open the GUI in the next tick.
             proxy.sheduleClientTickTask(() -> {
                 RemoteEntityDataLink dataLink = new RemoteEntityDataLink() {
-                    UUID entityUUID = uuid;
+                    final UUID entityUUID = uuid;
 
                     @Override
                     public void updateData(NBTTagCompound entityData) {

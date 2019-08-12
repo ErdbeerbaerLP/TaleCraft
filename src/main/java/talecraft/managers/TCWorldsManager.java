@@ -6,8 +6,8 @@ import talecraft.TaleCraft;
 import java.util.HashMap;
 
 public class TCWorldsManager {
-    private TaleCraft taleCraft;
-    private HashMap<World, TCWorldManager> worldMap;
+    private final TaleCraft taleCraft;
+    private final HashMap<World, TCWorldManager> worldMap;
 
     public TCWorldsManager(TaleCraft tc) {
         worldMap = new HashMap<>();

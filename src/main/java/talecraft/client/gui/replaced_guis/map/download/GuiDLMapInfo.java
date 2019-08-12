@@ -12,9 +12,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("CollectionAddAllCanBeReplacedWithConstructor")
 public class GuiDLMapInfo extends QADGuiScreen {
-    public GuiScreen parent;
-    public DownloadableMap map;
+    public final GuiScreen parent;
+    public final DownloadableMap map;
     private QADButton btnBack;
     private QADButton btnDownload;
     private QADButton btnDownloadMods;
@@ -45,43 +46,27 @@ public class GuiDLMapInfo extends QADGuiScreen {
         descPanel.setPosition((width / 2) - (descPanel.getWidth() / 2), (height / 2) - (descPanel.getHeight() / 2));
 
         final boolean downloaded = new File("." + File.separator + "saves" + File.separator + ".TC_DOWNLOADS" + File.separator + DownloadZip.getFileName(map.dlURL)).exists();
-        mapURL.setAction(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                GuiConfirmOpenLink guiconfirmopenlink = new GuiConfirmOpenLink(GuiDLMapInfo.this, map.mapURL, 13, false);
-                guiconfirmopenlink.disableSecurityWarning();
-                mc.displayGuiScreen(guiconfirmopenlink);
-            }
+        mapURL.setAction(() -> {
+            // TODO Auto-generated method stub
+            GuiConfirmOpenLink guiconfirmopenlink = new GuiConfirmOpenLink(GuiDLMapInfo.this, map.mapURL, 13, false);
+            guiconfirmopenlink.disableSecurityWarning();
+            mc.displayGuiScreen(guiconfirmopenlink);
         });
-        btnBack.setAction(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                mc.displayGuiScreen(parent);
-            }
+        btnBack.setAction(() -> {
+            // TODO Auto-generated method stub
+            mc.displayGuiScreen(parent);
         });
 
-        if (!downloaded) btnDownload.setAction(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                mc.displayGuiScreen(new GuiDownloading(GuiDLMapInfo.this, new DownloadZip(map.dlURL)));
-                buildGui();
-            }
+        if (!downloaded) btnDownload.setAction(() -> {
+            // TODO Auto-generated method stub
+            mc.displayGuiScreen(new GuiDownloading(GuiDLMapInfo.this, new DownloadZip(map.dlURL)));
+            buildGui();
         });
         else {
-            btnDownload.setAction(new Runnable() {
+            btnDownload.setAction(() -> {
+                // TODO Auto-generated method stub
+                mc.displayGuiScreen(new GuiDownloading(GuiDLMapInfo.this, map.dlURL));
 
-                @Override
-                public void run() {
-                    // TODO Auto-generated method stub
-                    mc.displayGuiScreen(new GuiDownloading(GuiDLMapInfo.this, map.dlURL));
-
-                }
             });
             btnDownload.setText("Unzip again");
         }
@@ -107,7 +92,7 @@ public class GuiDLMapInfo extends QADGuiScreen {
         String desc = map.description;
         desc = desc.replace("\\\\n", "\n");
         desc = desc.replace("\\n", "\n");
-        List<String> descLines1 = new ArrayList<String>();
+        List<String> descLines1 = new ArrayList<>();
         descLines1.addAll(this.fontRenderer.listFormattedStringToWidth(desc, descPanel.getContainerWidth() - 15));
         descPanel.removeAllComponents();
         int y = 10;

@@ -77,6 +77,7 @@ public class EditEntityCommand extends CommandBase {
 
         NBTTagCompound entityData = new NBTTagCompound();
         theEntity.writeToNBT(entityData);
+        //noinspection ConstantConditions
         entityData.setString("id", theEntity instanceof EntityPlayerMP ? "Player" : EntityList.getEntityString(theEntity));
 
         NBTTagCompound commandData = new NBTTagCompound();

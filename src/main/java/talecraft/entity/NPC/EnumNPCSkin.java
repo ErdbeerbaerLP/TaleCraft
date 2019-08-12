@@ -42,9 +42,9 @@ public enum EnumNPCSkin {
     Cow(new ResourceLocation("textures/entity/cow/cow.png"), EnumNPCModel.Cow),
     Mooshroom(new ResourceLocation("textures/entity/cow/mooshroom.png"), EnumNPCModel.Cow);
 
-    private ResourceLocation resloc;
-    private EnumNPCModel model;
-    private String author;
+    private final ResourceLocation resloc;
+    private final EnumNPCModel model;
+    private final String author;
 
     EnumNPCSkin(ResourceLocation location, EnumNPCModel model) {
         this(location, null, model);
@@ -57,7 +57,7 @@ public enum EnumNPCSkin {
     }
 
     public static EnumNPCSkin[] getSkinsWithModel(EnumNPCModel type) {
-        List<EnumNPCSkin> skins = new ArrayList<EnumNPCSkin>();
+        List<EnumNPCSkin> skins = new ArrayList<>();
         for (int i = 0; i < values().length; i++) {
             if (values()[i].getModelType() == type) skins.add(values()[i]);
         }

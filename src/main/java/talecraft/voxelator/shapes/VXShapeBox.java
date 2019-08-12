@@ -20,7 +20,7 @@ public class VXShapeBox extends VXShape {
             new BooleanBrushParameter("hollow", false)
     };
 
-    public static ShapeFactory FACTORY = new ShapeFactory() {
+    public static final ShapeFactory FACTORY = new ShapeFactory() {
         @Override
         public String getName() {
             return "box";
@@ -47,6 +47,7 @@ public class VXShapeBox extends VXShape {
                 NBTTagCompound shapeData = new NBTTagCompound();
                 shapeData.setString("type", getName());
                 shapeData.setInteger("width", Integer.parseInt(parameters[0]));
+                //noinspection ConstantConditions
                 shapeData.setInteger("height", Integer.parseInt(parameters[1]));
                 shapeData.setInteger("length", Integer.parseInt(parameters[2]));
                 shapeData.setBoolean("hollow", Boolean.parseBoolean(parameters[3]));

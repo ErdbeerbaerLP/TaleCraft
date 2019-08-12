@@ -185,7 +185,7 @@ public class Invoke {
         if (block instanceof BlockLever) {
             state = state.cycleProperty(BlockLever.POWERED);
             world.setBlockState(position, state, 3);
-            world.playSound(position.getX() + 0.5D, position.getY() + 0.5D, position.getZ() + 0.5D, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, state.getValue(BlockLever.POWERED).booleanValue() ? 0.6F : 0.5F, false);
+            world.playSound(position.getX() + 0.5D, position.getY() + 0.5D, position.getZ() + 0.5D, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3F, state.getValue(BlockLever.POWERED) ? 0.6F : 0.5F, false);
             world.notifyNeighborsOfStateChange(position, block, true);
             EnumFacing enumfacing1 = state.getValue(BlockLever.FACING).getFacing();
             world.notifyNeighborsOfStateChange(position.offset(enumfacing1.getOpposite()), block, true);

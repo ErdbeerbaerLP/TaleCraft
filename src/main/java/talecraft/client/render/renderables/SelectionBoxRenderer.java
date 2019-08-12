@@ -13,8 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import talecraft.TaleCraft;
 import talecraft.TaleCraftItems;
@@ -23,8 +21,8 @@ import talecraft.client.render.IRenderable;
 import talecraft.client.render.renderers.BoxRenderer;
 import talecraft.proxy.ClientProxy;
 import talecraft.util.WorldHelper;
-import talecraft.util.WorldHelper.BlockRegionIterator;
 
+@SuppressWarnings("ConstantConditions")
 public class SelectionBoxRenderer implements IRenderable {
 
     @Override
@@ -105,26 +103,23 @@ public class SelectionBoxRenderer implements IRenderable {
                         final int b = 255;
                         final int a = 255;
 
-                        WorldHelper.foreach(mc.world, ix, iy, iz, ax, ay, az, new BlockRegionIterator() {
-                            @Override
-                            public void $(World world, IBlockState state, BlockPos pos) {
-                                if (!state.equals(stvoid))
-                                    return;
+                        WorldHelper.foreach(mc.world, ix, iy, iz, ax, ay, az, (world, state, pos) -> {
+                            if (!state.equals(stvoid))
+                                return;
 
-                                float x = pos.getX();
-                                float y = pos.getY();
-                                float z = pos.getZ();
+                            float x = pos.getX();
+                            float y = pos.getY();
+                            float z = pos.getZ();
 
-                                vertexbuffer.pos(x + m, y + m, z + m).color(r, g, b, a).endVertex();
-                                vertexbuffer.pos(x + M, y + M, z + M).color(r, g, b, a).endVertex();
-                                vertexbuffer.pos(x + M, y + m, z + m).color(r, g, b, a).endVertex();
-                                vertexbuffer.pos(x + m, y + M, z + M).color(r, g, b, a).endVertex();
+                            vertexbuffer.pos(x + m, y + m, z + m).color(r, g, b, a).endVertex();
+                            vertexbuffer.pos(x + M, y + M, z + M).color(r, g, b, a).endVertex();
+                            vertexbuffer.pos(x + M, y + m, z + m).color(r, g, b, a).endVertex();
+                            vertexbuffer.pos(x + m, y + M, z + M).color(r, g, b, a).endVertex();
 
-                                vertexbuffer.pos(x + m, y + m, z + M).color(r, g, b, a).endVertex();
-                                vertexbuffer.pos(x + M, y + M, z + m).color(r, g, b, a).endVertex();
-                                vertexbuffer.pos(x + M, y + m, z + M).color(r, g, b, a).endVertex();
-                                vertexbuffer.pos(x + m, y + M, z + m).color(r, g, b, a).endVertex();
-                            }
+                            vertexbuffer.pos(x + m, y + m, z + M).color(r, g, b, a).endVertex();
+                            vertexbuffer.pos(x + M, y + M, z + m).color(r, g, b, a).endVertex();
+                            vertexbuffer.pos(x + M, y + m, z + M).color(r, g, b, a).endVertex();
+                            vertexbuffer.pos(x + m, y + M, z + m).color(r, g, b, a).endVertex();
                         });
                         tessellator.draw();
                         GlStateManager.glLineWidth(1f);
@@ -162,7 +157,7 @@ public class SelectionBoxRenderer implements IRenderable {
 
                 // Render secondary (no-depth) box
                 /// XXX: Temporarily disabled the 'xray selection' feature since it isnt working as intended.
-                if (Boolean.FALSE.booleanValue()) {
+                if (false) {
                     mc.getTextureManager().bindTexture(ClientResources.texColorWhite);
                     GlStateManager.disableTexture2D();
                     GlStateManager.disableDepth();

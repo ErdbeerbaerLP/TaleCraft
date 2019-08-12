@@ -113,9 +113,11 @@ public class TaleCraftItems {
         registerItemBlocks();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static void registerItemBlocks() {
         for (Block block : TaleCraftBlocks.blocks) {
             if (TaleCraftBlocks.customItemBlocks.contains(block)) {
+                //noinspection ConstantConditions
                 registry.register(new TaleCraftBlocks.ItemBlockBlankBlock(block).setRegistryName(block.getRegistryName()));
             } else {
                 registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));

@@ -1,6 +1,5 @@
 package talecraft.commands;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -119,11 +118,10 @@ public class TargetedTeleportCommand extends TCCommandBase {
 
         if (funcStr.startsWith("@")) {
             // selector
-            String selector = funcStr;
-            entitiesToTeleport = EntitySelector.matchEntities(sender, selector, Entity.class);
+            entitiesToTeleport = EntitySelector.matchEntities(sender, funcStr, Entity.class);
 
             if (entitiesToTeleport.isEmpty()) {
-                throw new CommandException("No entity found: Selector " + selector + " yielded no results.");
+                throw new CommandException("No entity found: Selector " + funcStr + " yielded no results.");
             }
         } else if (funcStr.equalsIgnoreCase("self")) {
             // self
@@ -143,11 +141,10 @@ public class TargetedTeleportCommand extends TCCommandBase {
             }
         } else {
             // name
-            String name = funcStr;
-            entitiesToTeleport = findNamedEntity(sender.getEntityWorld(), name);
+            entitiesToTeleport = findNamedEntity(sender.getEntityWorld(), funcStr);
 
             if (entitiesToTeleport.isEmpty()) {
-                throw new CommandException("No entity found: There are no entities with the name '" + name + "'.");
+                throw new CommandException("No entity found: There are no entities with the name '" + funcStr + "'.");
             }
         }
 
@@ -157,12 +154,7 @@ public class TargetedTeleportCommand extends TCCommandBase {
     }
 
     private List<Entity> findNamedEntity(final World world, final String name) {
-        return world.getEntities(Entity.class, new Predicate<Entity>() {
-            @Override
-            public boolean apply(Entity input) {
-                return name.equals(input.getName());
-            }
-        });
+        return world.getEntities(Entity.class, input -> name.equals(input.getName()));
     }
 
     private void teleport(List<Entity> entitiesToTeleport, Vec3d target) throws CommandException {
@@ -181,7 +173,8 @@ public class TargetedTeleportCommand extends TCCommandBase {
         }
 
         // XXX DISABLED FUNCTIONALITY: This doesn't work as expected.
-        if (Boolean.FALSE.booleanValue() && entity instanceof EntityPlayerMP) {
+        //noinspection ConstantConditions
+        if (false && entity instanceof EntityPlayerMP) {
             // special case code
             EnumSet<EnumFlags> enumset = EnumSet.noneOf(SPacketPlayerPosLook.EnumFlags.class);
             float f = entity.rotationPitch;

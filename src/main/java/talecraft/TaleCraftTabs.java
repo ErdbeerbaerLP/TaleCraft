@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TaleCraftTabs {
-    public static CreativeTabs tab_TaleCraftTab = new CreativeTabs("talecraftTab") {
+    public static final CreativeTabs tab_TaleCraftTab = new CreativeTabs("talecraftTab") {
         @Override
         public ItemStack getTabIconItem() {
             return new ItemStack(TaleCraftItems.filler);
@@ -27,7 +27,7 @@ public class TaleCraftTabs {
             super.displayAllRelevantItems(items);
         }
     };
-    public static CreativeTabs tab_TaleCraftDecorationTab = new CreativeTabs("talecraftDecoTab") {
+    public static final CreativeTabs tab_TaleCraftDecorationTab = new CreativeTabs("talecraftDecoTab") {
         @Override
         public ItemStack getTabIconItem() {
             return new ItemStack(Items.DYE, 1, this.getIconItemDamage());
@@ -38,13 +38,13 @@ public class TaleCraftTabs {
             return (int) ((Minecraft.getSystemTime() / 100D) % 16);
         }
     };
-    public static CreativeTabs tab_TaleCraftWorldTab = new CreativeTabs("talecraftWorldTab") {
+    public static final CreativeTabs tab_TaleCraftWorldTab = new CreativeTabs("talecraftWorldTab") {
         @Override
         public ItemStack getTabIconItem() {
             return new ItemStack(TaleCraftItems.goldKey);
         }
     };
-    public static CreativeTabs tab_TaleCraftWeaponTab = new CreativeTabs("talecraftWeaponTab") {
+    public static final CreativeTabs tab_TaleCraftWeaponTab = new CreativeTabs("talecraftWeaponTab") {
         @Override
         public ItemStack getTabIconItem() {
             return new ItemStack(TaleCraftItems.bomb);
@@ -52,7 +52,7 @@ public class TaleCraftTabs {
     };
 
     // Empty stub method for 'touching' the class
-    public static final void init() {
+    public static void init() {
     }
 
 }

@@ -5,7 +5,6 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiYesNo;
-import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.I18n;
@@ -41,6 +40,7 @@ import java.text.SimpleDateFormat;
  *
  * @author ErdbeerbaerLP
  */
+@SuppressWarnings("ConstantConditions")
 public class GuiListSaveCreatorEntry implements GuiListExtended.IGuiListEntry {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat();
@@ -54,7 +54,7 @@ public class GuiListSaveCreatorEntry implements GuiListExtended.IGuiListEntry {
     private File iconFile;
     private DynamicTexture icon;
     private long lastClickTime;
-    private String worldPathName;
+    private final String worldPathName;
 
     public GuiListSaveCreatorEntry(GuiListSaveCreator newGuiListWorldSelection, WorldSummary worldSummaryIn, ISaveFormat saveFormat) {
         this.containingListSel = newGuiListWorldSelection;
@@ -203,23 +203,19 @@ public class GuiListSaveCreatorEntry implements GuiListExtended.IGuiListEntry {
             e.printStackTrace();
         }
         if (this.worldSummary.askToOpenWorld()) {
-            this.client.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback() {
-                public void confirmClicked(boolean result, int id) {
-                    if (result) {
-                        GuiListSaveCreatorEntry.this.loadWorld();
-                    } else {
-                        GuiListSaveCreatorEntry.this.client.displayGuiScreen(GuiListSaveCreatorEntry.this.worldSelScreen);
-                    }
+            this.client.displayGuiScreen(new GuiYesNo((result, id) -> {
+                if (result) {
+                    GuiListSaveCreatorEntry.this.loadWorld();
+                } else {
+                    GuiListSaveCreatorEntry.this.client.displayGuiScreen(GuiListSaveCreatorEntry.this.worldSelScreen);
                 }
             }, I18n.format("selectWorld.versionQuestion"), I18n.format("selectWorld.versionWarning", this.worldSummary.getVersionName()), I18n.format("selectWorld.versionJoinButton"), I18n.format("gui.cancel"), 0));
         } else if (worldComp != null && worldComp.hasKey("version") && !worldComp.getString("version").equals(Reference.MOD_VERSION) && !worldComp.getString("version").equals("vanilla")) {
-            this.client.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback() {
-                public void confirmClicked(boolean result, int id) {
-                    if (result) {
-                        GuiListSaveCreatorEntry.this.loadWorld();
-                    } else {
-                        GuiListSaveCreatorEntry.this.client.displayGuiScreen(GuiListSaveCreatorEntry.this.worldSelScreen);
-                    }
+            this.client.displayGuiScreen(new GuiYesNo((result, id) -> {
+                if (result) {
+                    GuiListSaveCreatorEntry.this.loadWorld();
+                } else {
+                    GuiListSaveCreatorEntry.this.client.displayGuiScreen(GuiListSaveCreatorEntry.this.worldSelScreen);
                 }
             }, I18n.format("selectWorld.versionQuestion"), "This world was loaded in Talecraft version " + worldComp.getString("version") + " and loading it in this version could cause corruption!", I18n.format("selectWorld.versionJoinButton"), I18n.format("gui.cancel"), 0));
 

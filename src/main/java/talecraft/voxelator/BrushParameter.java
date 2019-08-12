@@ -5,7 +5,7 @@ import talecraft.voxelator.params.*;
 public abstract class BrushParameter {
     public static final BrushParameter[] NO_PARAMETERS = new BrushParameter[0];
     // name
-    private String name;
+    private final String name;
 
     public BrushParameter(String name) {
         this.name = name;

@@ -6,7 +6,7 @@ import talecraft.entity.NPC.NPCData;
 
 public class PanelQuests extends NPCPanel {
 
-    private QADTickBox has_quests;
+    private final QADTickBox has_quests;
 
     public PanelQuests(NPCData data, int width, int height) {
         super(data, width, height);

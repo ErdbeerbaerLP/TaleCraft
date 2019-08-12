@@ -1,7 +1,5 @@
 package talecraft.client.gui.qad;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,6 +15,7 @@ import talecraft.client.gui.qad.model.DefaultTextFieldModel;
 import talecraft.client.gui.vcui.VCUIRenderer;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * This entire class is simply a full-on copy of {@link QADTextField}<br><br>
@@ -35,8 +34,8 @@ public class QADColorTextField extends QADRectangularComponent {
     public int yPosition;
     public int width;
     public int height;
-    private Predicate<String> field_175209_y = Predicates.alwaysTrue();
-    private String[] autoCompleteOptions = new String[]{"\u00A711\u00A722\u00A733\u00A744\u00A755\u00A766\u00A777\u00A788\u00A799\u00A700\u00A7aa\u00A7bb\u00A7cc\u00A7dd\u00A7ee\u00A7ff\u00A7ll\u00A7f\u00A7mm\u00A7f\u00A7nn\u00A7f\u00A7oo \u00A7fr=reset"};
+    private final Predicate<String> field_175209_y = s -> true;
+    private final String[] autoCompleteOptions = new String[]{"\u00A711\u00A722\u00A733\u00A744\u00A755\u00A766\u00A777\u00A788\u00A799\u00A700\u00A7aa\u00A7bb\u00A7cc\u00A7dd\u00A7ee\u00A7ff\u00A7ll\u00A7f\u00A7mm\u00A7f\u00A7nn\u00A7f\u00A7oo \u00A7fr=reset"};
     private TextFieldModel model;
     private int maxStringLength = 64;
     private int cursorCounter;
@@ -309,20 +308,16 @@ public class QADColorTextField extends QADRectangularComponent {
     @Override
     public void onKeyTyped(char p_146201_1_, int p_146201_2_) {
         if (!this.isFocused || (!(model.getTextLength() + 1 < this.maxStringLength) && p_146201_2_ != 14)) {
-            return;
         } else if (GuiScreen.isKeyComboCtrlA(p_146201_2_)) {
             this.setCursorPositionEnd();
             this.setSelectionPos(0);
-            return;
         } else if (GuiScreen.isKeyComboCtrlC(p_146201_2_)) {
             GuiScreen.setClipboardString(this.getSelectedText());
-            return;
         } else if (GuiScreen.isKeyComboCtrlV(p_146201_2_)) {
             if (this.isEnabled) {
                 this.writeText(GuiScreen.getClipboardString());
             }
 
-            return;
         } else if (GuiScreen.isKeyComboCtrlX(p_146201_2_)) {
             GuiScreen.setClipboardString(this.getSelectedText());
 
@@ -330,7 +325,6 @@ public class QADColorTextField extends QADRectangularComponent {
                 this.writeText("");
             }
 
-            return;
         } else {
             switch (p_146201_2_) {
                 case 14:
@@ -409,9 +403,7 @@ public class QADColorTextField extends QADRectangularComponent {
                             this.writeText(Character.toString(p_146201_1_));
                         }
 
-                        return;
                     } else {
-                        return;
                     }
 
             }
@@ -434,7 +426,7 @@ public class QADColorTextField extends QADRectangularComponent {
     }
 
     public void setText(String newText) {
-        if (this.field_175209_y.apply(newText)) {
+        if (this.field_175209_y.test(newText)) {
             if (newText.length() > this.maxStringLength) {
                 model.setText(newText.substring(0, this.maxStringLength));
             } else {
@@ -482,7 +474,7 @@ public class QADColorTextField extends QADRectangularComponent {
             s1 = s1 + model.getText().substring(j);
         }
 
-        if (this.field_175209_y.apply(s1)) {
+        if (this.field_175209_y.test(s1)) {
             model.setText(s1);
             this.moveCursorBy(i - this.selectionEnd + l);
 

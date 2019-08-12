@@ -11,7 +11,7 @@ public class PlayerNBTDataMergePacketHandler {
         final ClientProxy cproxy = TaleCraft.proxy.asClient();
         final PlayerNBTDataMergePacket mpakDataMerge = message;
         cproxy.sheduleClientTickTask(new Runnable() {
-            Minecraft micr = ClientProxy.mc;
+            final Minecraft micr = ClientProxy.mc;
 
             @Override
             public void run() {

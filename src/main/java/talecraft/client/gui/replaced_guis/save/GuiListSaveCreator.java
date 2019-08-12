@@ -24,7 +24,7 @@ public class GuiListSaveCreator extends GuiListExtended {
     private static final Logger LOGGER = LogManager.getLogger();
     private final SaveCreator worldSelection;
     private final List<GuiListSaveCreatorEntry> entries = Lists.newArrayList();
-    public String worldPathName;
+    public final String worldPathName;
     /**
      * Index to the currently selected world
      */

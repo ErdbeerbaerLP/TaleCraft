@@ -20,7 +20,7 @@ public class SendMessage {
             if (latest.isGreaterVersion(current)) {
                 final ClientProxy cproxy = TaleCraft.proxy.asClient();
                 cproxy.sheduleClientTickTask(new Runnable() {
-                    Minecraft mc = ClientProxy.mc;
+                    final Minecraft mc = ClientProxy.mc;
 
                     @Override
                     public void run() {

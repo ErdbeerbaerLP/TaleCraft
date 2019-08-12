@@ -65,7 +65,7 @@ public interface INPCAnimationInternal {
 
             EntityNPC npc = (EntityNPC) entityIn;
 
-            boolean flag = entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).getTicksElytraFlying() > 4;
+            @SuppressWarnings("ConstantConditions") boolean flag = entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).getTicksElytraFlying() > 4;
 
             ModelRenderer bipedRightArm = data.animation.get("rightarm");
             ModelRenderer bipedLeftArm = data.animation.get("leftarm");

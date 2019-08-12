@@ -65,12 +65,12 @@ public class WorkbenchManager extends ArrayList<IRecipe> {
             NBTTagCompound stackTag = tag.getCompoundTag("item_" + i);
             if (stackTag.hasNoTags()) {
                 ingredients.add(Ingredient.fromStacks(ItemStack.EMPTY));
-                continue;
             } else {
                 ingredients.add(Ingredient.fromStacks(new ItemStack(stackTag)));
             }
         }
         ItemStack output = new ItemStack(tag.getCompoundTag("output"));
+        //noinspection ConstantConditions
         return new ShapedRecipes(null, width, height, ingredients, output);
     }
 

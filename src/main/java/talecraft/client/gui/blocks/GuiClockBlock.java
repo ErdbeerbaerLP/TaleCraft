@@ -12,7 +12,7 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.ClockBlockTileEntity;
 
 public class GuiClockBlock extends QADGuiScreen {
-    ClockBlockTileEntity tileEntity;
+    final ClockBlockTileEntity tileEntity;
 
     public GuiClockBlock(ClockBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;

@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ServerFileSystem {
-    private File root;
+    private final File root;
 
     public ServerFileSystem() {
         root = FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory();
@@ -141,6 +141,7 @@ public class ServerFileSystem {
             }
         } else if (file.isDirectory()) {
             nodeData.setString("type", "dir");
+            //noinspection ConstantConditions
             nodeData.setLong("entries", file.list().length);
 
             if (parent != null) {

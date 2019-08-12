@@ -18,7 +18,7 @@ public abstract class VXShape {
     public enum VXShapes {
         Sphere("Sphere"), Box("Box"), Cylinder("Cylinder");
 
-        String name;
+        final String name;
 
         VXShapes(String name) {
             this.name = name;

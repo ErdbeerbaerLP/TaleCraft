@@ -10,9 +10,9 @@ import talecraft.invoke.FileScriptInvoke;
 import talecraft.invoke.NullInvoke;
 
 public class InvokeSwitchGui extends QADGuiScreen {
-    int invokeTypeFlags;
-    IInvokeHolder holder;
-    GuiScreen screen;
+    final int invokeTypeFlags;
+    final IInvokeHolder holder;
+    final GuiScreen screen;
 
     public InvokeSwitchGui(int invokeTypeFlags, IInvokeHolder holder, GuiScreen screen) {
         this.invokeTypeFlags = invokeTypeFlags;

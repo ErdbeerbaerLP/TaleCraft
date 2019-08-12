@@ -50,6 +50,7 @@ public class EmitterBlock extends TCBlockContainer implements TCITriggerableBloc
         if (tileentity instanceof EmitterBlockTileEntity) {
             switch (triggerState) {
                 case ON:
+                case IGNORE:
                     ((EmitterBlockTileEntity) tileentity).setActive(true);
                     break;
                 case OFF:
@@ -57,9 +58,6 @@ public class EmitterBlock extends TCBlockContainer implements TCITriggerableBloc
                     break;
                 case INVERT:
                     ((EmitterBlockTileEntity) tileentity).toggleActive();
-                    break;
-                case IGNORE:
-                    ((EmitterBlockTileEntity) tileentity).setActive(true);
                     break;
                 default:
                     break;

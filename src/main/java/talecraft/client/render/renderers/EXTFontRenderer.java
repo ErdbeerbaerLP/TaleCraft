@@ -39,6 +39,7 @@ public class EXTFontRenderer {
      * @param align  Horizontal Alignment of the string in the box. 0=left, 1=center, 2=right.
      * @param valign Vertical Alignment of the string in the box. 0=top, 1=center, 2=bottom.
      **/
+    @SuppressWarnings("UnusedAssignment")
     public int drawStringInBox(String str, int x, int y, int width, int height, int color, boolean shadow, int align, int valign) {
         int str_w = fr.getStringWidth(str);
         int str_h = fr.FONT_HEIGHT;
@@ -68,6 +69,7 @@ public class EXTFontRenderer {
                 break;
             default:
             case 0:
+                //noinspection ConstantConditions
                 finalY = y;
                 break;
         }

@@ -23,7 +23,7 @@ import java.util.List;
 
 public class PanelTrades extends NPCPanel {
 
-    private List<NPCTrade> trades;
+    private final List<NPCTrade> trades;
     private int index = 0;
 
     public PanelTrades(NPCData data, int width, int height) {
@@ -125,7 +125,7 @@ public class PanelTrades extends NPCPanel {
 
     private class NBTFieldChangeListener implements TextChangeListener {
 
-        private ItemStack stack;
+        private final ItemStack stack;
 
         public NBTFieldChangeListener(ItemStack stack) {
             this.stack = stack;
@@ -144,7 +144,7 @@ public class PanelTrades extends NPCPanel {
 
     private class SizeFieldChangeListener implements TextChangeListener {
 
-        private ItemStack stack;
+        private final ItemStack stack;
 
         public SizeFieldChangeListener(ItemStack stack) {
             this.stack = stack;
@@ -165,8 +165,8 @@ public class PanelTrades extends NPCPanel {
     }
 
     class ListItemListModel implements ListModel {
-        private List<ListModelItem> items;
-        private List<ListModelItem> filtered;
+        private final List<ListModelItem> items;
+        private final List<ListModelItem> filtered;
         private ItemStack stack;
 
         @SuppressWarnings("ConstantConditions")
@@ -242,7 +242,7 @@ public class PanelTrades extends NPCPanel {
 
     class ItemItem implements ListModelItem {
 
-        private ItemStack stack;
+        private final ItemStack stack;
 
         public ItemItem(ItemStack stack) {
             this.stack = stack;

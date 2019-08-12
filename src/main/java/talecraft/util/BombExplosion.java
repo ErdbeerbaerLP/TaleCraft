@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+@SuppressWarnings("ConstantConditions")
 public class BombExplosion { //The same thing as a normal explosion, except it doesn't destroy all blocks
     /**
      * whether or not the explosion sets fire to blocks around it
@@ -79,9 +80,7 @@ public class BombExplosion { //The same thing as a normal explosion, except it d
         List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this.exploder, new AxisAlignedBB((double) k1, (double) i2, (double) j2, (double) l1, (double) i1, (double) j1));
         Vec3d vec3d = new Vec3d(this.explosionX, this.explosionY, this.explosionZ);
 
-        for (int k2 = 0; k2 < list.size(); ++k2) {
-            Entity entity = list.get(k2);
-
+        for (Entity entity : list) {
             if (!entity.isImmuneToExplosions()) {
                 double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / (double) f3;
 
@@ -127,6 +126,7 @@ public class BombExplosion { //The same thing as a normal explosion, except it d
                 for (int sz = -1; sz <= 1; sz++) {
                     BlockPos pos = new BlockPos(sx + explosionX, sy + explosionY, sz + explosionZ);
                     IBlockState state = worldObj.getBlockState(pos);
+                    //noinspection ConstantConditions
                     if (state != null && state.getBlock() == Blocks.STONEBRICK && state.getValue(BlockStoneBrick.VARIANT) == EnumType.CRACKED) {
                         origBlocks.add(pos);
                     }

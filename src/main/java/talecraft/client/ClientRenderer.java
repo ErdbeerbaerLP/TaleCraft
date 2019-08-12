@@ -49,7 +49,6 @@ import talecraft.entity.projectile.EntityKnife.EntityKnifeRenderFactory;
 import talecraft.proxy.ClientProxy;
 import talecraft.tileentity.*;
 
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @EventBusSubscriber
@@ -82,54 +81,54 @@ public class ClientRenderer {
 
     private static void init_render_tilentity() {
         ClientRegistry.bindTileEntitySpecialRenderer(ClockBlockTileEntity.class,
-                new GenericTileEntityRenderer<ClockBlockTileEntity>("talecraft:textures/blocks/util/timer.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/timer.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(RedstoneTriggerBlockTileEntity.class,
-                new GenericTileEntityRenderer<RedstoneTriggerBlockTileEntity>("talecraft:textures/blocks/util/redstoneTrigger.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/redstoneTrigger.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(RelayBlockTileEntity.class,
-                new GenericTileEntityRenderer<RelayBlockTileEntity>("talecraft:textures/blocks/util/relay.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/relay.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(ScriptBlockTileEntity.class,
-                new GenericTileEntityRenderer<ScriptBlockTileEntity>("talecraft:textures/blocks/util/script.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/script.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(BlockUpdateDetectorTileEntity.class,
-                new GenericTileEntityRenderer<BlockUpdateDetectorTileEntity>("talecraft:textures/blocks/util/bud.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/bud.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(StorageBlockTileEntity.class,
                 new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/storage.png",
                         new StorageBlockTileEntityEXTRenderer()));
 
         ClientRegistry.bindTileEntitySpecialRenderer(EmitterBlockTileEntity.class,
-                new GenericTileEntityRenderer<EmitterBlockTileEntity>("talecraft:textures/blocks/util/emitter.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/emitter.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(ImageHologramBlockTileEntity.class,
                 new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/texture.png",
                         new ImageHologramBlockTileEntityEXTRenderer()));
 
         ClientRegistry.bindTileEntitySpecialRenderer(CollisionTriggerBlockTileEntity.class,
-                new GenericTileEntityRenderer<CollisionTriggerBlockTileEntity>("talecraft:textures/blocks/util/trigger.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/trigger.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(LightBlockTileEntity.class,
-                new GenericTileEntityRenderer<LightBlockTileEntity>("talecraft:textures/blocks/util/light.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/light.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(MessageBlockTileEntity.class,
-                new GenericTileEntityRenderer<MessageBlockTileEntity>("talecraft:textures/blocks/util/message.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/message.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(InverterBlockTileEntity.class,
-                new GenericTileEntityRenderer<InverterBlockTileEntity>("talecraft:textures/blocks/util/inverter.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/inverter.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(MemoryBlockTileEntity.class,
-                new GenericTileEntityRenderer<MemoryBlockTileEntity>("talecraft:textures/blocks/util/memory.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/memory.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(TriggerFilterBlockTileEntity.class,
-                new GenericTileEntityRenderer<TriggerFilterBlockTileEntity>("talecraft:textures/blocks/util/filter.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/filter.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(DelayBlockTileEntity.class,
-                new GenericTileEntityRenderer<DelayBlockTileEntity>("talecraft:textures/blocks/util/delay.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/delay.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(URLBlockTileEntity.class,
-                new GenericTileEntityRenderer<URLBlockTileEntity>("talecraft:textures/blocks/util/url.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/url.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(SummonBlockTileEntity.class,
                 new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/spawner.png",
@@ -138,13 +137,13 @@ public class ClientRenderer {
         ClientRegistry.bindTileEntitySpecialRenderer(LockedDoorTileEntity.class, new LockedDoorRenderer());
 
         ClientRegistry.bindTileEntitySpecialRenderer(URLBlockTileEntity.class,
-                new GenericTileEntityRenderer<URLBlockTileEntity>("talecraft:textures/blocks/util/url.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/url.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(MusicBlockTileEntity.class,
-                new GenericTileEntityRenderer<MusicBlockTileEntity>("talecraft:textures/blocks/util/music.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/music.png"));
 
         ClientRegistry.bindTileEntitySpecialRenderer(CameraBlockTileEntity.class,
-                new GenericTileEntityRenderer<CameraBlockTileEntity>("talecraft:textures/blocks/util/camera.png"));
+                new GenericTileEntityRenderer<>("talecraft:textures/blocks/util/camera.png"));
     }
 
     private static void init_render_item() {
@@ -266,13 +265,7 @@ public class ClientRenderer {
         partialTicks = event.getPartialTicks();
 
         // Iterate trough all ITemporaryRenderables and remove the ones that can be removed.
-        Iterator<ITemporaryRenderable> iterator = temporaryRenderers.iterator();
-        while (iterator.hasNext()) {
-            ITemporaryRenderable itr = iterator.next();
-            if (itr.canRemove()) {
-                iterator.remove();
-            }
-        }
+        temporaryRenderers.removeIf(ITemporaryRenderable::canRemove);
 
         // If the world and the player exist, call the worldPostRender-method.
         if (mc.world != null && mc.player != null) {
@@ -331,6 +324,7 @@ public class ClientRenderer {
         RenderHelper.enableStandardItemLighting();
 
         // Render Item Meta Renderables
+        //noinspection ConstantConditions
         if (mc.player != null && mc.player.getHeldItemMainhand() != null) {
             ItemStack stack = mc.player.getHeldItemMainhand();
             Item item = stack.getItem();
@@ -433,7 +427,7 @@ public class ClientRenderer {
         Lighting("lighting"),
         Nightvision("nightvision"),
         Wireframe("wireframe");
-        String name;
+        final String name;
 
         VisualMode(String n) {
             name = n;

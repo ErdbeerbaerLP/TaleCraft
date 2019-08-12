@@ -11,7 +11,6 @@ import talecraft.client.ClientNetworkHandler;
 import talecraft.client.gui.misc.GuiEntityEditor;
 import talecraft.client.gui.misc.GuiEntityEditor.RemoteEntityDataLink;
 import talecraft.client.gui.misc.GuiEntityTypeSelection;
-import talecraft.client.gui.misc.GuiEntityTypeSelection.EntityTypeDataLink;
 import talecraft.client.gui.qad.*;
 import talecraft.client.gui.qad.QADTickBox.TickBoxModel;
 import talecraft.client.gui.qad.model.DefaultTextFieldDecimalNumberModel;
@@ -25,12 +24,12 @@ import talecraft.util.NBTHelper;
 import java.util.List;
 
 public class GuiSummonBlock extends QADGuiScreen {
-    SummonBlockTileEntity tileEntity;
+    final SummonBlockTileEntity tileEntity;
     QADScrollPanel mainContainer;
     QADPanel generalPanel;
     TWO_COLUMN_LAYOUT generalPanelLayout;
     List<QADPanel> summonOptionPanels;
-    private int headerHeight = 14;
+    private final int headerHeight = 14;
 
     public GuiSummonBlock(SummonBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;
@@ -69,7 +68,7 @@ public class GuiSummonBlock extends QADGuiScreen {
             model.setValidatorPredicate(new Predicate<Integer>() {
                 @Override
                 public boolean apply(Integer input) {
-                    int i = input.intValue();
+                    int i = input;
 
                     if (i > 100) return false;
                     if (i < 1) return false;
@@ -102,21 +101,18 @@ public class GuiSummonBlock extends QADGuiScreen {
             button.setTooltip("Sets the region in which", "entities are summoned.");
             generalPanelLayout.row(label, button);
 
-            button.setAction(new Runnable() {
-                @Override
-                public void run() {
-                    EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
-                    int[] bounds = WandItem.getBoundsFromPlayerOrNull(playerSP);
+            button.setAction(() -> {
+                EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
+                int[] bounds = WandItem.getBoundsFromPlayerOrNull(playerSP);
 
-                    if (bounds != null) {
-                        BlockPos position = tileEntity.getPos();
-                        String commandString = ClientNetworkHandler.makeBlockDataMergeCommand(position);
+                if (bounds != null) {
+                    BlockPos position = tileEntity.getPos();
+                    String commandString = ClientNetworkHandler.makeBlockDataMergeCommand(position);
 
-                        NBTTagCompound data = new NBTTagCompound();
-                        data.setIntArray("summonRegionBounds", bounds);
+                    NBTTagCompound data = new NBTTagCompound();
+                    data.setIntArray("summonRegionBounds", bounds);
 
-                        TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, data));
-                    }
+                    TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, data));
                 }
             });
         }
@@ -165,21 +161,18 @@ public class GuiSummonBlock extends QADGuiScreen {
             button.setTooltip("Add new summon option.");
             mainContainer.addComponent(button);
 
-            button.setAction(new Runnable() {
-                @Override
-                public void run() {
-                    SummonOption[] oldArray = tileEntity.getSummonOptions();
-                    SummonOption[] newArray = new SummonOption[oldArray.length + 1];
-                    System.arraycopy(oldArray, 0, newArray, 0, oldArray.length);
+            button.setAction(() -> {
+                SummonOption[] oldArray = tileEntity.getSummonOptions();
+                SummonOption[] newArray = new SummonOption[oldArray.length + 1];
+                System.arraycopy(oldArray, 0, newArray, 0, oldArray.length);
 
-                    newArray[oldArray.length] = new SummonOption();
-                    newArray[oldArray.length].setWeight(1f);
-                    newArray[oldArray.length].setData(new NBTTagCompound());
-                    newArray[oldArray.length].getData().setString("id", "Zombie");
-                    tileEntity.setSummonOptions(newArray);
-                    updateSummonBlockData(true);
-                    displayGuiScreen(null);
-                }
+                newArray[oldArray.length] = new SummonOption();
+                newArray[oldArray.length].setWeight(1f);
+                newArray[oldArray.length].setData(new NBTTagCompound());
+                newArray[oldArray.length].getData().setString("id", "Zombie");
+                tileEntity.setSummonOptions(newArray);
+                updateSummonBlockData(true);
+                displayGuiScreen(null);
             });
         }
 
@@ -236,7 +229,7 @@ public class GuiSummonBlock extends QADGuiScreen {
                 QADTextField field = new QADTextField(new DefaultTextFieldDecimalNumberModel(option.getWeight(), new Predicate<Double>() {
                     @Override
                     public boolean apply(Double input) {
-                        double i = input.doubleValue();
+                        double i = input;
 
                         if (i > 100) return false;
                         if (i < 0) return false;
@@ -270,21 +263,15 @@ public class GuiSummonBlock extends QADGuiScreen {
                 QADButton button = new QADButton(QADButton.ICON_INVEDIT);
                 button.setPosition(2 + 120 + 200 + 2, panelHeight);
                 button.setTooltip("Change entity type.");
-                button.setAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        TaleCraft.logger.info("Click!");
+                button.setAction(() -> {
+                    TaleCraft.logger.info("Click!");
 
-                        GuiEntityTypeSelection guiScreen = new GuiEntityTypeSelection(GuiSummonBlock.this, new EntityTypeDataLink() {
-                            @Override
-                            public void setType(String identifier) {
-                                option.getData().setString("id", identifier);
-                                updateSummonBlockData(true);
-                            }
-                        });
+                    GuiEntityTypeSelection guiScreen = new GuiEntityTypeSelection(GuiSummonBlock.this, identifier -> {
+                        option.getData().setString("id", identifier);
+                        updateSummonBlockData(true);
+                    });
 
-                        displayGuiScreen(guiScreen);
-                    }
+                    displayGuiScreen(guiScreen);
                 });
                 panel.addComponent(button);
             }
@@ -303,21 +290,15 @@ public class GuiSummonBlock extends QADGuiScreen {
                 QADButton button = new QADButton(QADButton.ICON_INVEDIT);
                 button.setPosition(2 + 120 + 200 + 2, panelHeight);
                 button.setTooltip("Open entity editor.");
-                button.setAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        RemoteEntityDataLink dataLink = new RemoteEntityDataLink() {
-                            @Override
-                            public void updateData(NBTTagCompound entityData) {
-                                option.setData(entityData);
-                                updateSummonBlockData(true);
-                            }
-                        };
+                button.setAction(() -> {
+                    RemoteEntityDataLink dataLink = entityData -> {
+                        option.setData(entityData);
+                        updateSummonBlockData(true);
+                    };
 
-                        GuiEntityEditor editor = new GuiEntityEditor(option.getData(), dataLink);
-                        editor.setBehind(GuiSummonBlock.this);
-                        displayGuiScreen(editor);
-                    }
+                    GuiEntityEditor editor = new GuiEntityEditor(option.getData(), dataLink);
+                    editor.setBehind(GuiSummonBlock.this);
+                    displayGuiScreen(editor);
                 });
                 panel.addComponent(button);
             }
@@ -405,8 +386,8 @@ public class GuiSummonBlock extends QADGuiScreen {
     }
 
     private static class TWO_COLUMN_LAYOUT {
-        private QADComponentContainer container;
-        private List<List<QADComponent>> rows;
+        private final QADComponentContainer container;
+        private final List<List<QADComponent>> rows;
         private int lastCalculatedHeight = 0;
 
         public TWO_COLUMN_LAYOUT(QADComponentContainer container) {

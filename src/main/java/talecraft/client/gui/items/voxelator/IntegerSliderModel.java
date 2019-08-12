@@ -11,7 +11,7 @@ public class IntegerSliderModel implements SliderModel<Integer> {
     private final String name;
     private int current;
     private float value;
-    private NBTTagCompound tag;
+    private final NBTTagCompound tag;
 
     public IntegerSliderModel(NBTTagCompound compound, IntegerBrushParameter param) {
         this.tag = compound;

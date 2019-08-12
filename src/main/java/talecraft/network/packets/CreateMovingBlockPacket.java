@@ -84,6 +84,7 @@ public class CreateMovingBlockPacket implements IMessage {
             WorldServer world = server.getWorld(message.world);
             EntityMovingBlock ent = new EntityMovingBlock(world);
             NBTTagCompound tag = new NBTTagCompound();
+            //noinspection ConstantConditions
             tag.setString("Block", message.STATE.getBlock().getRegistryName().toString());
             tag.setBoolean("invisible", message.INVISIBLE);
             tag.setBoolean("pushable", message.PUSHABLE);

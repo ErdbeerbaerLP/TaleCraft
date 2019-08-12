@@ -8,7 +8,7 @@ import java.util.List;
 
 public class WorkbenchObjectWrapper implements IObjectWrapper {
 
-    private WorkbenchManager manager;
+    private final WorkbenchManager manager;
 
     public WorkbenchObjectWrapper(WorkbenchManager manager) {
         this.manager = manager;

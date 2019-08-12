@@ -9,17 +9,17 @@ public class VCUIComponent {
     /**
      * Position of component in parent.
      **/
-    public Vec2i position;
+    public final Vec2i position;
 
     /**
      * The size of the component on screen.
      **/
-    public Vec2i size;
+    public final Vec2i size;
 
     /**
      * This children of this component.
      **/
-    public ArrayList<VCUIComponent> children;
+    public final ArrayList<VCUIComponent> children;
 
     /**
      * A consumer representing a layoutmanager.

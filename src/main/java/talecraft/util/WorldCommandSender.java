@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import talecraft.TaleCraft;
 
 public class WorldCommandSender implements ICommandSender {
-    private World world;
+    private final World world;
 
     public WorldCommandSender(World world) {
         this.world = world;

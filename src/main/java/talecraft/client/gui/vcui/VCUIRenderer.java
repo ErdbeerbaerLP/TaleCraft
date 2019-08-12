@@ -18,7 +18,7 @@ import java.util.Stack;
 
 @SuppressWarnings("DanglingJavadoc")
 public class VCUIRenderer {
-    EXTFontRenderer fontRenderer = new EXTFontRenderer();
+    final EXTFontRenderer fontRenderer = new EXTFontRenderer();
     FontRenderer nativeFontRenderer;
     RenderItem itemRender;
     GuiScreen guiScreen;
@@ -29,7 +29,7 @@ public class VCUIRenderer {
     int offsetY = 0;
     int uiWidth = 0;
     int uiHeight = 0;
-    Stack<ScissorFrame> scissorStack = new Stack<>();
+    final Stack<ScissorFrame> scissorStack = new Stack<>();
 
     public void setCurrentScreen(GuiScreen guiScreen, float zLevel, FontRenderer fontRendererObj, RenderItem itemRender) {
         this.minecraft = guiScreen.mc;

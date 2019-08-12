@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerList {
-    private Map<EntityPlayerMP, PlayerMirror> players;
+    private final Map<EntityPlayerMP, PlayerMirror> players;
 
     public PlayerList() {
         this.players = new HashMap<>();

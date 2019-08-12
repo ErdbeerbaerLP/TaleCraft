@@ -106,7 +106,8 @@ public class ImageHologramBlockTileEntityEXTRenderer implements
 
         GlStateManager.popMatrix();
 
-        if (Boolean.FALSE.booleanValue()) { // Debug
+        //noinspection ConstantConditions
+        if (false) { // Debug
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
             GlStateManager.scale(1f / 32f, -1f / 32f, 1f / 32f);

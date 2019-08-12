@@ -14,7 +14,7 @@ public class GuiItemStackEditor extends QADGuiScreen {
     QADTextField fieldType;
     QADNumberTextField fieldCount;
     QADNumberTextField fieldDamage;
-    private NBTTagCompound stack;
+    private final NBTTagCompound stack;
 
     public GuiItemStackEditor(NBTTagCompound slot) {
         this.stack = slot;

@@ -28,6 +28,7 @@ import java.util.Map;
 
 import static talecraft.clipboard.ClipboardTagNames.*;
 
+@SuppressWarnings({"StatementWithEmptyBody", "ConstantConditions"})
 public class ClipboardItem {
     private NBTTagCompound data;
 
@@ -175,7 +176,7 @@ public class ClipboardItem {
             if (pallet_map.containsKey(typeString)) {
                 blocks[ix] = pallet_map.get(typeString);
             } else {
-                pallet_map.put(typeString, Integer.valueOf(palletIndexCounter));
+                pallet_map.put(typeString, palletIndexCounter);
                 pallet_list.add(typeString);
                 blocks[ix] = palletIndexCounter;
                 palletIndexCounter++;
@@ -200,12 +201,11 @@ public class ClipboardItem {
         // System.out.println("BLOCKS = " + blocksCompound);
 
         if (!world.isRemote && name != null) {
-            StringBuilder builder = new StringBuilder();
-            builder.append(TextFormatting.GREEN);
-            builder.append("Copied ").append(regionVolume).append(regionVolume == 1 ? " block" : " blocks").append(" to the clipboard. ");
-            builder.append("(").append(pallet_list.size()).append(" types)");
 
-            player.sendMessage(new TextComponentString(builder.toString()));
+            String builder = TextFormatting.GREEN +
+                    "Copied " + regionVolume + (regionVolume == 1 ? " block" : " blocks") + " to the clipboard. " +
+                    "(" + pallet_list.size() + " types)";
+            player.sendMessage(new TextComponentString(builder));
             player.sendMessage(new TextComponentString("Key: " + name));
         }
 

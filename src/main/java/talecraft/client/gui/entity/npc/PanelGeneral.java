@@ -15,18 +15,18 @@ import java.util.List;
 
 public class PanelGeneral extends NPCPanel {
 
-    private QADTextField NAME_FIELD;
-    private QADTickBox NAME_SHOWN;
-    private QADTextField MSG_FIELD;
-    private QADTickBox INCLUDE_NAME;
+    private final QADTextField NAME_FIELD;
+    private final QADTickBox NAME_SHOWN;
+    private final QADTextField MSG_FIELD;
+    private final QADTickBox INCLUDE_NAME;
     private EnumNPCModel MODEL;
-    private QADDropdownBox SKIN_SELECTOR;
+    private final QADDropdownBox SKIN_SELECTOR;
     private EnumNPCSkin SKIN;
-    private QADTextField CUSTOMSKIN;
-    private QADNumberTextField HEALTH_FIELD;
-    private QADTickBox INVERLNERABLE;
-    private QADTickBox MOVABLE;
-    private QADTickBox BOSS;
+    private final QADTextField CUSTOMSKIN;
+    private final QADNumberTextField HEALTH_FIELD;
+    private final QADTickBox INVERLNERABLE;
+    private final QADTickBox MOVABLE;
+    private final QADTickBox BOSS;
 
 
     public PanelGeneral(NPCData data, int width, int height) {
@@ -166,8 +166,8 @@ public class PanelGeneral extends NPCPanel {
 
     private class ModelListModel implements ListModel {
 
-        private List<ListModelItem> items = new ArrayList<ListModelItem>();
-        private List<ListModelItem> filtered = new ArrayList<ListModelItem>();
+        private final List<ListModelItem> items = new ArrayList<>();
+        private final List<ListModelItem> filtered = new ArrayList<>();
 
         public ModelListModel() {
             for (EnumNPCModel model : EnumNPCModel.values()) {
@@ -225,8 +225,8 @@ public class PanelGeneral extends NPCPanel {
 
     private class SkinListModel implements ListModel {
 
-        private List<ListModelItem> items = new ArrayList<ListModelItem>();
-        private List<ListModelItem> filtered = new ArrayList<ListModelItem>();
+        private final List<ListModelItem> items = new ArrayList<>();
+        private final List<ListModelItem> filtered = new ArrayList<>();
 
         public SkinListModel() {
             for (EnumNPCSkin skin : EnumNPCSkin.values()) {
@@ -270,7 +270,7 @@ public class PanelGeneral extends NPCPanel {
         @Override
         public void applyFilter(String filter) {
             filtered.clear();
-            List<ListModelItem> blanks = new ArrayList<ListModelItem>();
+            List<ListModelItem> blanks = new ArrayList<>();
             for (ListModelItem item : items) {
                 SkinListModelItem skin = (SkinListModelItem) item;
                 if (skin.getText().toLowerCase().contains(filter.toLowerCase())) {

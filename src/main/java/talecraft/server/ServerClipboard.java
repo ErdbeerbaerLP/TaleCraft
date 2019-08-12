@@ -6,7 +6,7 @@ import talecraft.clipboard.ClipboardItem;
 import java.util.Map;
 
 public class ServerClipboard {
-    private Map<String, ClipboardItem> items;
+    private final Map<String, ClipboardItem> items;
 
     public ServerClipboard() {
         items = Maps.newHashMap();

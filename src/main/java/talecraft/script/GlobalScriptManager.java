@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+@SuppressWarnings({"deprecation", "FieldCanBeLocal"})
 public class GlobalScriptManager {
     private NativeObject globalScope;
     private ClassShutter globalClassShutter;
@@ -236,10 +237,7 @@ public class GlobalScriptManager {
             return "";
         }
 
-        File worldDirectory = world.getSaveHandler().getWorldDirectory();
-
-        File dataDir = worldDirectory;
-        File scriptDir = new File(dataDir, "scripts");
+        File scriptDir = new File(world.getSaveHandler().getWorldDirectory(), "scripts");
 
         if (!scriptDir.exists()) {
             scriptDir.mkdir();
@@ -254,9 +252,8 @@ public class GlobalScriptManager {
         }
 
         try {
-            String script = FileUtils.readFileToString(scriptFile);
             // TaleCraft.logger.info("Script successfully loaded: " + scriptFile + " (~"+script.length()+" chars)");
-            return script;
+            return FileUtils.readFileToString(scriptFile);
         } catch (IOException e) {
             TaleCraft.logger.error("Failed to load Script: " + scriptFile);
             e.printStackTrace();
@@ -265,10 +262,8 @@ public class GlobalScriptManager {
     }
 
     public void saveScript(World world, String fileContent, String fileName) throws IOException {
-        File worldDirectory = world.getSaveHandler().getWorldDirectory();
 
-        File dataDir = worldDirectory;
-        File scriptDir = new File(dataDir, "scripts");
+        File scriptDir = new File(world.getSaveHandler().getWorldDirectory(), "scripts");
 
         if (!scriptDir.exists()) {
             scriptDir.mkdir();

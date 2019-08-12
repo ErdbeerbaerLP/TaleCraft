@@ -7,7 +7,7 @@ import talecraft.script.wrappers.IObjectWrapper;
 import java.util.List;
 
 public class PotionEffectObjectWrapper implements IObjectWrapper {
-    private PotionEffect potionEffect;
+    private final PotionEffect potionEffect;
 
     public PotionEffectObjectWrapper(PotionEffect potionEffect) {
         this.potionEffect = potionEffect;

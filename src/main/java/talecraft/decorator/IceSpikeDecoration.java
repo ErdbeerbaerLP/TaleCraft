@@ -8,7 +8,7 @@ import net.minecraft.world.gen.feature.WorldGenIceSpike;
 
 public class IceSpikeDecoration extends StaticDecoration {
 
-    WorldGenIceSpike gen;
+    final WorldGenIceSpike gen;
 
     public IceSpikeDecoration() {
         super();

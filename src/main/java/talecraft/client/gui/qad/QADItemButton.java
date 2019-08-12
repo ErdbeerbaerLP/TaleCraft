@@ -8,7 +8,7 @@ import talecraft.client.render.renderers.EXTFontRenderer;
 
 public class QADItemButton extends QADButton {
 
-    private ItemStack stack;
+    private final ItemStack stack;
 
     public QADItemButton(int x, int y, int width, String text, ItemStack stack) {
         super(x, y, width, text);

@@ -28,7 +28,7 @@ import java.util.UUID;
 
 public class ServerHandler {
 
-    private static HashMap<MinecraftServer, ServerMirror> serverMirrorsMap = new HashMap<>();
+    private static final HashMap<MinecraftServer, ServerMirror> serverMirrorsMap = new HashMap<>();
 
     public static void handleEntityJoin(World world, Entity entity) {
         // If this is a player, send the player the persistent EntityData.

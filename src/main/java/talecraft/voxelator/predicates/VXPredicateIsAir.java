@@ -10,7 +10,7 @@ import talecraft.voxelator.VXPredicate;
 import talecraft.voxelator.Voxelator.FilterFactory;
 
 public final class VXPredicateIsAir extends VXPredicate {
-    public static FilterFactory FACTORY = new FilterFactory() {
+    public static final FilterFactory FACTORY = new FilterFactory() {
         @Override
         public String getName() {
             return "is_air";

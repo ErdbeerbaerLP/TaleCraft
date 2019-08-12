@@ -554,7 +554,7 @@ public class BoxRenderer {
 
     //tiffit got lazy, he used a cheap way
     private static class VertexBufferHelper {
-        private BufferBuilder rend;
+        private final BufferBuilder rend;
 
         public VertexBufferHelper(BufferBuilder rend) {
             this.rend = rend;

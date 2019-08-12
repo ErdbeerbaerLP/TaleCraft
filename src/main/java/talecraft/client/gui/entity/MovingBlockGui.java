@@ -20,7 +20,9 @@ import java.util.List;
 
 public class MovingBlockGui extends QADGuiScreen {
 
-    private double x, y, z;
+    private final double x;
+    private final double y;
+    private final double z;
 
     private IBlockState STATE = Blocks.STONE.getDefaultState();
     private QADTickBox INVISIBLE;
@@ -78,24 +80,20 @@ public class MovingBlockGui extends QADGuiScreen {
         ON_DEATH = addComponent(new QADTextField(5 * 4 + this.width / 5 * 3, 98 + 20 * 5, this.width / 5, 20, ""));
 
         QADButton SAVE = new QADButton(this.width - 105, 5, 100, "Create");
-        SAVE.setAction(new Runnable() {
-            @Override
-            public void run() {
-                TaleCraft.network.sendToServer(new CreateMovingBlockPacket(
-                        x, y, z, mc.world.provider.getDimension(), //Location to place
-                        STATE, //Type of block
-                        INVISIBLE.getState(), PUSHABLE.getState(), COLLISION.getState(), NO_GRAVITY.getState(), //Boolean settings
-                        MOUNT_Y_OFFSET.getValue().floatValue(), //Numbers
-                        new String[]{ON_TICK.getText(), ON_INTERACT.getText(), ON_COLLIDE.getText(), ON_DEATH.getText()} //Scripts
-                ));
-            }
-        });
+        SAVE.setAction(() -> TaleCraft.network.sendToServer(new CreateMovingBlockPacket(
+                x, y, z, mc.world.provider.getDimension(), //Location to place
+                STATE, //Type of block
+                INVISIBLE.getState(), PUSHABLE.getState(), COLLISION.getState(), NO_GRAVITY.getState(), //Boolean settings
+                MOUNT_Y_OFFSET.getValue().floatValue(), //Numbers
+                new String[]{ON_TICK.getText(), ON_INTERACT.getText(), ON_COLLIDE.getText(), ON_DEATH.getText()} //Scripts
+        )));
         addComponent(SAVE);
     }
 
+    @SuppressWarnings("deprecation")
     private static class BlockStateItem implements ListModelItem {
 
-        private ItemStack stack;
+        private final ItemStack stack;
 
         public BlockStateItem(ItemStack stack) {
             this.stack = stack;
@@ -125,18 +123,19 @@ public class MovingBlockGui extends QADGuiScreen {
     }
 
     private class ListBlockStateListModel implements ListModel {
-        private List<ListModelItem> items;
-        private List<ListModelItem> filtered;
+        private final List<ListModelItem> items;
+        private final List<ListModelItem> filtered;
 
         public ListBlockStateListModel() {
-            items = new ArrayList<ListModelItem>();
-            filtered = new ArrayList<ListModelItem>();
-            List<ItemStack> stacks = new ArrayList<ItemStack>();
+            items = new ArrayList<>();
+            filtered = new ArrayList<>();
+            List<ItemStack> stacks = new ArrayList<>();
             for (Object block : Block.REGISTRY) {
                 stacks.add(new ItemStack((Block) block));
             }
             for (ItemStack item : stacks) {
                 Item itm = item.getItem();
+                //noinspection ConstantConditions
                 if (itm == null) continue;
                 NonNullList<ItemStack> subitems = NonNullList.create();
                 itm.getSubItems(CreativeTabs.INVENTORY, subitems);

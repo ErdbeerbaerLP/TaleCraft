@@ -27,7 +27,7 @@ public class CustomPaintingRender implements IMetadataRender {
         RENDER = new RenderPainting(mc.getRenderManager());
     }
 
-    @SuppressWarnings({"ConstantConditions", "IntegerDivisionInFloatingPointContext", "DuplicateExpressions"})
+    @SuppressWarnings({"ConstantConditions", "DuplicateExpressions"})
     @Override
     public void render(Item item, ItemStack stack, Tessellator tessellator, BufferBuilder buffer, double partialTick, BlockPos playerPos, EntityPlayerSP player, WorldClient world) {
         EnumArt painting;
@@ -47,9 +47,11 @@ public class CustomPaintingRender implements IMetadataRender {
             GL11.glColor4f(1f, 1f, 1f, 0.5f);
             double xMove = 0;
             if (facing.getFrontOffsetX() == 0)
+                //noinspection IntegerDivisionInFloatingPointContext
                 xMove = (painting.sizeX != 32 ? painting.sizeX >= 48 ? -painting.sizeX / 16 / 8 : 0.5 : 0);
             double zMove = 0;
             if (facing.getFrontOffsetZ() == 0)
+                //noinspection IntegerDivisionInFloatingPointContext
                 zMove = (painting.sizeX != 32 ? painting.sizeX >= 48 ? -painting.sizeX / 16 / 8 : 0.5 : 0);
             if (painting.sizeX == 16) {
                 if (facing.getOpposite() == EnumFacing.EAST) zMove -= 1;

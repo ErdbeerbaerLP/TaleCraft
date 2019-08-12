@@ -2,20 +2,17 @@ package talecraft.client.gui.misc;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants.NBT;
 import talecraft.client.gui.qad.*;
 import talecraft.client.gui.qad.QADNumberTextField.NumberType;
-import talecraft.client.gui.qad.QADTextField.TextChangeListener;
 import talecraft.client.gui.qad.QADTickBox.TickBoxModel;
 import talecraft.client.gui.qad.model.nbtcompound.*;
 import talecraft.util.MutableInteger;
 import talecraft.util.NBTHelper;
 import talecraft.util.RecursiveNBTIterator;
-import talecraft.util.RecursiveNBTIterator.NBTTreeConsumer;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -25,14 +22,14 @@ public class GuiEntityEditor extends QADGuiScreen {
     final NBTTagCompound entityData;
     final int rightColumnOffset = 180;
     final int lineHeight = 20;
-    RemoteEntityDataLink dataLink;
+    final RemoteEntityDataLink dataLink;
     QADTickBox rawDataTickBox;
     QADButton buttonRefresh;
     QADButton buttonCancel;
     QADButton buttonApply;
     QADScrollPanel scrollPanel;
     List<QADPanel> panels;
-    NumberFormat format;
+    final NumberFormat format;
     boolean showRawData = false;
 
     public GuiEntityEditor(NBTTagCompound entity, RemoteEntityDataLink dataLink) {
@@ -51,12 +48,11 @@ public class GuiEntityEditor extends QADGuiScreen {
         format.setGroupingUsed(true);
     }
 
-    private static final String NBTItemToString(NBTTagCompound slot) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(slot.getString("id")).append("/");
-        builder.append(slot.getShort("Damage")).append(" x");
-        builder.append(slot.getByte("Count"));
-        return builder.toString();
+    private static String NBTItemToString(NBTTagCompound slot) {
+        String builder = slot.getString("id") + "/" +
+                slot.getShort("Damage") + " x" +
+                slot.getByte("Count");
+        return builder;
     }
 
     @Override
@@ -80,27 +76,16 @@ public class GuiEntityEditor extends QADGuiScreen {
         addComponent(buttonCancel);
         addComponent(buttonApply);
 
-        buttonApply.setAction(new Runnable() {
-            @Override
-            public void run() {
-                dataLink.updateData(entityData);
-                displayGuiScreen(null);
-            }
+        buttonApply.setAction(() -> {
+            dataLink.updateData(entityData);
+            displayGuiScreen(null);
         });
 
-        buttonCancel.setAction(new Runnable() {
-            @Override
-            public void run() {
-                displayGuiScreen(null);
-            }
-        });
+        buttonCancel.setAction(() -> displayGuiScreen(null));
 
-        buttonRefresh.setAction(new Runnable() {
-            @Override
-            public void run() {
-                generatePanels();
-                relayout();
-            }
+        buttonRefresh.setAction(() -> {
+            generatePanels();
+            relayout();
         });
 
         rawDataTickBox = new QADTickBox(0, (20 - 14) / 2, 14, 14);
@@ -434,14 +419,11 @@ public class GuiEntityEditor extends QADGuiScreen {
             panel.addComponent(QADFACTORY.createLabel("Owner UUID", 2, yOff));
             QADTextField textField = new QADTextField(fontRenderer, rightColumnOffset, yOff - 3, 140, 14);
             textField.setModel(new NBTStringTextFieldModel("OwnerUUID", entityData));
-            textField.textChangedListener = new TextChangeListener() {
-                @Override
-                public void call(QADTextField field, String text) {
-                    try {
-                        field.setTextColor(0xFFFFFFFF);
-                    } catch (IllegalArgumentException e) {
-                        field.setTextColor(0xFFFF0000);
-                    }
+            textField.textChangedListener = (field, text) -> {
+                try {
+                    field.setTextColor(0xFFFFFFFF);
+                } catch (IllegalArgumentException e) {
+                    field.setTextColor(0xFFFF0000);
                 }
             };
             panel.addComponent(textField);
@@ -727,19 +709,17 @@ public class GuiEntityEditor extends QADGuiScreen {
 
         {
             QADButton buttonAsJson = QADFACTORY.createButton("Copy to Clipboard as JSON", 2, yOff, rightColumnOffset);
-            buttonAsJson.setAction(new Runnable() {
-                @Override
-                public void run() {
-                    NBTTagCompound compound = entityData.copy();
-                    compound.removeTag("Pos");
-                    compound.removeTag("Motion");
-                    compound.removeTag("Rotation");
+            buttonAsJson.setAction(() -> {
+                NBTTagCompound compound = entityData.copy();
+                compound.removeTag("Pos");
+                compound.removeTag("Motion");
+                compound.removeTag("Rotation");
 
-                    String nbtAsJson = NBTHelper.asJson(compound);
+                String nbtAsJson = NBTHelper.asJson(compound);
 
-                    if (nbtAsJson != null) {
-                        GuiScreen.setClipboardString(nbtAsJson);
-                    }
+                //noinspection ConstantConditions
+                if (nbtAsJson != null) {
+                    GuiScreen.setClipboardString(nbtAsJson);
                 }
             });
             buttonAsJson.setTooltip("Copies the entity data to the", "clipboard as a string of JSON.");
@@ -762,46 +742,43 @@ public class GuiEntityEditor extends QADGuiScreen {
         //		yOff += lineHeight*2;
 
         final MutableInteger yOffMut = new MutableInteger(yOff);
-        RecursiveNBTIterator.iterate(entityData, new NBTTreeConsumer() {
-            @Override
-            public void consume(int depth, String name, NBTBase tag, NBTTagCompound parent) {
-                int x = 6 + depth * 6;
+        RecursiveNBTIterator.iterate(entityData, (depth, name, tag, parent) -> {
+            int x = 6 + depth * 6;
 
-                if (tag == null) {
-                    panel.addComponent(QADFACTORY.createLabel("---", x, yOffMut.get() - 7));
-                    return;
-                }
-
-                if (tag instanceof NBTTagCompound) {
-                    panel.addComponent(QADFACTORY.createLabel(name, x, yOffMut.get()));
-                } else if (tag instanceof NBTTagList) {
-                    NBTTagList list = (NBTTagList) tag;
-
-                    if (list.getTagType() == NBT.TAG_COMPOUND) {
-                        panel.addComponent(QADFACTORY.createLabel(name, x, yOffMut.get()));
-                    }
-
-                    if (list.getTagType() == NBT.TAG_DOUBLE) {
-                        StringBuilder builder = new StringBuilder();
-                        builder.append(list.tagCount());
-                        builder.append(" [");
-                        for (int i = 0; i < list.tagCount(); i++) {
-                            builder.append(TextFormatting.DARK_GRAY);
-                            builder.append(format.format(list.getDoubleAt(i)));
-                            builder.append(TextFormatting.WHITE);
-                            builder.append(", ");
-                        }
-                        builder.setLength(builder.length() - 2);
-                        builder.append("]");
-
-                        panel.addComponent(QADFACTORY.createLabel(name + " = " + builder.toString(), x, yOffMut.get()));
-                    }
-
-                } else {
-                    panel.addComponent(QADFACTORY.createLabel(name + " = " + tag.toString(), x, yOffMut.get()));
-                }
-                yOffMut.add(lineHeight);
+            if (tag == null) {
+                panel.addComponent(QADFACTORY.createLabel("---", x, yOffMut.get() - 7));
+                return;
             }
+
+            if (tag instanceof NBTTagCompound) {
+                panel.addComponent(QADFACTORY.createLabel(name, x, yOffMut.get()));
+            } else if (tag instanceof NBTTagList) {
+                NBTTagList list = (NBTTagList) tag;
+
+                if (list.getTagType() == NBT.TAG_COMPOUND) {
+                    panel.addComponent(QADFACTORY.createLabel(name, x, yOffMut.get()));
+                }
+
+                if (list.getTagType() == NBT.TAG_DOUBLE) {
+                    StringBuilder builder = new StringBuilder();
+                    builder.append(list.tagCount());
+                    builder.append(" [");
+                    for (int i = 0; i < list.tagCount(); i++) {
+                        builder.append(TextFormatting.DARK_GRAY);
+                        builder.append(format.format(list.getDoubleAt(i)));
+                        builder.append(TextFormatting.WHITE);
+                        builder.append(", ");
+                    }
+                    builder.setLength(builder.length() - 2);
+                    builder.append("]");
+
+                    panel.addComponent(QADFACTORY.createLabel(name + " = " + builder.toString(), x, yOffMut.get()));
+                }
+
+            } else {
+                panel.addComponent(QADFACTORY.createLabel(name + " = " + tag.toString(), x, yOffMut.get()));
+            }
+            yOffMut.add(lineHeight);
         });
         yOff = yOffMut.get();
 
@@ -845,13 +822,10 @@ public class GuiEntityEditor extends QADGuiScreen {
             int slotID = slot.hasKey("Slot") ? slot.getByte("Slot") : -1;
 
             panel.addComponent(QADFACTORY.createLabel("Item " + ((slotID == -1) ? i : slotID), 2, yOff));
-            panel.addComponent(QADFACTORY.createButton(NBTItemToString(slot), rightColumnOffset, yOff, 200, new Runnable() {
-                @Override
-                public void run() {
-                    QADGuiScreen guiScreen = new GuiItemStackEditor(slot);
-                    guiScreen.setBehind(GuiEntityEditor.this);
-                    displayGuiScreen(guiScreen);
-                }
+            panel.addComponent(QADFACTORY.createButton(NBTItemToString(slot), rightColumnOffset, yOff, 200, () -> {
+                QADGuiScreen guiScreen = new GuiItemStackEditor(slot);
+                guiScreen.setBehind(GuiEntityEditor.this);
+                displayGuiScreen(guiScreen);
             })).textAlignment = 0;
 
             yOff += lineHeight;
@@ -914,31 +888,28 @@ public class GuiEntityEditor extends QADGuiScreen {
             final NBTTagCompound offers = entityData.getCompoundTag("Offers");
             final NBTTagList recipes = offers.getTagList("Recipes", NBT.TAG_COMPOUND);
 
-            panel.addComponent(QADFACTORY.createButton("Add Recipe", 2, yOff, 100, new Runnable() {
-                @Override
-                public void run() {
-                    NBTTagCompound compound = new NBTTagCompound();
-                    compound.setInteger("uses", 0);
-                    compound.setInteger("maxUses", 1);
-                    compound.setBoolean("rewardExp", false);
+            panel.addComponent(QADFACTORY.createButton("Add Recipe", 2, yOff, 100, () -> {
+                NBTTagCompound compound = new NBTTagCompound();
+                compound.setInteger("uses", 0);
+                compound.setInteger("maxUses", 1);
+                compound.setBoolean("rewardExp", false);
 
-                    NBTTagCompound compoundBUY = new NBTTagCompound();
-                    compoundBUY.setShort("Damage", (short) 0);
-                    compoundBUY.setByte("Count", (byte) 1);
-                    compoundBUY.setString("id", "minecraft:emerald");
+                NBTTagCompound compoundBUY = new NBTTagCompound();
+                compoundBUY.setShort("Damage", (short) 0);
+                compoundBUY.setByte("Count", (byte) 1);
+                compoundBUY.setString("id", "minecraft:emerald");
 
-                    NBTTagCompound compoundSELL = new NBTTagCompound();
-                    compoundSELL.setShort("Damage", (short) 0);
-                    compoundSELL.setByte("Count", (byte) 1);
-                    compoundSELL.setString("id", "minecraft:stone");
+                NBTTagCompound compoundSELL = new NBTTagCompound();
+                compoundSELL.setShort("Damage", (short) 0);
+                compoundSELL.setByte("Count", (byte) 1);
+                compoundSELL.setString("id", "minecraft:stone");
 
-                    compound.setTag("buy", compoundBUY);
-                    compound.setTag("sell", compoundSELL);
+                compound.setTag("buy", compoundBUY);
+                compound.setTag("sell", compoundSELL);
 
-                    recipes.appendTag(compound);
-                    generatePanels();
-                    relayout();
-                }
+                recipes.appendTag(compound);
+                generatePanels();
+                relayout();
             }));
             yOff += lineHeight;
 
@@ -947,13 +918,10 @@ public class GuiEntityEditor extends QADGuiScreen {
                 final NBTTagCompound recipe = recipes.getCompoundTagAt(i);
 
                 panel.addComponent(QADFACTORY.createLabel(TextFormatting.AQUA + "Recipe " + i, 2 + 8, yOff + 6));
-                panel.addComponent(QADFACTORY.createButton("Remove Recipe", rightColumnOffset, yOff, 100, new Runnable() {
-                    @Override
-                    public void run() {
-                        recipes.removeTag(index);
-                        generatePanels();
-                        relayout();
-                    }
+                panel.addComponent(QADFACTORY.createButton("Remove Recipe", rightColumnOffset, yOff, 100, () -> {
+                    recipes.removeTag(index);
+                    generatePanels();
+                    relayout();
                 }));
                 yOff += lineHeight + 8;
 
@@ -985,24 +953,18 @@ public class GuiEntityEditor extends QADGuiScreen {
                 final NBTTagCompound slotSell = recipe.getCompoundTag("sell");
 
                 panel.addComponent(QADFACTORY.createLabel("Buys:", 2 + 8, yOff));
-                panel.addComponent(QADFACTORY.createButton(NBTItemToString(slotBuy), rightColumnOffset, yOff, 140, new Runnable() {
-                    @Override
-                    public void run() {
-                        QADGuiScreen guiScreen = new GuiItemStackEditor(slotBuy);
-                        guiScreen.setBehind(GuiEntityEditor.this);
-                        displayGuiScreen(guiScreen);
-                    }
+                panel.addComponent(QADFACTORY.createButton(NBTItemToString(slotBuy), rightColumnOffset, yOff, 140, () -> {
+                    QADGuiScreen guiScreen = new GuiItemStackEditor(slotBuy);
+                    guiScreen.setBehind(GuiEntityEditor.this);
+                    displayGuiScreen(guiScreen);
                 }));
                 yOff += lineHeight;
 
                 panel.addComponent(QADFACTORY.createLabel("Sells:", 2 + 8, yOff));
-                panel.addComponent(QADFACTORY.createButton(NBTItemToString(slotSell), rightColumnOffset, yOff, 140, new Runnable() {
-                    @Override
-                    public void run() {
-                        QADGuiScreen guiScreen = new GuiItemStackEditor(slotSell);
-                        guiScreen.setBehind(GuiEntityEditor.this);
-                        displayGuiScreen(guiScreen);
-                    }
+                panel.addComponent(QADFACTORY.createButton(NBTItemToString(slotSell), rightColumnOffset, yOff, 140, () -> {
+                    QADGuiScreen guiScreen = new GuiItemStackEditor(slotSell);
+                    guiScreen.setBehind(GuiEntityEditor.this);
+                    displayGuiScreen(guiScreen);
                 }));
 
                 yOff += lineHeight;

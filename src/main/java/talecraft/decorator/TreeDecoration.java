@@ -7,7 +7,7 @@ import net.minecraft.world.gen.feature.WorldGenTrees;
 
 public class TreeDecoration extends StaticDecoration {
 
-    WorldGenTrees gen;
+    final WorldGenTrees gen;
 
     public TreeDecoration() {
         super();

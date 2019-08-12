@@ -14,9 +14,9 @@ import talecraft.TaleCraft;
 import java.util.List;
 
 public class CachedWorldDiff implements IBlockAccess {
-    private World world;
-    private List<BlockSnapshot> changes;
-    private List<BlockSnapshot> previous;
+    private final World world;
+    private final List<BlockSnapshot> changes;
+    private final List<BlockSnapshot> previous;
 
     public CachedWorldDiff(World world, List<BlockSnapshot> previous, List<BlockSnapshot> changes) {
         this.world = world;

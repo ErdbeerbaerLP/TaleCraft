@@ -7,7 +7,7 @@ import talecraft.script.wrappers.IObjectWrapper;
 import java.util.List;
 
 public class GameRulesObjectWrapper implements IObjectWrapper {
-    private GameRules rules;
+    private final GameRules rules;
 
     public GameRulesObjectWrapper(GameRules gameRules) {
         this.rules = gameRules;

@@ -14,6 +14,7 @@ import talecraft.TaleCraft;
 import talecraft.items.TeleporterItem;
 import talecraft.items.WandItem;
 
+@SuppressWarnings({"ConstantConditions", "SameReturnValue"})
 public class EntityPoint extends Entity {
 
     public EntityPoint(World worldIn) {
@@ -108,7 +109,7 @@ public class EntityPoint extends Entity {
 
     @Override
     public AxisAlignedBB getEntityBoundingBox() {
-        if (Boolean.FALSE.booleanValue()) {
+        if (false) {
             final double f = getCollisionBorderSize();
             return new AxisAlignedBB(0, 0, 0, 0, 0, 0).offset(prevPosX, prevPosY, prevPosZ).expand(f, f, f);
         }

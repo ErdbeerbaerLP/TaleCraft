@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Decorator {
 
-    private static List<StaticDecoration> statics = new ArrayList<>();
+    private static final List<StaticDecoration> statics = new ArrayList<>();
     private static List<Decoration> decorations;
 
     static {

@@ -3,6 +3,7 @@ package talecraft.client.gui.qad.model;
 import net.minecraft.util.ResourceLocation;
 import talecraft.client.gui.qad.QADButton.ButtonModel;
 
+@SuppressWarnings("unused")
 public abstract class AbstractButtonModel implements ButtonModel {
     public String text;
     public ResourceLocation icon;

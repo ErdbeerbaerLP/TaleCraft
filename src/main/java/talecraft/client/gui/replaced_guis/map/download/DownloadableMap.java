@@ -16,12 +16,12 @@ public class DownloadableMap {
     public String description = "Unknown";
     public String author = "Unknown";
     public URL dlURL = null;
-    public boolean hasScripts;
+    public final boolean hasScripts;
     public boolean additionalModsRequired = false;
-    public List<DownloadableMod> additionalMods = new ArrayList<>();
+    public final List<DownloadableMod> additionalMods = new ArrayList<>();
     public String mapURL = "";
     public String mapVersion = "";
-    public String mapUUIDs = "-";
+    public final String mapUUIDs = "-";
 
     public DownloadableMap(Entry<String, JsonElement> mapJson) {
         // TODO Auto-generated constructor stub

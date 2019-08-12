@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import talecraft.TaleCraft;
 import talecraft.TaleCraftTabs;
 
+@SuppressWarnings({"deprecation", "SameReturnValue"})
 public abstract class TCBlockContainer extends BlockContainer {
 
     protected TCBlockContainer() {

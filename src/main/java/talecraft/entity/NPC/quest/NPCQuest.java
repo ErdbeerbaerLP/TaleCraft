@@ -6,9 +6,9 @@ import talecraft.entity.NPC.EntityNPC;
 public abstract class NPCQuest {
 
     private boolean finished;
-    private String start_message;
-    private String ongoing_message;
-    private String end_message;
+    private final String start_message;
+    private final String ongoing_message;
+    private final String end_message;
 
     public NPCQuest(String start_message, String ongoing_message, String end_message) {
         finished = false;

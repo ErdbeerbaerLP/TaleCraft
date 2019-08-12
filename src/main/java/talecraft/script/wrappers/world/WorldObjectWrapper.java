@@ -1,6 +1,5 @@
 package talecraft.script.wrappers.world;
 
-import com.google.common.base.Predicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.EntitySelector;
@@ -26,8 +25,9 @@ import talecraft.util.WorldCommandSender;
 
 import java.util.List;
 
+@SuppressWarnings("ConstantConditions")
 public class WorldObjectWrapper implements IObjectWrapper {
-    private World world;
+    private final World world;
     private WorldCommandSender worldCommandSender;
     private Scriptable worldScope;
 
@@ -135,12 +135,7 @@ public class WorldObjectWrapper implements IObjectWrapper {
     }
 
     public List<EntityObjectWrapper> getEntitiesByName(final String name) {
-        List<Entity> entities = world.getEntities(Entity.class, new Predicate<Entity>() {
-            @Override
-            public boolean apply(Entity input) {
-                return input.getName().equals(name);
-            }
-        });
+        List<Entity> entities = world.getEntities(Entity.class, input -> input.getName().equals(name));
 
         return EntityObjectWrapper.transform(entities);
     }

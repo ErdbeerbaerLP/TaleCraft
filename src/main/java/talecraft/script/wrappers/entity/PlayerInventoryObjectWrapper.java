@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PlayerInventoryObjectWrapper implements IObjectWrapper {
 
-    InventoryPlayer inv;
+    final InventoryPlayer inv;
 
     public PlayerInventoryObjectWrapper(InventoryPlayer inv) {
         this.inv = inv;

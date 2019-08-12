@@ -144,7 +144,6 @@ public class WandCommand extends TCCommandBase {
 
         if (args[0].equals("region")) {
             execute_region(args, player, sender);
-            return;
         }
 
     }
@@ -224,7 +223,6 @@ public class WandCommand extends TCCommandBase {
             int az = bounds[5] + value;
 
             WandItem.setBounds(player, ix, iy, iz, ax, ay, az);
-            return;
         } else {
             throw new WrongUsageException("Missing parameters! /tc_wand expand <val>");
         }
@@ -247,7 +245,6 @@ public class WandCommand extends TCCommandBase {
             int az = bounds[5] + value;
 
             WandItem.setBounds(player, ix, iy, iz, ax, ay, az);
-            return;
         } else {
             throw new WrongUsageException("Missing parameters! /tc_wand expand <val>");
         }
@@ -270,7 +267,6 @@ public class WandCommand extends TCCommandBase {
             int az = bounds[5];
 
             WandItem.setBounds(player, ix, iy, iz, ax, ay, az);
-            return;
         } else {
             throw new WrongUsageException("Missing parameters! /tc_wand expand <val>");
         }
@@ -413,7 +409,6 @@ public class WandCommand extends TCCommandBase {
                         entity.setDead();
                 }
 
-                return;
             }
         } else {
             throw new WrongUsageException("Missing parameters! /tc_wand region ...?");
@@ -528,7 +523,6 @@ public class WandCommand extends TCCommandBase {
             }
 
             WorldHelper.fill(player.getEntityWorld(), bounds, replace);
-            return;
         } else {
             throw new WrongUsageException("Missing parameters! /tc_wand region fill <block>");
         }
@@ -554,7 +548,6 @@ public class WandCommand extends TCCommandBase {
             }
 
             WorldHelper.replace(player.getEntityWorld(), bounds, replace, mask);
-            return;
         } else {
             throw new WrongUsageException("Missing parameters! /tc_wand region fill <block>");
         }
@@ -623,7 +616,6 @@ public class WandCommand extends TCCommandBase {
             if (f_west) WorldHelper.fill(player.getEntityWorld(), ix, iy, iz, ix, ay, az, replace);
 
             // WorldHelper.fill(player.getEntityWorld(), bounds, replace);
-            return;
         } else {
             throw new WrongUsageException("Missing parameters! /tc_wand region room <UDNESW BA> <block>");
         }
@@ -717,6 +709,7 @@ public class WandCommand extends TCCommandBase {
                     "set");
         }
 
+        //noinspection ConstantConditions
         if (args.length >= 2 && args[0].equals("expand_to")) {
             return getListOfStringsMatchingLastWord(args, COORDINATES);
         }

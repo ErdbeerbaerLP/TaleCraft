@@ -18,11 +18,11 @@ import java.util.List;
 public class BlockStateListModel implements ListModel {
 
     private final NBTTagCompound tag;
-    private String name;
+    private final String name;
     // private ItemStack current;
 
-    private List<ListModelItem> items;
-    private List<ListModelItem> filtered;
+    private final List<ListModelItem> items;
+    private final List<ListModelItem> filtered;
 
     public BlockStateListModel(NBTTagCompound compound, BlockstateBrushParameter param) {
         this.tag = compound;
@@ -96,7 +96,7 @@ public class BlockStateListModel implements ListModel {
 
     private static class BlockStateItem implements ListModelItem {
 
-        private ItemStack stack;
+        private final ItemStack stack;
 
         public BlockStateItem(ItemStack stack) {
             this.stack = stack;

@@ -13,13 +13,11 @@ import talecraft.TaleCraft;
 import talecraft.container.WorkbenchContainer;
 import talecraft.network.packets.WorkbenchCraftingPacket;
 
-import java.io.IOException;
-
 public class GuiWorkbench extends GuiContainer {
 
     private static final ResourceLocation CRAFTING_TABLE_GUI_TEXTURES = new ResourceLocation("textures/gui/container/crafting_table.png");
 
-    private WorkbenchContainer container;
+    private final WorkbenchContainer container;
 
     public GuiWorkbench(WorkbenchContainer container) {
         super(container);
@@ -53,7 +51,7 @@ public class GuiWorkbench extends GuiContainer {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
+    protected void actionPerformed(GuiButton button) {
         if (button.id == 0 || button.id == 1) {
             boolean empty = true;
             NonNullList<Ingredient> ingredients = NonNullList.create();
@@ -66,6 +64,7 @@ public class GuiWorkbench extends GuiContainer {
             if (!empty) {
                 if (!container.getSlot(0).getStack().isEmpty()) {
                     if (button.id == 0) {
+                        //noinspection ConstantConditions
                         TaleCraft.network.sendToServer(new WorkbenchCraftingPacket(new ShapedRecipes(null, 3, 3, ingredients, container.getSlot(0).getStack()), true));
                     } else {
                         TaleCraft.network.sendToServer(new WorkbenchCraftingPacket(new ShapedRecipes(null, 3, 3, ingredients, container.getSlot(0).getStack()), false));

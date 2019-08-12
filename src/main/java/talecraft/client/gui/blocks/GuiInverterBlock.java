@@ -8,7 +8,7 @@ import talecraft.client.gui.qad.QADLabel;
 import talecraft.tileentity.InverterBlockTileEntity;
 
 public class GuiInverterBlock extends QADGuiScreen {
-    InverterBlockTileEntity tileEntity;
+    final InverterBlockTileEntity tileEntity;
 
     public GuiInverterBlock(InverterBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;

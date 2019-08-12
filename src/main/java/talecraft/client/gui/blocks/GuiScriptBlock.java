@@ -8,7 +8,7 @@ import talecraft.client.gui.qad.QADLabel;
 import talecraft.tileentity.ScriptBlockTileEntity;
 
 public class GuiScriptBlock extends QADGuiScreen {
-    ScriptBlockTileEntity tileEntity;
+    final ScriptBlockTileEntity tileEntity;
 
     public GuiScriptBlock(ScriptBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;

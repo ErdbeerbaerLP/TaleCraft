@@ -120,9 +120,9 @@ public class ScriptItem extends TCItem {
     }
 
     private static class TempstackvokeSource implements IInvokeSource, ICommandSender {
-        World world;
-        Entity holder;
-        BlockPos position;
+        final World world;
+        final Entity holder;
+        final BlockPos position;
         Scriptable scriptScope;
 
         public TempstackvokeSource(World worldIn, BlockPos positionIn, Entity holderIn) {

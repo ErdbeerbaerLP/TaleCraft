@@ -25,6 +25,7 @@ import talecraft.tileentity.SummonBlockTileEntity.SummonOption;
 import java.util.UUID;
 
 // summonblock
+@SuppressWarnings("ConstantConditions")
 public class SummonBlock extends TCBlockContainer implements TCITriggerableBlock {
 
     @Override

@@ -15,11 +15,11 @@ public class GuiNPCDialogue extends GuiScreen {
 
     private static final ResourceLocation GUI_TEXTURE = new ResourceLocation("talecraft:textures/gui/npcdialogue.png");
     private final UUID npcid;
-    private NPCDialogue current;
-    private List<NPCDialogue> dialogues;
+    private final NPCDialogue current;
+    private final List<NPCDialogue> dialogues;
     private int guiLeft;
     private int guiTop;
-    private UUID uuid;
+    private final UUID uuid;
 
     public GuiNPCDialogue(NPCDialogue current, UUID uuid, List<NPCDialogue> dialogues, UUID npcid) {
         this.current = current;

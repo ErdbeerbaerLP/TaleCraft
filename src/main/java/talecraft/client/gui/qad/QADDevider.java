@@ -5,7 +5,7 @@ import talecraft.client.gui.vcui.VCUIRenderer;
 public class QADDevider extends QADComponent {
 
     private int pos;
-    private boolean vertical;
+    private final boolean vertical;
 
     public QADDevider(int pos, boolean vertical) {
         this.pos = pos;

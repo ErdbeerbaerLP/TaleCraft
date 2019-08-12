@@ -19,7 +19,7 @@ import talecraft.tileentity.RelayBlockTileEntity;
 import java.util.Map.Entry;
 
 public class GuiRelayBlock extends QADGuiScreen {
-    RelayBlockTileEntity tileEntity;
+    final RelayBlockTileEntity tileEntity;
 
     public GuiRelayBlock(RelayBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;

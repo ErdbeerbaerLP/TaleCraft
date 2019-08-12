@@ -12,7 +12,7 @@ import talecraft.proxy.ClientProxy;
 
 public class BoxTemporable implements ITemporaryRenderable {
     public int[] box;
-    public long deletionTimepoint;
+    public final long deletionTimepoint;
     public int color;
 
     public BoxTemporable() {

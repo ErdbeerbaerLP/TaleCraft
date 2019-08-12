@@ -15,7 +15,7 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.DelayBlockTileEntity;
 
 public class GuiDelayBlock extends QADGuiScreen {
-    DelayBlockTileEntity tileEntity;
+    final DelayBlockTileEntity tileEntity;
     QADSlider slider;
 
     public GuiDelayBlock(DelayBlockTileEntity tileEntity) {
@@ -35,16 +35,13 @@ public class GuiDelayBlock extends QADGuiScreen {
         slider.setX(2);
         slider.setY(16 + 2 + 20 + 2);
         slider.setTooltip("ylock", "Delay in ticks.", "Max: " + maximum);
-        slider.setSliderAction(new Runnable() {
-            @Override
-            public void run() {
-                int newValue = (int) (slider.getSliderValue() * maximum);
-                String commandString = ClientNetworkHandler.makeBlockCommand(position);
-                NBTTagCompound commandData = new NBTTagCompound();
-                commandData.setString("command", "set");
-                commandData.setInteger("delay", MathHelper.clamp(newValue, 1, maximum));
-                TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
-            }
+        slider.setSliderAction(() -> {
+            int newValue = (int) (slider.getSliderValue() * maximum);
+            String commandString = ClientNetworkHandler.makeBlockCommand(position);
+            NBTTagCompound commandData = new NBTTagCompound();
+            commandData.setString("command", "set");
+            commandData.setInteger("delay", MathHelper.clamp(newValue, 1, maximum));
+            TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
         });
     }
 

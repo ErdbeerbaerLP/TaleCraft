@@ -7,6 +7,7 @@ import talecraft.blocks.TCTileEntity;
 import talecraft.clipboard.ClipboardItem;
 import talecraft.invoke.IInvoke;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class StorageBlockTileEntity extends TCTileEntity {
@@ -76,7 +77,7 @@ public class StorageBlockTileEntity extends TCTileEntity {
                 TaleCraft.logger.error(getName() + this + "# does not have CLIPBOARD: " + item);
             }
             if (bounds == null) {
-                TaleCraft.logger.error(getName() + this + "# does not have BOUNDS: " + bounds);
+                TaleCraft.logger.error(getName() + this + "# does not have BOUNDS: " + Arrays.toString(bounds));
             }
 
             if (item != null && bounds != null) {

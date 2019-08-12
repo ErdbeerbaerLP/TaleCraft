@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class EntityObjectWrapper implements IObjectWrapper {
-    private Entity entity;
+    private final Entity entity;
 
     public EntityObjectWrapper(Entity entity) {
         this.entity = entity;

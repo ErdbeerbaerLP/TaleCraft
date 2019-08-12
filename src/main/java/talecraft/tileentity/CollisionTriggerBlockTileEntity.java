@@ -18,13 +18,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+@SuppressWarnings("EmptyMethod")
 public class CollisionTriggerBlockTileEntity extends TCTileEntity {
     IInvoke collisionStartTrigger = BlockTriggerInvoke.ZEROINSTANCE;
     IInvoke collisionStopTrigger = BlockTriggerInvoke.ZEROINSTANCE;
     private int entityFilter = 1;
 
     // This map contains all entities that are currently colliding with this block.
-    private Map<Entity, MutableInteger> collidingEntities = Maps.newHashMap();
+    private final Map<Entity, MutableInteger> collidingEntities = Maps.newHashMap();
 
     public void collision(Entity entityIn) {
         if (!filter(entityIn)) return;

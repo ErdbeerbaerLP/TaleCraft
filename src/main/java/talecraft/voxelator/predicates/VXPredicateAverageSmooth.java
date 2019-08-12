@@ -15,7 +15,7 @@ public final class VXPredicateAverageSmooth extends VXPredicate {
             new IntegerBrushParameter("range", 2, 15, 7)
     };
 
-    public static FilterFactory FACTORY = new FilterFactory() {
+    public static final FilterFactory FACTORY = new FilterFactory() {
         @Override
         public String getName() {
             return "avgsmooth";

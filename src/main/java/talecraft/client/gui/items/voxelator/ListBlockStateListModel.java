@@ -17,8 +17,8 @@ import java.util.Set;
 
 public class ListBlockStateListModel implements ListModel {
     private final NBTTagCompound tag;
-    private List<ListModelItem> items;
-    private List<ListModelItem> filtered;
+    private final List<ListModelItem> items;
+    private final List<ListModelItem> filtered;
 
     public ListBlockStateListModel(NBTTagCompound tag) {
         this.tag = tag;
@@ -93,7 +93,7 @@ public class ListBlockStateListModel implements ListModel {
 
     public static class BlockStateItem implements ListModelItem {
 
-        private ItemStack stack;
+        private final ItemStack stack;
 
         public BlockStateItem(ItemStack stack) {
             this.stack = stack;

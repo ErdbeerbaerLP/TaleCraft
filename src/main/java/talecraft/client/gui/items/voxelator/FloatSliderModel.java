@@ -12,7 +12,7 @@ public class FloatSliderModel implements SliderModel<Float> {
     private final String name;
     private float current;
     private float value;
-    private NBTTagCompound tag;
+    private final NBTTagCompound tag;
 
     public FloatSliderModel(NBTTagCompound compound, FloatBrushParameter param) {
         tag = compound;

@@ -21,8 +21,8 @@ public class GuiDecorator extends QADGuiScreen {
     private QADNumberTextField AMOUNT;
     private QADNumberTextField RADIUS;
     private String selected_decoration;
-    private List<String> decorations;
-    private NBTTagCompound tag;
+    private final List<String> decorations;
+    private final NBTTagCompound tag;
 
     public GuiDecorator(List<String> sd, NBTTagCompound tag) {
         selected_decoration = sd.get(0);
@@ -63,22 +63,17 @@ public class GuiDecorator extends QADGuiScreen {
         addComponent(DECORATION_SELECTOR);
         QADButton button = new QADButton("Apply");
         button.setBounds(2, 135, 75, 20);
-        button.setAction(new Runnable() {
-            @Override
-            public void run() {
-                TaleCraft.network.sendToServer(
-                        new DecoratorPacket(mc.player.getUniqueID(),
-                                X_OFFSET.getValue().intValue(), Y_OFFSET.getValue().intValue(), Z_OFFSET.getValue().intValue(),
-                                selected_decoration, AMOUNT.getValue().intValue(), RADIUS.getValue().intValue()));
-            }
-        });
+        button.setAction(() -> TaleCraft.network.sendToServer(
+                new DecoratorPacket(mc.player.getUniqueID(),
+                        X_OFFSET.getValue().intValue(), Y_OFFSET.getValue().intValue(), Z_OFFSET.getValue().intValue(),
+                        selected_decoration, AMOUNT.getValue().intValue(), RADIUS.getValue().intValue())));
         addComponent(button);
     }
 
     private class DecorationListModel implements ListModel {
 
-        private final List<ListModelItem> items = new ArrayList<ListModelItem>();
-        private final List<ListModelItem> filtered = new ArrayList<ListModelItem>();
+        private final List<ListModelItem> items = new ArrayList<>();
+        private final List<ListModelItem> filtered = new ArrayList<>();
 
         public DecorationListModel() {
             for (String decor : decorations) {
@@ -136,7 +131,7 @@ public class GuiDecorator extends QADGuiScreen {
 
     private class DecorationModelItem implements ListModelItem {
 
-        private String decor;
+        private final String decor;
 
         public DecorationModelItem(String decor) {
             this.decor = decor;

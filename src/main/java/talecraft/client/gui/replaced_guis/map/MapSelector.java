@@ -26,7 +26,7 @@ public class MapSelector extends GuiScreen {
     /**
      * The screen to return to when this closes (always Main Menu).
      */
-    protected GuiScreen prevScreen;
+    protected final GuiScreen prevScreen;
     protected String title = "Select Map";
     /**
      * Tooltip displayed a world whose version is different from this client's
@@ -40,7 +40,7 @@ public class MapSelector extends GuiScreen {
     /**
      * Used to determine the world´s folder
      */
-    private String worldPathName = "saves/.TC_MAPS";
+    private final String worldPathName = "saves/.TC_MAPS";
 
     public MapSelector(GuiScreen screenIn) {
         this.prevScreen = screenIn;
@@ -81,7 +81,7 @@ public class MapSelector extends GuiScreen {
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
      */
-    protected void actionPerformed(GuiButton button) throws IOException {
+    protected void actionPerformed(GuiButton button) {
         if (button.enabled) {
             GuiListMapSelectionEntry guilistworldselectionentry = this.selectionList.getSelectedWorld();
 

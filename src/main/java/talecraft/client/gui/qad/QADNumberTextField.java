@@ -9,7 +9,7 @@ public class QADNumberTextField extends QADTextField implements TextChangeListen
     public static final int COLOR_FAIL = 0xFFFF7F7F;
 
     private Number valueLast;
-    private NumberType valueType;
+    private final NumberType valueType;
     private double MIN;
     private double MAX;
 

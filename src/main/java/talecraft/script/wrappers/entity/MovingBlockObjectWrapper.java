@@ -7,7 +7,7 @@ import talecraft.entity.EntityMovingBlock;
 import java.util.List;
 
 public class MovingBlockObjectWrapper extends EntityObjectWrapper {
-    private EntityMovingBlock moving;
+    private final EntityMovingBlock moving;
 
     public MovingBlockObjectWrapper(EntityMovingBlock moving) {
         super(moving);

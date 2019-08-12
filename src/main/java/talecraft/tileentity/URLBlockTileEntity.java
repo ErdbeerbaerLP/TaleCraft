@@ -73,6 +73,7 @@ public class URLBlockTileEntity extends TCTileEntity {
             command.command = "client.gui.openurl";
             command.data = NBTHelper.newSingleStringCompound("url", url);
 
+            //noinspection ConstantConditions
             for (EntityPlayerMP player : players) {
                 TaleCraft.network.sendTo(command, player);
             }

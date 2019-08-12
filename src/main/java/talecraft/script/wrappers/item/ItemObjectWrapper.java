@@ -7,7 +7,7 @@ import talecraft.script.wrappers.IObjectWrapper;
 import java.util.List;
 
 public class ItemObjectWrapper implements IObjectWrapper {
-    private Item item;
+    private final Item item;
 
     public ItemObjectWrapper(Item item) {
         this.item = item;

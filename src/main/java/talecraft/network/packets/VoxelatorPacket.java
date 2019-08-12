@@ -49,6 +49,7 @@ public class VoxelatorPacket implements IMessage {
 
             ItemStack item = player.inventory.getCurrentItem();
             if (item.getItem() == TaleCraftItems.voxelbrush) {
+                //noinspection ConstantConditions
                 item.getTagCompound().setTag("brush_data", message.data);
             } else TaleCraft.logger.error("Currently Held Item Is Not A VoxelBrush");
             return null;

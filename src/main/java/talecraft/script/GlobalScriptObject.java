@@ -23,8 +23,9 @@ import talecraft.util.GObjectTypeHelper;
 
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class GlobalScriptObject implements IObjectWrapper {
-    private GlobalScriptManager globalScriptManager;
+    private final GlobalScriptManager globalScriptManager;
 
     protected GlobalScriptObject(GlobalScriptManager globalScriptManager) {
         this.globalScriptManager = globalScriptManager;

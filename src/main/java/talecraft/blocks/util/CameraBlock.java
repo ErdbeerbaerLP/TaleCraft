@@ -36,6 +36,7 @@ public class CameraBlock extends TCBlockContainer implements TCITriggerableBlock
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = playerIn.getHeldItem(hand);
         if (!worldIn.isRemote) {
+            //noinspection ConstantConditions
             if (heldItem != null && heldItem.getItem() == TaleCraftItems.camera) {
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setLong("selected", pos.toLong());

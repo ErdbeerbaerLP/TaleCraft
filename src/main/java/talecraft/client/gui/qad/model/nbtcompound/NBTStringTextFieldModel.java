@@ -5,8 +5,8 @@ import talecraft.client.gui.qad.QADTextField.TextFieldModel;
 
 public final class NBTStringTextFieldModel implements TextFieldModel {
     String text;
-    String tagKey;
-    NBTTagCompound tagParent;
+    final String tagKey;
+    final NBTTagCompound tagParent;
 
     public NBTStringTextFieldModel(String tagKey, NBTTagCompound tagParent) {
         this.tagKey = tagKey;

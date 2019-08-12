@@ -16,7 +16,7 @@ public class QADSlider extends QADRectangularComponent {
     private int yPos;
     private int width = 100;
     private int height = 20;
-    private boolean enabled = true;
+    private final boolean enabled = true;
     private boolean hovered = false;
     private boolean focused = false;
     private SliderModel<?> model;

@@ -5,8 +5,8 @@ import net.minecraft.nbt.NBTTagList;
 import talecraft.client.gui.qad.QADTextField.TextFieldModel;
 
 public class NBTListDoubleTextFieldModel implements TextFieldModel {
-    NBTTagList list;
-    int index;
+    final NBTTagList list;
+    final int index;
     String text;
     boolean valid;
 

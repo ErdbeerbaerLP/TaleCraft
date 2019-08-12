@@ -16,7 +16,7 @@ import talecraft.client.gui.vcui.VCUIRenderer;
 @SideOnly(Side.CLIENT)
 public class TCGuiScreen extends GuiScreen {
     public static final VCUIRenderer instance = new VCUIRenderer();
-    private VCUIComponent root;
+    private final VCUIComponent root;
 
     public TCGuiScreen() {
         super.allowUserInput = false;

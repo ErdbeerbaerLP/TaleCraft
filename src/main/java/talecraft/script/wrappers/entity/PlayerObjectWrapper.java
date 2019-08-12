@@ -5,7 +5,7 @@ import net.minecraft.util.text.TextComponentString;
 
 public class PlayerObjectWrapper extends EntityObjectWrapper {
 
-    private EntityPlayer player;
+    private final EntityPlayer player;
 
     public PlayerObjectWrapper(EntityPlayer player) {
         super(player);

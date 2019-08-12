@@ -8,7 +8,7 @@ import talecraft.script.wrappers.IObjectWrapper;
 import java.util.List;
 
 public class ScoreboardCriteriaObjectWrapper implements IObjectWrapper {
-    private IScoreCriteria criteria;
+    private final IScoreCriteria criteria;
 
     public ScoreboardCriteriaObjectWrapper(IScoreCriteria criteria) {
         this.criteria = criteria;

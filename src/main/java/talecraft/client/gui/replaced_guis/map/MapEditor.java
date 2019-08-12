@@ -37,7 +37,7 @@ public class MapEditor extends QADGuiScreen {
     private BufferedImage newImage = null;
     private QADButton btnResetIcon;
     private QADButton btnSetIcon;
-    private String path;
+    private final String path;
 
     public MapEditor(GuiScreen p_i46593_1_, String p_i46593_2_, String path) {
         this.lastScreen = p_i46593_1_;
@@ -61,111 +61,91 @@ public class MapEditor extends QADGuiScreen {
         this.addComponent(btnCancel = new QADButton(this.width / 2 - 100, this.height / 4 + 120 + 12, 200, I18n.format("gui.cancel")));
         btnResetIcon.setEnabled(new AnvilSaveConverter(new File(mc.mcDataDir, path), mc.getDataFixer()).getFile(this.worldId, "icon.png").isFile());
         btnSetIcon = addComponent(new QADButton(btnResetIcon.getX() + btnResetIcon.getButtonWidth(), btnResetIcon.getY(), 80, "Set Icon"));
-        btnSetIcon.setAction(new Runnable() {
+        btnSetIcon.setAction(() -> {
+            // TODO Auto-generated method stub
+            try {
+                JFileChooser fc = new JFileChooser();
 
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
+                fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                fc.setFileFilter(new FileFilter() {
+
+                    @Override
+                    public String getDescription() {
+                        // TODO Auto-generated method stub
+                        return "World icon files (.png)";
+                    }
+
+                    @Override
+                    public boolean accept(File f) {
+                        // TODO Auto-generated method stub
+                        if (f.isDirectory()) return true;
+                        return f.getName().endsWith(".png");
+                    }
+                });
+                JFrame j = new JFrame();
+                j.setUndecorated(true);
+                j.setTitle("Select icon");
+                j.setVisible(true);
+                int res = fc.showOpenDialog(j);
+                j.setVisible(false);
+                if (res == JFileChooser.CANCEL_OPTION) return;
+
+                BufferedImage img = ImageIO.read(fc.getSelectedFile());
+                int w = img.getWidth();
+                int h = img.getHeight();
+                BufferedImage dimg = new BufferedImage(64, 64, img.getType());
+                Graphics2D g = dimg.createGraphics();
+                g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                        RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+                        RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+                g.drawImage(img, 0, 0, 64, 64, 0, 0, w, h, null);
+                g.dispose();
+                newImage = dimg;
+
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        });
+        btnCancel.setAction(() -> {
+            // TODO Auto-generated method stub
+            mc.displayGuiScreen(lastScreen);
+        });
+        btnSave.setAction(() -> {
+            // TODO Auto-generated method stub
+            ISaveFormat isaveformat12 = new AnvilSaveConverter(new File(mc.mcDataDir, path), mc.getDataFixer());
+            isaveformat12.renameWorld(worldId, nameEdit.getText().trim());
+            if (newImage != null) {
+                File world = isaveformat12.getFile(worldId, "level.dat").getParentFile();
+                File icon = new File(world, "icon.png");
+                if (icon.exists()) icon.delete();
                 try {
-                    JFileChooser fc = new JFileChooser();
+                    FileOutputStream fo = new FileOutputStream(icon);
 
-                    fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                    fc.setFileFilter(new FileFilter() {
-
-                        @Override
-                        public String getDescription() {
-                            // TODO Auto-generated method stub
-                            return "World icon files (.png)";
-                        }
-
-                        @Override
-                        public boolean accept(File f) {
-                            // TODO Auto-generated method stub
-                            if (f.isDirectory()) return true;
-                            return f.getName().endsWith(".png");
-                        }
-                    });
-                    JFrame j = new JFrame();
-                    j.setUndecorated(true);
-                    j.setTitle("Select icon");
-                    j.setVisible(true);
-                    int res = fc.showOpenDialog(j);
-                    j.setVisible(false);
-                    if (res == JFileChooser.CANCEL_OPTION) return;
-
-                    BufferedImage img = ImageIO.read(fc.getSelectedFile());
-                    int w = img.getWidth();
-                    int h = img.getHeight();
-                    BufferedImage dimg = new BufferedImage(64, 64, img.getType());
-                    Graphics2D g = dimg.createGraphics();
-                    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                            RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                    g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
-                            RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-                    g.drawImage(img, 0, 0, 64, 64, 0, 0, w, h, null);
-                    g.dispose();
-                    newImage = dimg;
-
-
-                } catch (Exception e) {
+                    ImageIO.write(newImage, "png", fo);
+                    fo.close();
+                } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-
+                btnResetIcon.setEnabled(true);
             }
+            mc.displayGuiScreen(lastScreen);
         });
-        btnCancel.setAction(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                mc.displayGuiScreen(lastScreen);
-            }
+        btnResetIcon.setAction(() -> {
+            // TODO Auto-generated method stub
+            ISaveFormat isaveformat1 = new AnvilSaveConverter(new File(mc.mcDataDir, path), mc.getDataFixer());
+            FileUtils.deleteQuietly(isaveformat1.getFile(worldId, "icon.png"));
+            btnResetIcon.setEnabled(false);
         });
-        btnSave.setAction(new Runnable() {
+        btnOpenFolder.setAction(() -> {
+            // TODO Auto-generated method stub
+            ISaveFormat isaveformat2 = new AnvilSaveConverter(new File(mc.mcDataDir, path), mc.getDataFixer());
+            OpenGlHelper.openFile(isaveformat2.getFile(worldId, "level.dat").getParentFile());
 
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                ISaveFormat isaveformat = new AnvilSaveConverter(new File(mc.mcDataDir, path), mc.getDataFixer());
-                isaveformat.renameWorld(worldId, nameEdit.getText().trim());
-                if (newImage != null) {
-                    File world = isaveformat.getFile(worldId, "level.dat").getParentFile();
-                    File icon = new File(world, "icon.png");
-                    if (icon.exists()) icon.delete();
-                    try {
-                        FileOutputStream fo = new FileOutputStream(icon);
-
-                        ImageIO.write(newImage, "png", fo);
-                        fo.close();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    btnResetIcon.setEnabled(true);
-                }
-                mc.displayGuiScreen(lastScreen);
-            }
-        });
-        btnResetIcon.setAction(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                ISaveFormat isaveformat1 = new AnvilSaveConverter(new File(mc.mcDataDir, path), mc.getDataFixer());
-                FileUtils.deleteQuietly(isaveformat1.getFile(worldId, "icon.png"));
-                btnResetIcon.setEnabled(false);
-            }
-        });
-        btnOpenFolder.setAction(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                ISaveFormat isaveformat2 = new AnvilSaveConverter(new File(mc.mcDataDir, path), mc.getDataFixer());
-                OpenGlHelper.openFile(isaveformat2.getFile(worldId, "level.dat").getParentFile());
-
-            }
         });
 
     }

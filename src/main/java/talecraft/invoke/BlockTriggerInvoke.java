@@ -4,6 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.Arrays;
 
+@SuppressWarnings("ConstantConditions")
 public class BlockTriggerInvoke implements IInvoke {
     public static final BlockTriggerInvoke ZEROINSTANCE = new BlockTriggerInvoke();
     public static final String TYPE = "BlockTriggerInvoke";

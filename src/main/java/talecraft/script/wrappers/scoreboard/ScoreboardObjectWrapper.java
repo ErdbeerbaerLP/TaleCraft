@@ -8,7 +8,7 @@ import talecraft.script.wrappers.IObjectWrapper;
 import java.util.List;
 
 public class ScoreboardObjectWrapper implements IObjectWrapper {
-    private Scoreboard scoreboard;
+    private final Scoreboard scoreboard;
 
     public ScoreboardObjectWrapper(Scoreboard scoreboard) {
         this.scoreboard = scoreboard;

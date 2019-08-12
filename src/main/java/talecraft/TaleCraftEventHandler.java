@@ -149,7 +149,7 @@ public class TaleCraftEventHandler {
         WorkbenchBlock.recipes = WorkbenchManager.fromNBT(WorldFileDataHelper.getTagFromFile(event.getWorld(), "workbench"));
         UndoTask.loadFromNBT(WorldFileDataHelper.getTagFromFile(event.getWorld(), "undo"));
         NBTTagCompound c = WorldFileDataHelper.getTagFromFile(event.getWorld(), "info");
-        if ((c.hasKey("version") && c.getString("version") != "vanilla") || !c.hasKey("version"))
+        if ((c.hasKey("version") && !c.getString("version").equals("vanilla")) || !c.hasKey("version"))
             c.setString("version", Reference.MOD_VERSION);
 
         WorldFileDataHelper.saveNBTToWorld(event.getWorld(), "info", c);
@@ -227,7 +227,6 @@ public class TaleCraftEventHandler {
 
         if (event.getSource() == DamageSource.IN_WALL && world.getGameRules().getBoolean("disable.damage.suffocate")) {
             event.setCanceled(true);
-            return;
         }
 
     }
@@ -237,7 +236,7 @@ public class TaleCraftEventHandler {
         if (event.getSide() == Side.CLIENT) return;
         ItemStack stack = event.getItemStack();
         final EntityPlayer player = event.getEntityPlayer();
-        boolean hasCommandTag = stack.hasTagCompound() && stack.getTagCompound().hasKey("command");
+        @SuppressWarnings("ConstantConditions") boolean hasCommandTag = stack.hasTagCompound() && stack.getTagCompound().hasKey("command");
         if (hasCommandTag) {
             String command = stack.getTagCompound().getString("command");
             FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager().executeCommand(new ICommandSender() {

@@ -151,7 +151,7 @@ public class PasteItemRender implements IMetadataRender {
         }
         if (snap > 1) {
             final int s = (int) snap;
-            final int r = 1 * s;
+            final int r = s;
             final float bsi = 0.5f - 0.05f;
             final float bsa = 0.5f + 0.05f;
 

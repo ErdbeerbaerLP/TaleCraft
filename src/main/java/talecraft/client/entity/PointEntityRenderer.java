@@ -85,6 +85,7 @@ public class PointEntityRenderer extends Render<Entity> {
         boolean shouldDrawName = (x * x + y * y + z * z) < 128;
 
         final String TEXT = entity.getName(); // tile.getStateAsString();
+        //noinspection ConstantConditions
         if (TEXT != null && shouldDrawName) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y + yeoffset, z);

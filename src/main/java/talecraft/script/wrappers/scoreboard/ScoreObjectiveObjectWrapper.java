@@ -8,7 +8,7 @@ import talecraft.script.wrappers.IObjectWrapper;
 import java.util.List;
 
 public class ScoreObjectiveObjectWrapper implements IObjectWrapper {
-    private ScoreObjective objective;
+    private final ScoreObjective objective;
 
     public ScoreObjectiveObjectWrapper(ScoreObjective objective) {
         this.objective = objective;

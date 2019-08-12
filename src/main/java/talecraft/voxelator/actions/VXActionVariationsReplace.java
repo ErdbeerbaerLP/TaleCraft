@@ -17,6 +17,7 @@ import talecraft.voxelator.params.ListBrushParameter;
 
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class VXActionVariationsReplace extends VXAction {
     private static final BrushParameter[] PARAMS = new BrushParameter[]{
             new ListBrushParameter("variants", 255, BPType.BLOCKSTATE)

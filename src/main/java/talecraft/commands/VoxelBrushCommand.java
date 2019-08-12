@@ -17,6 +17,7 @@ import talecraft.util.GObjectTypeHelper;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("ConstantConditions")
 public class VoxelBrushCommand extends CommandBase {
 
     @Override

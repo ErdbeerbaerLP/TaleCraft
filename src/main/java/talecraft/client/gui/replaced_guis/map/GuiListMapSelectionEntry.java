@@ -14,6 +14,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldSummary;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -37,6 +38,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author ErdbeerbaerLP
  */
+@SuppressWarnings("ConstantConditions")
 public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat();
@@ -50,7 +52,7 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry {
     private File iconFile;
     private DynamicTexture icon;
     private long lastClickTime;
-    private String worldPathName;
+    private final String worldPathName;
 
     public GuiListMapSelectionEntry(GuiListMapSelection newGuiListWorldSelection, WorldSummary worldSummaryIn, ISaveFormat saveFormat) {
         this.containingListSel = newGuiListWorldSelection;
@@ -194,23 +196,19 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry {
             e.printStackTrace();
         }
         if (this.worldSummary.askToOpenWorld()) {
-            this.client.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback() {
-                public void confirmClicked(boolean result, int id) {
-                    if (result) {
-                        GuiListMapSelectionEntry.this.loadWorld();
-                    } else {
-                        GuiListMapSelectionEntry.this.client.displayGuiScreen(GuiListMapSelectionEntry.this.worldSelScreen);
-                    }
+            this.client.displayGuiScreen(new GuiYesNo((result, id) -> {
+                if (result) {
+                    GuiListMapSelectionEntry.this.loadWorld();
+                } else {
+                    GuiListMapSelectionEntry.this.client.displayGuiScreen(GuiListMapSelectionEntry.this.worldSelScreen);
                 }
             }, I18n.format("selectWorld.versionQuestion"), I18n.format("selectWorld.versionWarning", this.worldSummary.getVersionName()), I18n.format("selectWorld.versionJoinButton"), I18n.format("gui.cancel"), 0));
         } else if (worldComp != null && worldComp.hasKey("version") && (!worldComp.getString("version").equals(Reference.MOD_VERSION)) && !worldComp.getString("version").equals("vanilla")) {
-            this.client.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback() {
-                public void confirmClicked(boolean result, int id) {
-                    if (result) {
-                        GuiListMapSelectionEntry.this.loadWorld();
-                    } else {
-                        GuiListMapSelectionEntry.this.client.displayGuiScreen(GuiListMapSelectionEntry.this.worldSelScreen);
-                    }
+            this.client.displayGuiScreen(new GuiYesNo((result, id) -> {
+                if (result) {
+                    GuiListMapSelectionEntry.this.loadWorld();
+                } else {
+                    GuiListMapSelectionEntry.this.client.displayGuiScreen(GuiListMapSelectionEntry.this.worldSelScreen);
                 }
             }, I18n.format("selectWorld.versionQuestion"), "This world was loaded in Talecraft version " + worldComp.getString("version") + " and loading it in this version could cause corruption!", I18n.format("selectWorld.versionJoinButton"), I18n.format("gui.cancel"), 0));
 
@@ -229,18 +227,16 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry {
     }
 
     public void deleteWorld() {
-        this.client.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback() {
-            public void confirmClicked(boolean result, int id) {
-                if (result) {
-                    GuiListMapSelectionEntry.this.client.displayGuiScreen(new GuiScreenWorking());
-                    ISaveFormat isaveformat = new AnvilSaveConverter(new File(GuiListMapSelectionEntry.this.client.mcDataDir, GuiListMapSelectionEntry.this.worldPathName), GuiListMapSelectionEntry.this.client.getDataFixer());
-                    isaveformat.flushCache();
-                    isaveformat.deleteWorldDirectory(GuiListMapSelectionEntry.this.worldSummary.getFileName());
-                    GuiListMapSelectionEntry.this.containingListSel.refreshList();
-                }
-
-                GuiListMapSelectionEntry.this.client.displayGuiScreen(GuiListMapSelectionEntry.this.worldSelScreen);
+        this.client.displayGuiScreen(new GuiYesNo((result, id) -> {
+            if (result) {
+                GuiListMapSelectionEntry.this.client.displayGuiScreen(new GuiScreenWorking());
+                ISaveFormat isaveformat = new AnvilSaveConverter(new File(GuiListMapSelectionEntry.this.client.mcDataDir, GuiListMapSelectionEntry.this.worldPathName), GuiListMapSelectionEntry.this.client.getDataFixer());
+                isaveformat.flushCache();
+                isaveformat.deleteWorldDirectory(GuiListMapSelectionEntry.this.worldSummary.getFileName());
+                GuiListMapSelectionEntry.this.containingListSel.refreshList();
             }
+
+            GuiListMapSelectionEntry.this.client.displayGuiScreen(GuiListMapSelectionEntry.this.worldSelScreen);
         }, I18n.format("selectWorld.deleteQuestion"), "'" + this.worldSummary.getDisplayName() + "' " + I18n.format("selectWorld.deleteWarning"), I18n.format("selectWorld.deleteButton"), I18n.format("gui.cancel"), 0));
     }
 
@@ -271,28 +267,19 @@ public class GuiListMapSelectionEntry implements GuiListExtended.IGuiListEntry {
         this.client.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
         if (new AnvilSaveConverter(new File(this.client.mcDataDir, this.worldPathName), this.client.getDataFixer()).canLoadWorld(this.worldSummary.getFileName())) {
-            Thread t = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        Minecraft.getMinecraft().displayGuiScreen(new GuiCopyingWorld("Loading...."));
-                        sleep(TimeUnit.SECONDS.toMillis(1));
+            Thread t = new Thread(() -> {
+                try {
+                    Minecraft.getMinecraft().displayGuiScreen(new GuiCopyingWorld("Loading...."));
+                    Thread.sleep(TimeUnit.SECONDS.toMillis(1));
 
-                        final File outDir = new File(new File(client.mcDataDir, "saves"), worldSummary.getFileName());
-                        FileUtils.copyDirectory(new File(new File(client.mcDataDir, worldPathName), worldSummary.getFileName()), outDir);
-                        Minecraft.getMinecraft().addScheduledTask(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                net.minecraftforge.fml.client.FMLClientHandler.instance().tryLoadExistingWorld(new GuiWorldSelection(worldSelScreen), worldSummary);
-                            }
-                        });
-                    } catch (InterruptedException | IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    final File outDir = new File(new File(client.mcDataDir, "saves"), worldSummary.getFileName());
+                    FileUtils.copyDirectory(new File(new File(client.mcDataDir, worldPathName), worldSummary.getFileName()), outDir);
+                    Minecraft.getMinecraft().addScheduledTask(() -> FMLClientHandler.instance().tryLoadExistingWorld(new GuiWorldSelection(worldSelScreen), worldSummary));
+                } catch (InterruptedException | IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-            };
+            });
             t.start();
 
         }

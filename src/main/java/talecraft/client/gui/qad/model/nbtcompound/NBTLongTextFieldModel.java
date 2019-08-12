@@ -5,8 +5,8 @@ import talecraft.client.gui.qad.QADTextField.TextFieldModel;
 
 public final class NBTLongTextFieldModel implements TextFieldModel {
     String text;
-    String tagKey;
-    NBTTagCompound tagParent;
+    final String tagKey;
+    final NBTTagCompound tagParent;
     boolean valid;
 
     public NBTLongTextFieldModel(String tagKey, NBTTagCompound tagParent) {

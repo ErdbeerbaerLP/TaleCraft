@@ -57,8 +57,8 @@ public class WorkbenchContainer extends ContainerWorkbench {
 
     public static class SlotWorkbenchCrafting extends SlotCrafting {
 
-        private InventoryCrafting craftMatrix;
-        private EntityPlayer player;
+        private final InventoryCrafting craftMatrix;
+        private final EntityPlayer player;
 
         public SlotWorkbenchCrafting(EntityPlayer player, InventoryCrafting craftingInventory, IInventory inventoryIn, int slotIndex, int xPosition, int yPosition) {
             super(player, craftingInventory, inventoryIn, slotIndex, xPosition, yPosition);
@@ -83,6 +83,7 @@ public class WorkbenchContainer extends ContainerWorkbench {
                 ItemStack itemstack = this.craftMatrix.getStackInSlot(i);
                 ItemStack itemstack1 = aitemstack[i];
 
+                //noinspection ConstantConditions
                 if (itemstack != null) {
                     this.craftMatrix.decrStackSize(i, 1);
                     itemstack = this.craftMatrix.getStackInSlot(i);

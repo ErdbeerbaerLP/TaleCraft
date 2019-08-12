@@ -9,12 +9,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+@SuppressWarnings("deprecation")
 public class CommandArgumentParser {
     // configurable data
     public Vec3d commandSenderPosition;
     public Entity commandSenderEntity;
     private int index;
-    private String[] arguments;
+    private final String[] arguments;
 
     public CommandArgumentParser(String[] arguments, int start) {
         this.arguments = arguments;
@@ -278,6 +279,7 @@ public class CommandArgumentParser {
         ResourceLocation location = new ResourceLocation(typeStr);
         Block type = Block.REGISTRY.getObject(location);
 
+        //noinspection ConstantConditions
         if (type == null) {
             throw new CommandException("Block type '" + location + "' does not exist.", typeStr);
         }

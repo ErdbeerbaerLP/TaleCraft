@@ -10,7 +10,7 @@ import talecraft.script.wrappers.entity.EntityObjectWrapper;
 import java.util.List;
 
 public class WorldBorderObjectWrapper implements IObjectWrapper {
-    private WorldBorder worldBorder;
+    private final WorldBorder worldBorder;
 
     public WorldBorderObjectWrapper(WorldBorder worldBorder) {
         this.worldBorder = worldBorder;

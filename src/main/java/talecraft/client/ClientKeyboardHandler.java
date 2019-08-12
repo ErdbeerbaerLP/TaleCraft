@@ -25,11 +25,11 @@ public class ClientKeyboardHandler {
     public static KeyBinding buildModeBinding;
     private final ClientProxy proxy;
     private final Minecraft mc;
-    private KeyBinding mapSettingsBinding;
-    private KeyBinding visualizationBinding;
-    private KeyBinding nbt;
-    private KeyBinding reload;
-    private KeyBinding triggerItem;
+    private final KeyBinding mapSettingsBinding;
+    private final KeyBinding visualizationBinding;
+    private final KeyBinding nbt;
+    private final KeyBinding reload;
+    private final KeyBinding triggerItem;
 
     public ClientKeyboardHandler(ClientProxy clientProxy) {
         proxy = clientProxy;
@@ -53,6 +53,7 @@ public class ClientKeyboardHandler {
 
     public void on_key(KeyInputEvent event) {
         //opens the NBT editor
+        //noinspection ConstantConditions
         if (nbt.isPressed() && nbt.isKeyDown() && mc.player != null && mc.player != null && !mc.isGamePaused()) {
             InventoryPlayer player = mc.player.inventory;
             System.out.println(player.getCurrentItem());

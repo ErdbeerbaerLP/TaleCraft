@@ -46,15 +46,12 @@ public class GuiMapControl extends QADGuiScreen {
         addComponent(btnSave = new QADButton(width / 2, height - 100, 60, "SAVE"));
         addComponent(authorNameField = new QADTextField(100, 60, 60, 10, author));
         addComponent(QADFACTORY.createLabel("World Author", authorNameField.xPosition, authorNameField.yPosition - 10));
-        btnSave.setAction(new Runnable() {
-            @Override
-            public void run() {
-                NBTTagCompound tag = WorldFileDataHelper.getTagFromFile(mp.getEntityWorld(), "info");
-                tag.setString("author", authorNameField.getText());
-                tag.setString("description", descField.getText());
-                WorldFileDataHelper.saveNBTToWorld(FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld(), "info", tag);
-                mc.displayGuiScreen(null);
-            }
+        btnSave.setAction(() -> {
+            NBTTagCompound tag = WorldFileDataHelper.getTagFromFile(mp.getEntityWorld(), "info");
+            tag.setString("author", authorNameField.getText());
+            tag.setString("description", descField.getText());
+            WorldFileDataHelper.saveNBTToWorld(FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld(), "info", tag);
+            mc.displayGuiScreen(null);
         });
         authorNameField.setMaxStringLength(30);
         descField.setMaxStringLength(800);

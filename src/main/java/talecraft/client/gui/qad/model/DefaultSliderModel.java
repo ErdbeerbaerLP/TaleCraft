@@ -4,7 +4,7 @@ import net.minecraft.util.math.MathHelper;
 import talecraft.client.gui.qad.QADSlider.SliderModel;
 
 public class DefaultSliderModel implements SliderModel<Integer> {
-    private int maximum;
+    private final int maximum;
     private int current;
     private float value;
 

@@ -28,6 +28,7 @@ import talecraft.network.packets.MovingBlockDataUpdatePacket;
 
 import java.util.List;
 
+@SuppressWarnings("ConstantConditions")
 public class EntityMovingBlock extends EntityFallingBlock implements IEntityAdditionalSpawnData, IInvokeSource {
 
     private boolean invisible;
@@ -141,6 +142,7 @@ public class EntityMovingBlock extends EntityFallingBlock implements IEntityAddi
 
     @Override
     public String getName() {
+        //noinspection ConstantConditions
         return "Moving Block [" + getBlock().getBlock().getRegistryName() + "]";
     }
 

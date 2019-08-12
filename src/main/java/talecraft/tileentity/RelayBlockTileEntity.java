@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class RelayBlockTileEntity extends TCTileEntity {
-    private Map<String, IInvoke> invokes;
+    private final Map<String, IInvoke> invokes;
 
     public RelayBlockTileEntity() {
         invokes = Maps.newHashMap();

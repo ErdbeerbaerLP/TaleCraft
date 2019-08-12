@@ -5,8 +5,8 @@ import net.minecraft.nbt.NBTTagString;
 import talecraft.client.gui.qad.QADTextField.TextFieldModel;
 
 public class NBTListStringTextFieldModel implements TextFieldModel {
-    NBTTagList list;
-    int index;
+    final NBTTagList list;
+    final int index;
     String text;
 
     public NBTListStringTextFieldModel(NBTTagList li, int ix) {

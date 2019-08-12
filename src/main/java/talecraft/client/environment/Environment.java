@@ -8,10 +8,10 @@ import java.util.List;
 
 public class Environment {
     public Conditions predicate = null;
-    public String lighting = null;
-    public Fog fog = null;
-    public List<CloudLayer> clouds = null;
-    public List<SkyLayer> sky = null;
+    public final String lighting = null;
+    public final Fog fog = null;
+    public final List<CloudLayer> clouds = null;
+    public final List<SkyLayer> sky = null;
 
     public Environment() {
     }
@@ -46,10 +46,10 @@ public class Environment {
     }
 
     public static class Fog {
-        public float start = 1.0f;
-        public float end = 100.0f;
-        public float density = 0.1f;
-        public float[] color = new float[]{1f, 1f, 1f};
+        public final float start = 1.0f;
+        public final float end = 100.0f;
+        public final float density = 0.1f;
+        public final float[] color = new float[]{1f, 1f, 1f};
 
         @Override
         public String toString() {
@@ -58,10 +58,10 @@ public class Environment {
     }
 
     public static class CloudLayer {
-        public float angle = 360.0f;
-        public float speed = 1.0f;
-        public int height = 255;
-        public String texture = "talecraft:environments/example/clouds.png";
+        public final float angle = 360.0f;
+        public final float speed = 1.0f;
+        public final int height = 255;
+        public final String texture = "talecraft:environments/example/clouds.png";
 
         @Override
         public String toString() {
@@ -70,15 +70,15 @@ public class Environment {
     }
 
     public static class SkyLayer {
-        public String blend = "add";
-        public boolean depth = false;
-        public boolean cull = false;
-        public String shape = "plane";
-        public String origin = "player";
+        public final String blend = "add";
+        public final boolean depth = false;
+        public final boolean cull = false;
+        public final String shape = "plane";
+        public final String origin = "player";
         public String texture = "talecraft:environment/noise.png";
-        public float[] offset = new float[]{0f, 0f, 0f};
-        public float scale = 1.0f;
-        public List<SkyLayerRotation> rotation = null;
+        public final float[] offset = new float[]{0f, 0f, 0f};
+        public final float scale = 1.0f;
+        public final List<SkyLayerRotation> rotation = null;
 
         @Override
         public String toString() {
@@ -108,9 +108,9 @@ public class Environment {
         }
 
         public static class SkyLayerRotation {
-            public float[] axis = new float[]{0f, 1f, 0f};
-            public float offset = 0f;
-            public float speed = 1f;
+            public final float[] axis = new float[]{0f, 1f, 0f};
+            public final float offset = 0f;
+            public final float speed = 1f;
 
             @Override
             public String toString() {

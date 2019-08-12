@@ -60,7 +60,6 @@ public class GenericTileEntityRenderer<T extends TileEntity> extends TileEntityS
 
             // bounds
             final float D = 2f / 64f;
-            final float I = D;
             final float A = 1f - D;
 
             // bind texture
@@ -72,35 +71,35 @@ public class GenericTileEntityRenderer<T extends TileEntity> extends TileEntityS
             vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
             //vertexbuffer.setBrightness(0xEE); //TODO: FIX
 
-            vertexbuffer.pos(I, A, A).tex(1, 0).endVertex();
+            vertexbuffer.pos(D, A, A).tex(1, 0).endVertex();
             vertexbuffer.pos(A, A, A).tex(0, 0).endVertex();
-            vertexbuffer.pos(A, A, I).tex(0, 1).endVertex();
-            vertexbuffer.pos(I, A, I).tex(1, 1).endVertex();
+            vertexbuffer.pos(A, A, D).tex(0, 1).endVertex();
+            vertexbuffer.pos(D, A, D).tex(1, 1).endVertex();
             // bottom
-            vertexbuffer.pos(I, I, I).tex(1, 0).endVertex();
-            vertexbuffer.pos(A, I, I).tex(0, 0).endVertex();
-            vertexbuffer.pos(A, I, A).tex(0, 1).endVertex();
-            vertexbuffer.pos(I, I, A).tex(1, 1).endVertex();
+            vertexbuffer.pos(D, D, D).tex(1, 0).endVertex();
+            vertexbuffer.pos(A, D, D).tex(0, 0).endVertex();
+            vertexbuffer.pos(A, D, A).tex(0, 1).endVertex();
+            vertexbuffer.pos(D, D, A).tex(1, 1).endVertex();
             // negative z | north
-            vertexbuffer.pos(I, A, I).tex(1, 0).endVertex();
-            vertexbuffer.pos(A, A, I).tex(0, 0).endVertex();
-            vertexbuffer.pos(A, I, I).tex(0, 1).endVertex();
-            vertexbuffer.pos(I, I, I).tex(1, 1).endVertex();
+            vertexbuffer.pos(D, A, D).tex(1, 0).endVertex();
+            vertexbuffer.pos(A, A, D).tex(0, 0).endVertex();
+            vertexbuffer.pos(A, D, D).tex(0, 1).endVertex();
+            vertexbuffer.pos(D, D, D).tex(1, 1).endVertex();
             // positive z | south
             vertexbuffer.pos(A, A, A).tex(1, 0).endVertex();
-            vertexbuffer.pos(I, A, A).tex(0, 0).endVertex();
-            vertexbuffer.pos(I, I, A).tex(0, 1).endVertex();
-            vertexbuffer.pos(A, I, A).tex(1, 1).endVertex();
+            vertexbuffer.pos(D, A, A).tex(0, 0).endVertex();
+            vertexbuffer.pos(D, D, A).tex(0, 1).endVertex();
+            vertexbuffer.pos(A, D, A).tex(1, 1).endVertex();
             // positive x | east
-            vertexbuffer.pos(A, A, I).tex(1, 0).endVertex();
+            vertexbuffer.pos(A, A, D).tex(1, 0).endVertex();
             vertexbuffer.pos(A, A, A).tex(0, 0).endVertex();
-            vertexbuffer.pos(A, I, A).tex(0, 1).endVertex();
-            vertexbuffer.pos(A, I, I).tex(1, 1).endVertex();
+            vertexbuffer.pos(A, D, A).tex(0, 1).endVertex();
+            vertexbuffer.pos(A, D, D).tex(1, 1).endVertex();
             // negative x | west
-            vertexbuffer.pos(I, A, A).tex(1, 0).endVertex();
-            vertexbuffer.pos(I, A, I).tex(0, 0).endVertex();
-            vertexbuffer.pos(I, I, I).tex(0, 1).endVertex();
-            vertexbuffer.pos(I, I, A).tex(1, 1).endVertex();
+            vertexbuffer.pos(D, A, A).tex(1, 0).endVertex();
+            vertexbuffer.pos(D, A, D).tex(0, 0).endVertex();
+            vertexbuffer.pos(D, D, D).tex(0, 1).endVertex();
+            vertexbuffer.pos(D, D, A).tex(1, 1).endVertex();
             tessellator.draw();
 
             GlStateManager.popMatrix();

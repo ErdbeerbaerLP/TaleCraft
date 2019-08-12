@@ -18,12 +18,12 @@ public class NPCObjectWrapper extends EntityLivingObjectWrapper {
     /**
      * Map of all dialogues currently loaded
      */
-    public static HashMap<UUID, List<NPCDialogue>> created_dialogues_map = new HashMap<>();
-    private EntityNPC npc;
+    public static final HashMap<UUID, List<NPCDialogue>> created_dialogues_map = new HashMap<>();
+    private final EntityNPC npc;
     /**
      * List of all dialogues created in the current instance of the script
      */
-    private List<NPCDialogue> created_dialogues;
+    private final List<NPCDialogue> created_dialogues;
 
     public NPCObjectWrapper(EntityNPC npc) {
         super(npc);

@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class NPCEditorGui extends QADGuiScreen {
 
-    private NPCData data;
+    private final NPCData data;
     private QADPanel master;
     private PanelGeneral genpan;
     private PanelAI aipan;
@@ -27,7 +27,7 @@ public class NPCEditorGui extends QADGuiScreen {
     private QADButton EQUIPS_BUTTON;
     private QADButton SCRIPTS_BUTTON;
 
-    private UUID uuid;
+    private final UUID uuid;
 
     public NPCEditorGui(UUID uuid, NPCData data) {
         this.data = data;
@@ -82,25 +82,22 @@ public class NPCEditorGui extends QADGuiScreen {
         genrunnable.run();
 
         QADButton SAVE = new QADButton(0, getHeight() - 21, getWidth(), "Save");
-        SAVE.setAction(new Runnable() {
-            @Override
-            public void run() {
-                genpan.save(data);
-                aipan.save(data);
-                dropspan.save(data);
-                tradespan.save(data);
-                equipspan.save(data);
-                scriptspan.save(data);
-                TaleCraft.network.sendToServer(new NPCDataPacket(uuid, data.toNBT()));
+        SAVE.setAction(() -> {
+            genpan.save(data);
+            aipan.save(data);
+            dropspan.save(data);
+            tradespan.save(data);
+            equipspan.save(data);
+            scriptspan.save(data);
+            TaleCraft.network.sendToServer(new NPCDataPacket(uuid, data.toNBT()));
 
-            }
         });
         addComponent(SAVE);
     }
 
     private class TabRunnable implements Runnable {
-        private QADPanel panel;
-        private QADButton button;
+        private final QADPanel panel;
+        private final QADButton button;
 
         public TabRunnable(QADButton button, QADPanel panel) {
             this.panel = panel;

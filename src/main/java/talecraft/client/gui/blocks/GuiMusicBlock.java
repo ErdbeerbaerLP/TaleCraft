@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuiMusicBlock extends QADGuiScreen {
-    MusicBlockTileEntity tileEntity;
+    final MusicBlockTileEntity tileEntity;
     QADTickBox muteBox;
     QADDropdownBox soundBox;
     QADTickBox repeatBox;
@@ -48,27 +48,23 @@ public class GuiMusicBlock extends QADGuiScreen {
         soundBox = new QADDropdownBox(new MusicListModel(), new MusicModelItem(tileEntity.getSound()));
         soundBox.setBounds(10, 15, 100, 20);
         addComponent(soundBox);
-        addComponent(QADFACTORY.createButton("Save", width - 60, height - 30, 50, new Runnable() {
-            @Override
-            public void run() {
-                NBTTagCompound commandData = new NBTTagCompound();
-                String commandString = ClientNetworkHandler.makeBlockCommand(tileEntity.getPosition());
-                commandData.setString("command", "sound");
-                commandData.setBoolean("mute", muteBox.getState());
-                commandData.setString("sound", sound.toString());
-                commandData.setBoolean("repeat", repeatBox.getState());
-                commandData.setInteger("repeat_delay", delayField.getValue().intValue());
-                TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
-                displayGuiScreen(null);
-            }
-
+        addComponent(QADFACTORY.createButton("Save", width - 60, height - 30, 50, () -> {
+            NBTTagCompound commandData = new NBTTagCompound();
+            String commandString = ClientNetworkHandler.makeBlockCommand(tileEntity.getPosition());
+            commandData.setString("command", "sound");
+            commandData.setBoolean("mute", muteBox.getState());
+            commandData.setString("sound", sound.toString());
+            commandData.setBoolean("repeat", repeatBox.getState());
+            commandData.setInteger("repeat_delay", delayField.getValue().intValue());
+            TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
+            displayGuiScreen(null);
         }));
     }
 
     private class MusicListModel implements ListModel {
 
-        private final List<ListModelItem> items = new ArrayList<ListModelItem>();
-        private final List<ListModelItem> filtered = new ArrayList<ListModelItem>();
+        private final List<ListModelItem> items = new ArrayList<>();
+        private final List<ListModelItem> filtered = new ArrayList<>();
 
         public MusicListModel() {
             for (SoundEnum sound : SoundEnum.values()) {
@@ -126,7 +122,7 @@ public class GuiMusicBlock extends QADGuiScreen {
 
     private class MusicModelItem implements ListModelItem {
 
-        private SoundEnum sound;
+        private final SoundEnum sound;
 
         public MusicModelItem(SoundEnum sound) {
             this.sound = sound;

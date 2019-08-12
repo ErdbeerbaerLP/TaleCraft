@@ -10,7 +10,7 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.ImageHologramBlockTileEntity;
 
 public class GuiImageHologramBlock extends QADGuiScreen {
-    ImageHologramBlockTileEntity tileEntity;
+    final ImageHologramBlockTileEntity tileEntity;
 
     public GuiImageHologramBlock(ImageHologramBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;

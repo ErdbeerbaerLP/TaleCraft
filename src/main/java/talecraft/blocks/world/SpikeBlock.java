@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import talecraft.blocks.TCITriggerableBlock;
 import talecraft.invoke.EnumTriggerState;
 
+@SuppressWarnings({"ALL", "deprecation"})
 public class SpikeBlock extends TCWorldBlock implements TCITriggerableBlock {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
@@ -42,7 +43,7 @@ public class SpikeBlock extends TCWorldBlock implements TCITriggerableBlock {
             return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(FACING, enumfacing).withProperty(ACTIVE, true);
         } catch (IllegalArgumentException var11) {
             if (!worldIn.isRemote) {
-                LOGGER.warn(String.format("Invalid spike block data @ " + pos.toString() + " in " + worldIn.provider.getDimension()));
+                LOGGER.warn("Invalid spike block data @ " + pos.toString() + " in " + worldIn.provider.getDimension());
 
                 if (placer instanceof EntityPlayer) {
                     placer.sendMessage(new TextComponentString("Invalid spike block data!"));
@@ -58,6 +59,7 @@ public class SpikeBlock extends TCWorldBlock implements TCITriggerableBlock {
         return new BlockStateContainer(this, FACING, ACTIVE);
     }
 
+    @SuppressWarnings("deprecation")
     @Deprecated
     @Override
     public IBlockState getStateFromMeta(int meta) {

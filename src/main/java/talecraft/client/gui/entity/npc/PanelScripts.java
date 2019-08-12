@@ -6,9 +6,9 @@ import talecraft.entity.NPC.NPCData;
 
 public class PanelScripts extends NPCPanel {
 
-    private QADTextField SCRIPT_INTERACT;
-    private QADTextField SCRIPT_UPDATE;
-    private QADTextField SCRIPT_DEATH;
+    private final QADTextField SCRIPT_INTERACT;
+    private final QADTextField SCRIPT_UPDATE;
+    private final QADTextField SCRIPT_DEATH;
 
     public PanelScripts(NPCData data, int width, int height) {
         super(data, width, height);

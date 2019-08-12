@@ -45,12 +45,12 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
         layout = null;
         components = null;
         behindScreen = null;
-        lastUpdateComponents = new ArrayList<QADComponent>();
+        lastUpdateComponents = new ArrayList<>();
 
     }
 
     // FOLLOWING ARE UTILITY METHODS!
-    public static final long parseLong(String string, long original, long min, long max) {
+    public static long parseLong(String string, long original, long min, long max) {
         try {
             long i = 0;
 
@@ -73,7 +73,7 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
         }
     }
 
-    public static final int parseInt(String string, int original, int min, int max) {
+    public static int parseInt(String string, int original, int min, int max) {
         try {
             int i = 0;
 
@@ -96,16 +96,16 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
         }
     }
 
-    /** ********************************* **/
-    /**                                   **/
-    /** Everything following is final and **/
-    /** should not be overriden.          **/
-    /**                                   **/
+    /* ********************************* **/
+    /*                                   **/
+    /* Everything following is final and **/
+    /* should not be overriden.          **/
+    /*                                   **/
     /**
      * ********************************
      **/
 
-    public static final float parseFloat(String string, float original, float min, float max) {
+    public static float parseFloat(String string, float original, float min, float max) {
         try {
             float f = Float.parseFloat(string);
 
@@ -178,7 +178,7 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
     public void onScreenResized() {
     }
 
-    private final void onLayout() {
+    private void onLayout() {
         if (components != null && !components.isEmpty() && lastUpdateComponents != null) {
             layoutGui();
             if (layout != null) {
@@ -196,12 +196,7 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
         Keyboard.enableRepeatEvents(false);
 
         if (behindScreen != null) {
-            TaleCraft.proxy.asClient().sheduleClientTickTask(new Runnable() {
-                @Override
-                public void run() {
-                    mc.displayGuiScreen(behindScreen);
-                }
-            });
+            TaleCraft.proxy.asClient().sheduleClientTickTask(() -> mc.displayGuiScreen(behindScreen));
         }
 
     }
@@ -329,11 +324,12 @@ public class QADGuiScreen extends GuiScreen implements QADComponentContainer {
         instance.drawDefaultBackground();
 
         if (components == null)
-            lastUpdateComponents = new ArrayList<QADComponent>();
+            lastUpdateComponents = new ArrayList<>();
         else
-            lastUpdateComponents = new ArrayList<QADComponent>(components);
+            lastUpdateComponents = new ArrayList<>(components);
 
         // Draw all components
+        //noinspection ConstantConditions
         if (lastUpdateComponents != null) {
             for (QADComponent component : lastUpdateComponents) {
                 if (component != null)

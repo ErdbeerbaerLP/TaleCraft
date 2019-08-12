@@ -42,6 +42,7 @@ public class GunReloadPacket implements IMessage {
             MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
             EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(message.uuid);
             ItemStack item = player.inventory.getCurrentItem();
+            //noinspection ConstantConditions
             if (item == null) return null;
             if (item.getItem() instanceof TCGunItem) {
                 TCGunItem gun = (TCGunItem) item.getItem();

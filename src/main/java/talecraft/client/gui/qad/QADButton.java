@@ -8,6 +8,7 @@ import talecraft.client.render.renderers.EXTFontRenderer;
 
 import java.util.List;
 
+@SuppressWarnings("ConstantConditions")
 public class QADButton extends QADRectangularComponent {
     public static final ResourceLocation ICON_ADD = new ResourceLocation("talecraft:textures/gui/add.png");
     public static final ResourceLocation ICON_DELETE = new ResourceLocation("talecraft:textures/gui/delete.png");

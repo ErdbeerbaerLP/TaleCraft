@@ -5,8 +5,9 @@ import talecraft.entity.NPC.NPCData;
 
 public abstract class NPCPanel extends QADPanel {
 
-    protected NPCData data;
-    protected int width, height;
+    protected final NPCData data;
+    protected final int width;
+    protected final int height;
 
     public NPCPanel(NPCData data, int width, int height) {
         setBackgroundColor(2);

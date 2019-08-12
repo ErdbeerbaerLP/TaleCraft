@@ -14,7 +14,7 @@ public abstract class VXAction {
     public enum VXActions {
         Grassify("Grassify"), Replace("Replace"), VariationsReplace("Variations Replace");
 
-        String name;
+        final String name;
 
         VXActions(String name) {
             this.name = name;

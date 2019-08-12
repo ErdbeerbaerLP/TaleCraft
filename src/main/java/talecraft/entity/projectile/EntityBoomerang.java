@@ -45,6 +45,7 @@ public class EntityBoomerang extends EntityThrowable {
             if (ent == getThrower()) {
                 setDead();
             } else {
+                //noinspection ConstantConditions
                 ent.attackEntityFrom(
                         DamageSource.causeIndirectDamage(this, getThrower()), 4F);
             }

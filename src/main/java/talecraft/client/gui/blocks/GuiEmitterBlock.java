@@ -14,7 +14,7 @@ import talecraft.util.GObjectTypeHelper;
 import java.util.List;
 
 public class GuiEmitterBlock extends QADGuiScreen {
-    EmitterBlockTileEntity tileEntity;
+    final EmitterBlockTileEntity tileEntity;
 
     QADTextField particleTypeTextField;
 
@@ -44,14 +44,14 @@ public class GuiEmitterBlock extends QADGuiScreen {
         int tfc = 2;
         int sro = 6; // string row offset
         rowp[0] = 16;
-        rowp[1] = rowp[0] + rowh + 0;
-        rowp[2] = rowp[1] + rowh + 0;
-        rowp[3] = rowp[2] + rowh + 0;
-        rowp[4] = rowp[3] + rowh + 0;
-        rowp[5] = rowp[4] + rowh + 0;
-        rowp[6] = rowp[5] + rowh + 0;
-        rowp[7] = rowp[6] + rowh + 0;
-        rowp[8] = rowp[7] + rowh + 0;
+        rowp[1] = rowp[0] + rowh;
+        rowp[2] = rowp[1] + rowh;
+        rowp[3] = rowp[2] + rowh;
+        rowp[4] = rowp[3] + rowh;
+        rowp[5] = rowp[4] + rowh;
+        rowp[6] = rowp[5] + rowh;
+        rowp[7] = rowp[6] + rowh;
+        rowp[8] = rowp[7] + rowh;
 
         addComponent(QADFACTORY.createLabel("Particle Type", colp[0], rowp[0] + sro));
         addComponent(QADFACTORY.createLabel("Spawn Count", colp[0], rowp[1] + sro));
@@ -71,12 +71,7 @@ public class GuiEmitterBlock extends QADGuiScreen {
         particleTypeTextField.setTooltip("The particle type to emit.");
         addComponent(particleTypeTextField);
 
-        addComponent(QADFACTORY.createButton("?", colp[2], rowp[0], 20, new Runnable() {
-            @Override
-            public void run() {
-                displayGuiScreen(new GuiEmitterBlockParticleTypes(GuiEmitterBlock.this));
-            }
-        }));
+        addComponent(QADFACTORY.createButton("?", colp[2], rowp[0], 20, () -> displayGuiScreen(new GuiEmitterBlockParticleTypes(GuiEmitterBlock.this))));
 
         final QADTextField spawnCountTextField = QADFACTORY.createNumberTextField(tileEntity.getSpawnCount(), colp[1], rowp[1] + tfc, colw[1], 1000, 0);
         spawnCountTextField.setTooltip("How many particles to spawn per tick.");
@@ -124,36 +119,33 @@ public class GuiEmitterBlock extends QADGuiScreen {
 
         QADButton applyButton = QADFACTORY.createButton("Apply", colp[1], rowp[8], colw[1], null);
         applyButton.setEnabled(true);
-        applyButton.setAction(new Runnable() {
-            @Override
-            public void run() {
-                NBTTagCompound commandComp = new NBTTagCompound();
-                commandComp.setString("var_type", particleTypeTextField.getText());
-                commandComp.setInteger("var_spawnCount", parseInt(spawnCountTextField.getText(), tileEntity.getSpawnCount(), 1, 1000));
+        applyButton.setAction(() -> {
+            NBTTagCompound commandComp = new NBTTagCompound();
+            commandComp.setString("var_type", particleTypeTextField.getText());
+            commandComp.setInteger("var_spawnCount", parseInt(spawnCountTextField.getText(), tileEntity.getSpawnCount(), 1, 1000));
 
-                commandComp.setFloat("var_offsetX", parseFloat(offsetXTextField.getText(), tileEntity.getOffsetX(), -128, +128));
-                commandComp.setFloat("var_offsetY", parseFloat(offsetYTextField.getText(), tileEntity.getOffsetY(), -128, +128));
-                commandComp.setFloat("var_offsetZ", parseFloat(offsetZTextField.getText(), tileEntity.getOffsetZ(), -128, +128));
+            commandComp.setFloat("var_offsetX", parseFloat(offsetXTextField.getText(), tileEntity.getOffsetX(), -128, +128));
+            commandComp.setFloat("var_offsetY", parseFloat(offsetYTextField.getText(), tileEntity.getOffsetY(), -128, +128));
+            commandComp.setFloat("var_offsetZ", parseFloat(offsetZTextField.getText(), tileEntity.getOffsetZ(), -128, +128));
 
-                commandComp.setFloat("var_offsetRandX", parseFloat(offsetRandXTextField.getText(), tileEntity.getOffsetRandX(), 0, +128));
-                commandComp.setFloat("var_offsetRandY", parseFloat(offsetRandYTextField.getText(), tileEntity.getOffsetRandY(), 0, +128));
-                commandComp.setFloat("var_offsetRandZ", parseFloat(offsetRandZTextField.getText(), tileEntity.getOffsetRandZ(), 0, +128));
+            commandComp.setFloat("var_offsetRandX", parseFloat(offsetRandXTextField.getText(), tileEntity.getOffsetRandX(), 0, +128));
+            commandComp.setFloat("var_offsetRandY", parseFloat(offsetRandYTextField.getText(), tileEntity.getOffsetRandY(), 0, +128));
+            commandComp.setFloat("var_offsetRandZ", parseFloat(offsetRandZTextField.getText(), tileEntity.getOffsetRandZ(), 0, +128));
 
-                commandComp.setFloat("var_velocityX", parseFloat(velocityXTextField.getText(), tileEntity.getVelocityX(), -10, +10));
-                commandComp.setFloat("var_velocityY", parseFloat(velocityYTextField.getText(), tileEntity.getVelocityY(), -10, +10));
-                commandComp.setFloat("var_velocityZ", parseFloat(velocityZTextField.getText(), tileEntity.getVelocityZ(), -10, +10));
+            commandComp.setFloat("var_velocityX", parseFloat(velocityXTextField.getText(), tileEntity.getVelocityX(), -10, +10));
+            commandComp.setFloat("var_velocityY", parseFloat(velocityYTextField.getText(), tileEntity.getVelocityY(), -10, +10));
+            commandComp.setFloat("var_velocityZ", parseFloat(velocityZTextField.getText(), tileEntity.getVelocityZ(), -10, +10));
 
-                commandComp.setFloat("var_velocityRandX", parseFloat(velocityRandXTextField.getText(), tileEntity.getVelocityRandX(), 0, +2));
-                commandComp.setFloat("var_velocityRandY", parseFloat(velocityRandYTextField.getText(), tileEntity.getVelocityRandY(), 0, +2));
-                commandComp.setFloat("var_velocityRandZ", parseFloat(velocityRandZTextField.getText(), tileEntity.getVelocityRandZ(), 0, +2));
+            commandComp.setFloat("var_velocityRandX", parseFloat(velocityRandXTextField.getText(), tileEntity.getVelocityRandX(), 0, +2));
+            commandComp.setFloat("var_velocityRandY", parseFloat(velocityRandYTextField.getText(), tileEntity.getVelocityRandY(), 0, +2));
+            commandComp.setFloat("var_velocityRandZ", parseFloat(velocityRandZTextField.getText(), tileEntity.getVelocityRandZ(), 0, +2));
 
-                // Final
-                commandComp.setString("command", "set_vars");
+            // Final
+            commandComp.setString("command", "set_vars");
 
-                String commandString = ClientNetworkHandler.makeBlockCommand(position);
-                TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandComp));
-                GuiEmitterBlock.this.mc.displayGuiScreen(null);
-            }
+            String commandString = ClientNetworkHandler.makeBlockCommand(position);
+            TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandComp));
+            GuiEmitterBlock.this.mc.displayGuiScreen(null);
         });
         addComponent(applyButton);
 

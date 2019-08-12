@@ -20,7 +20,7 @@ public class NPCShop implements IMerchant {
 
     private List<NPCTrade> trades;
     private EntityPlayer player;
-    private EntityNPC npc;
+    private final EntityNPC npc;
 
     public NPCShop(EntityNPC npc) {
         this.npc = npc;
@@ -112,8 +112,8 @@ public class NPCShop implements IMerchant {
 
     public static class NPCTrade {
 
-        private ItemStack item1;
-        private ItemStack item2;
+        private final ItemStack item1;
+        private final ItemStack item2;
         private int stock;
 
         public NPCTrade(ItemStack item1, ItemStack item2) {
@@ -186,7 +186,7 @@ public class NPCShop implements IMerchant {
 
     public static class NPCMerchantRecipe extends MerchantRecipe {
 
-        private NPCTrade npctrade;
+        private final NPCTrade npctrade;
 
         public NPCMerchantRecipe(NPCTrade trade, ItemStack outOfStock) {
             super(trade.item1, outOfStock, trade.item2, 0, Integer.MAX_VALUE);

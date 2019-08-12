@@ -25,7 +25,7 @@ public class SaveSelector extends GuiScreen {
     /**
      * The screen to return to when this closes (always Main Menu).
      */
-    protected GuiScreen prevScreen;
+    protected final GuiScreen prevScreen;
     protected String title = "Select Save";
     /**
      * Tooltip displayed a world whose version is different from this client's
@@ -39,7 +39,7 @@ public class SaveSelector extends GuiScreen {
     /**
      * Used to determine the world´s folder
      */
-    private String worldPathName = "saves/.TC_SAVES";
+    private final String worldPathName = "saves/.TC_SAVES";
 
     public SaveSelector(GuiScreen screenIn) {
         this.prevScreen = screenIn;
@@ -80,7 +80,7 @@ public class SaveSelector extends GuiScreen {
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
      */
-    protected void actionPerformed(GuiButton button) throws IOException {
+    protected void actionPerformed(GuiButton button) {
         if (button.enabled) {
             GuiListSaveSelectionEntry guilistworldselectionentry = this.selectionList.getSelectedWorld();
 

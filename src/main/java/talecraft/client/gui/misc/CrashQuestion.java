@@ -52,6 +52,7 @@ public class CrashQuestion extends GuiScreen {
                 this.mc.displayGuiScreen(new GuiWorldSelection(this));
                 return;
             case 1:
+                //noinspection ConstantConditions
                 for (String s : savesList) {
                     if (s.startsWith(".TC")) continue;
                     FileUtils.deleteDirectory(new File(savesDir, s));

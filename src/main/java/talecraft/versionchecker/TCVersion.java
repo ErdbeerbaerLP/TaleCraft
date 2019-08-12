@@ -1,7 +1,7 @@
 package talecraft.versionchecker;
 
 public class TCVersion {
-    String name;
+    final String name;
 
     public TCVersion(String name) {
         this.name = name;

@@ -13,9 +13,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class QADScrollPanel extends QADRectangularComponent implements QADComponentContainer {
-    public List<QADComponent> components;
-    public boolean enabled;
-    public boolean visible;
+    public final List<QADComponent> components;
+    public final boolean enabled;
+    public final boolean visible;
     public boolean focused;
     public boolean allowLeftMouseButtonScrolling;
     private int x;
@@ -220,7 +220,7 @@ public class QADScrollPanel extends QADRectangularComponent implements QADCompon
                     focused = true;
                 }
             }
-        } catch (ConcurrentModificationException e) {
+        } catch (ConcurrentModificationException ignored) {
 
         }
     }

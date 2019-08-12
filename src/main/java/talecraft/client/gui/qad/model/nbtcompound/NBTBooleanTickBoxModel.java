@@ -5,8 +5,8 @@ import talecraft.client.gui.qad.QADTickBox.TickBoxModel;
 
 public class NBTBooleanTickBoxModel implements TickBoxModel {
     boolean state;
-    String tagKey;
-    NBTTagCompound tagParent;
+    final String tagKey;
+    final NBTTagCompound tagParent;
 
     public NBTBooleanTickBoxModel(String key, NBTTagCompound parent) {
         this.tagKey = key;

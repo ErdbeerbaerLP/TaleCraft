@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class ItemMetaWorldRenderer {
 
-    public static HashMap<Item, IMetadataRender> ITEM_RENDERS = new HashMap<>();
+    public static final HashMap<Item, IMetadataRender> ITEM_RENDERS = new HashMap<>();
 
     // CLIENT
     public static ClientProxy clientProxy;

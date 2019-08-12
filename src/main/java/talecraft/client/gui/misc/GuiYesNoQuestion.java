@@ -6,8 +6,8 @@ import talecraft.client.gui.qad.QADGuiScreen;
 import talecraft.client.gui.qad.QADLabel;
 
 public class GuiYesNoQuestion extends QADGuiScreen {
-    String question;
-    Runnable yesAction;
+    final String question;
+    final Runnable yesAction;
 
     QADLabel Qquestion;
     QADButton QyesButton;

@@ -195,9 +195,9 @@ public class InvokePanelBuilder {
     }
 
     public static class InvokeSwitchAction implements Runnable {
-        int invokeTypeFlags;
-        IInvokeHolder holder;
-        GuiScreen screen;
+        final int invokeTypeFlags;
+        final IInvokeHolder holder;
+        final GuiScreen screen;
 
         public InvokeSwitchAction(int invokeTypeFlags, IInvokeHolder holder, GuiScreen screen) {
             this.invokeTypeFlags = invokeTypeFlags;

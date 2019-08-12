@@ -17,9 +17,9 @@ import java.util.Map;
 
 public class ReflectionUtil {
 
-    private static HashMap<GuiListWorldSelectionEntry, File> worldfolder = new HashMap<>();
-    private static Map<World, List<IEventListener>> eventlisteners = new HashMap<>();
-    private static Map<GuiListWorldSelectionEntry, WorldSummary> worldSummaries = new HashMap<>();
+    private static final HashMap<GuiListWorldSelectionEntry, File> worldfolder = new HashMap<>();
+    private static final Map<World, List<IEventListener>> eventlisteners = new HashMap<>();
+    private static final Map<GuiListWorldSelectionEntry, WorldSummary> worldSummaries = new HashMap<>();
 
     public static File getWorldFolderFromSelection(GuiListWorldSelectionEntry entry) {
         if (worldfolder.containsKey(entry)) {

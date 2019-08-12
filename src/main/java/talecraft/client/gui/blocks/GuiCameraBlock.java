@@ -6,7 +6,7 @@ import talecraft.client.gui.qad.QADLabel;
 import talecraft.tileentity.CameraBlockTileEntity;
 
 public class GuiCameraBlock extends QADGuiScreen {
-    private CameraBlockTileEntity te;
+    private final CameraBlockTileEntity te;
 
     public GuiCameraBlock(CameraBlockTileEntity tileEntity) {
         this.te = tileEntity;

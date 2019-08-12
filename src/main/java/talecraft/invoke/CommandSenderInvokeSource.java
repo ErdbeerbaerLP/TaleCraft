@@ -9,8 +9,8 @@ import talecraft.TaleCraft;
 import java.util.List;
 
 public class CommandSenderInvokeSource implements IInvokeSource {
-    Scriptable scope;
-    ICommandSender sender;
+    final Scriptable scope;
+    final ICommandSender sender;
 
     public CommandSenderInvokeSource(ICommandSender sender) {
         this.scope = TaleCraft.globalScriptManager.createNewScope();

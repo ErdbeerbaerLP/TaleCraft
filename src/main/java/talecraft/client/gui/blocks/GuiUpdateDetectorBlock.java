@@ -8,7 +8,7 @@ import talecraft.client.gui.qad.QADLabel;
 import talecraft.tileentity.BlockUpdateDetectorTileEntity;
 
 public class GuiUpdateDetectorBlock extends QADGuiScreen {
-    BlockUpdateDetectorTileEntity tileEntity;
+    final BlockUpdateDetectorTileEntity tileEntity;
 
     public GuiUpdateDetectorBlock(BlockUpdateDetectorTileEntity tileEntity) {
         this.tileEntity = tileEntity;

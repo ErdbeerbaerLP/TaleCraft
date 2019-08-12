@@ -11,16 +11,16 @@ import java.util.Iterator;
 import java.util.List;
 
 public class QADPanel extends QADRectangularComponent implements QADComponentContainer {
-    public boolean enabled;
-    public boolean visible;
+    public final boolean enabled;
+    public final boolean visible;
     public boolean focused;
-    public boolean ignoreOuterEvents;
+    public final boolean ignoreOuterEvents;
     private int x;
     private int y;
     private int width;
     private int height;
     private int backgroundColor;
-    private List<QADComponent> components;
+    private final List<QADComponent> components;
     private QADLayoutManager layout;
     private boolean shouldRebuildLayout;
 

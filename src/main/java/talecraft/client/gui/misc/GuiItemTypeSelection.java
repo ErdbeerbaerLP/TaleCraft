@@ -14,7 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class GuiItemTypeSelection extends QADGuiScreen {
-    private ItemTypeDataLink dataLink;
+    private final ItemTypeDataLink dataLink;
     private QADScrollPanel panel;
 
     public GuiItemTypeSelection(GuiScreen gui, ItemTypeDataLink dataLink) {

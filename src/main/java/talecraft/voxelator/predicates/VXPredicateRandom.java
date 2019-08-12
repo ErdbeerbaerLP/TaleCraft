@@ -16,7 +16,7 @@ public final class VXPredicateRandom extends VXPredicate {
             new FloatBrushParameter("chance", 0, 1, 0.5f)
     };
 
-    public static FilterFactory FACTORY = new FilterFactory() {
+    public static final FilterFactory FACTORY = new FilterFactory() {
         @Override
         public String getName() {
             return "random";

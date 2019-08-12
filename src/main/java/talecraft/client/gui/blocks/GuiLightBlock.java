@@ -11,7 +11,7 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.LightBlockTileEntity;
 
 public class GuiLightBlock extends QADGuiScreen {
-    LightBlockTileEntity tileEntity;
+    final LightBlockTileEntity tileEntity;
 
     public GuiLightBlock(LightBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;

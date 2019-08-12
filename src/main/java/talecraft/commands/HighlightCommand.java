@@ -53,7 +53,7 @@ public class HighlightCommand extends TCCommandBase {
             List<EntityPlayerSP> entities = EntitySelector.matchEntities(sender, selector, EntityPlayerSP.class);
 
             Potion potion = Potion.getPotionFromResourceLocation("minecraft:glow");
-            PotionEffect effect = new PotionEffect(potion, (int) duration, 1);
+            @SuppressWarnings("ConstantConditions") PotionEffect effect = new PotionEffect(potion, (int) duration, 1);
 
             for (Entity ent : entities) {
                 if (ent instanceof EntityLiving) {
@@ -76,7 +76,6 @@ public class HighlightCommand extends TCCommandBase {
             pktdata.setInteger("pos.z", blockPos.getZ());
             pktdata.setDouble("duration", duration);
             TaleCraft.network.sendToAll(new StringNBTCommandPacket("client.render.renderable.push", pktdata));
-            return;
         }
 
     }

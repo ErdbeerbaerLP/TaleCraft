@@ -6,7 +6,7 @@ import talecraft.client.gui.vcui.VCUIRenderer;
 import java.util.List;
 
 public class QADLabel extends QADRectangularComponent {
-    LabelModel model;
+    final LabelModel model;
     Runnable onClick = null;
     int x;
     int y;

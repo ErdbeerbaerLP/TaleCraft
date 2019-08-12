@@ -35,6 +35,7 @@ public class MusicBlock extends TCBlockContainer implements TCITriggerableBlock 
             return true;
 
         Minecraft mc = Minecraft.getMinecraft();
+        //noinspection ConstantConditions
         mc.displayGuiScreen(new GuiMusicBlock((MusicBlockTileEntity) worldIn.getTileEntity(pos)));
 
         return true;

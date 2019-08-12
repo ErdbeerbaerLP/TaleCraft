@@ -1,6 +1,5 @@
 package talecraft.entity.NPC;
 
-import com.google.common.base.Predicates;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -44,6 +43,7 @@ import talecraft.network.packets.NPCOpenPacket;
 
 import java.util.List;
 
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public class EntityNPC extends EntityCreature implements IEntityAdditionalSpawnData, IInvokeSource {
 
     @SideOnly(Side.CLIENT)
@@ -52,7 +52,7 @@ public class EntityNPC extends EntityCreature implements IEntityAdditionalSpawnD
     private NPCData data;
     private NBTTagCompound scriptdata;
     private Scriptable scope;
-    private BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
+    private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
 
     public EntityNPC(World world) {
         super(world);
@@ -141,7 +141,7 @@ public class EntityNPC extends EntityCreature implements IEntityAdditionalSpawnD
         setHealth(getMaxHealth());
         if (world.isRemote)
             return;
-        for (Entity ent : this.world.getEntities(EntityPlayerMP.class, Predicates.notNull())) {
+        for (Entity ent : this.world.getEntities(EntityPlayerMP.class, entityPlayerMP -> entityPlayerMP != null)) {
             EntityPlayerMP player = (EntityPlayerMP) ent;
             player.connection.sendPacket(new S16PacketEntityLook(this.getEntityId(), (byte) this.rotationYaw, (byte) this.rotationPitch, this.onGround));
         }
@@ -209,6 +209,7 @@ public class EntityNPC extends EntityCreature implements IEntityAdditionalSpawnD
                 player.sendMessage(new TextComponentString(message));
             }
         }
+        //noinspection ConstantConditions
         if (data.getShop().getRecipes(player).size() > 0) {
             data.getShop().setCustomer(player);
             player.displayVillagerTradeGui(data.getShop());
@@ -289,7 +290,7 @@ public class EntityNPC extends EntityCreature implements IEntityAdditionalSpawnD
                 Invoke.invoke(scriptInvoke, this, null, EnumTriggerState.IGNORE);
             }
         }
-        EntityPlayer lookPlayer = lookAtPlayer(5, 2);
+        EntityPlayer lookPlayer = lookAtPlayer();
         EntityLivingBase attackTarget = getAttackTarget();
         if ((data.doEyesFollow() && lookPlayer != null) || attackTarget != null) {
             if (attackTarget != null)
@@ -303,8 +304,8 @@ public class EntityNPC extends EntityCreature implements IEntityAdditionalSpawnD
         }
     }
 
-    private EntityPlayer lookAtPlayer(int range, int rangeY) {
-        List<Entity> closeEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(this.posX - range, this.posY - rangeY, this.posZ - range, this.posX + range, this.posY + rangeY, this.posZ + range));
+    private EntityPlayer lookAtPlayer() {
+        List<Entity> closeEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(this.posX - 5, this.posY - 2, this.posZ - 5, this.posX + 5, this.posY + 2, this.posZ + 5));
         for (Entity ent : closeEntities) {
             if (ent instanceof EntityPlayer) {
                 return (EntityPlayer) ent;

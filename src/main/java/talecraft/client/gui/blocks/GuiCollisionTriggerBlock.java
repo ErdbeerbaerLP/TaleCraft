@@ -8,7 +8,7 @@ import talecraft.client.gui.qad.QADLabel;
 import talecraft.tileentity.CollisionTriggerBlockTileEntity;
 
 public class GuiCollisionTriggerBlock extends QADGuiScreen {
-    CollisionTriggerBlockTileEntity tileEntity;
+    final CollisionTriggerBlockTileEntity tileEntity;
 
     public GuiCollisionTriggerBlock(CollisionTriggerBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;

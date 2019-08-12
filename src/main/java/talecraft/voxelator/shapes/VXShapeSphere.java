@@ -18,7 +18,7 @@ public class VXShapeSphere extends VXShape {
             new BooleanBrushParameter("hollow", false)
     };
 
-    public static ShapeFactory FACTORY = new ShapeFactory() {
+    public static final ShapeFactory FACTORY = new ShapeFactory() {
         @Override
         public String getName() {
             return "sphere";
@@ -42,6 +42,7 @@ public class VXShapeSphere extends VXShape {
                 NBTTagCompound shapeData = new NBTTagCompound();
                 shapeData.setString("type", getName());
                 shapeData.setFloat("radius", Float.parseFloat(parameters[0]));
+                //noinspection ConstantConditions
                 shapeData.setBoolean("hollow", Boolean.parseBoolean(parameters[1]));
                 return shapeData;
             }

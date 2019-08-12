@@ -9,7 +9,7 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.URLBlockTileEntity;
 
 public class GuiURLBlock extends QADGuiScreen {
-    URLBlockTileEntity tileEntity;
+    final URLBlockTileEntity tileEntity;
 
     QADTextField textField_url;
     QADTextField textField_selector;
@@ -35,18 +35,15 @@ public class GuiURLBlock extends QADGuiScreen {
         addComponent(textField_selector);
 
         QADButton setDataButton = QADFACTORY.createButton("Apply", 2, 14, 60, null);
-        setDataButton.setAction(new Runnable() {
-            @Override
-            public void run() {
-                String commandString = ClientNetworkHandler.makeBlockDataMergeCommand(position);
-                NBTTagCompound commandData = new NBTTagCompound();
+        setDataButton.setAction(() -> {
+            String commandString = ClientNetworkHandler.makeBlockDataMergeCommand(position);
+            NBTTagCompound commandData = new NBTTagCompound();
 
-                commandData.setString("selector", textField_selector.getText());
-                commandData.setString("url", textField_url.getText());
+            commandData.setString("selector", textField_selector.getText());
+            commandData.setString("url", textField_url.getText());
 
-                TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
-                displayGuiScreen(null);
-            }
+            TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
+            displayGuiScreen(null);
         });
         setDataButton.setTooltip("There is no auto-save, ", "so don't forget to click this button!");
         addComponent(setDataButton);

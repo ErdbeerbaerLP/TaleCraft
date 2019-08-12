@@ -24,6 +24,7 @@ import talecraft.voxelator.Voxelator;
 
 import java.util.List;
 
+@SuppressWarnings("ConstantConditions")
 public class VoxelatorItem extends TCItem implements TCITriggerableItem {
 
     @SideOnly(Side.CLIENT)

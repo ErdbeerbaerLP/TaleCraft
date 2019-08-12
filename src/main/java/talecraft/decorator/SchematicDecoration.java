@@ -36,6 +36,7 @@ public class SchematicDecoration implements Decoration {
         return name;
     }
 
+    @SuppressWarnings("deprecation")
     public static class Schematic {
 
         private final NBTTagCompound tag;

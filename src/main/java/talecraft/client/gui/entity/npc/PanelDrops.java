@@ -24,7 +24,7 @@ import java.util.List;
 
 public class PanelDrops extends NPCPanel {
 
-    private List<NPCDrop> drops;
+    private final List<NPCDrop> drops;
     private int index = 0;
 
     public PanelDrops(NPCData data, int width, int height) {
@@ -167,8 +167,8 @@ public class PanelDrops extends NPCPanel {
     }
 
     class ListItemListModel implements ListModel {
-        private List<ListModelItem> items;
-        private List<ListModelItem> filtered;
+        private final List<ListModelItem> items;
+        private final List<ListModelItem> filtered;
 
         @SuppressWarnings("ConstantConditions")
         public ListItemListModel() {
@@ -242,7 +242,7 @@ public class PanelDrops extends NPCPanel {
 
     class ItemItem implements ListModelItem {
 
-        private ItemStack stack;
+        private final ItemStack stack;
 
         public ItemItem(ItemStack stack) {
             this.stack = stack;

@@ -13,7 +13,7 @@ import java.util.*;
 public class AttackCommand extends TCCommandBase {
 
     private static List<String> damageSourceNames;
-    private static Map<String, DamageSource> damageSources = new HashMap<>();
+    private static final Map<String, DamageSource> damageSources = new HashMap<>();
 
     private static List<String> getDamageSourceNames() {
         if (damageSourceNames != null) return damageSourceNames;

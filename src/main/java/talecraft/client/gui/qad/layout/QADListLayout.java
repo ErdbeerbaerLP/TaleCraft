@@ -12,10 +12,10 @@ import java.util.List;
 	QADLayoutManager that arranges components in a list.
 */
 public class QADListLayout implements QADLayoutManager {
-    private int rowHeight;
-    private int vgap;
-    private int hgap;
-    private double widthMultiplier;
+    private final int rowHeight;
+    private final int vgap;
+    private final int hgap;
+    private final double widthMultiplier;
 
     /*
         No row-height given, using '20'.
@@ -50,7 +50,7 @@ public class QADListLayout implements QADLayoutManager {
         int yIncrement = vgap + height;
 
         // Current Y position to place a component at.
-        int currentY = 0 + vgap;
+        int currentY = vgap;
         for (QADComponent component : components) {
             int yIncrementAlt = 0;
             // Is this a rectangular component/a component with size?

@@ -27,7 +27,7 @@ import java.util.List;
 public class TaleCraftBlocks {
     public static HashMap<String, Block> blocksMap = Maps.newHashMap();
     public static List<Block> blocks = Lists.newArrayList();
-    public static List<Block> customItemBlocks = Lists.newArrayList();
+    public static final List<Block> customItemBlocks = Lists.newArrayList();
     // UTILITY
     public static KillBlock killBlock;
     public static ClockBlock clockBlock;
@@ -183,6 +183,7 @@ public class TaleCraftBlocks {
         blocksMap.put(name, block);
         blocks.add(block);
         Item item = Item.getItemFromBlock(block);
+        //noinspection ConstantConditions
         if (item != null) TaleCraftItems.ALL_TC_ITEMS.add(item);
     }
 

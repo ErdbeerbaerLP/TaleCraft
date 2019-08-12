@@ -18,7 +18,7 @@ public class UndoRegion {
     public final int width, height, length;
     public final World world;
     public IBlockState[] blocks;
-    private BlockRegion region;
+    private final BlockRegion region;
 
     public UndoRegion(BlockRegion region, World world) {
         region = new BlockRegion(region.getMinX() - 1, region.getMinY() - 1, region.getMinZ() - 1, region.getMaxX() + 1, region.getMaxY() + 1, region.getMaxZ() + 1);

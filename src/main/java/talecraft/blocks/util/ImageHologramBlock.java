@@ -50,6 +50,7 @@ public class ImageHologramBlock extends TCBlockContainer implements TCITriggerab
         if (tileentity instanceof ImageHologramBlockTileEntity) {
             switch (triggerState) {
                 case ON:
+                case IGNORE:
                     ((ImageHologramBlockTileEntity) tileentity).setActive(true);
                     break;
                 case OFF:
@@ -57,9 +58,6 @@ public class ImageHologramBlock extends TCBlockContainer implements TCITriggerab
                     break;
                 case INVERT:
                     ((ImageHologramBlockTileEntity) tileentity).toggleActive();
-                    break;
-                case IGNORE:
-                    ((ImageHologramBlockTileEntity) tileentity).setActive(true);
                     break;
                 default:
                     break;

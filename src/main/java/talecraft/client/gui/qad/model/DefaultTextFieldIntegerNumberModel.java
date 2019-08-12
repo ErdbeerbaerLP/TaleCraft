@@ -70,6 +70,7 @@ public final class DefaultTextFieldIntegerNumberModel implements TextFieldModel 
     }
 
     public void setValidatorPredicate(java.util.function.Predicate<Integer> validator) {
+        //noinspection FunctionalExpressionCanBeFolded
         this.validatorPredicate = validator::test;
     }
 

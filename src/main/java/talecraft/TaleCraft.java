@@ -144,6 +144,7 @@ public class TaleCraft {
         MinecraftServer server = event.getServer();
 
         ICommandManager cmdmng = server.getCommandManager();
+        //noinspection ConstantConditions
         if (cmdmng instanceof ServerCommandManager && cmdmng instanceof CommandHandler) {
             CommandHandler cmdhnd = (CommandHandler) cmdmng;
             TaleCraftCommands.register(cmdhnd);

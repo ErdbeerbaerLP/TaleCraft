@@ -9,7 +9,7 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.MessageBlockTileEntity;
 
 public class GuiMessageBlock extends QADGuiScreen {
-    MessageBlockTileEntity tileEntity;
+    final MessageBlockTileEntity tileEntity;
 
     QADTextField textField_message;
     QADTextField textField_selector;
@@ -40,20 +40,17 @@ public class GuiMessageBlock extends QADGuiScreen {
         addComponent(tickBox_tellraw);
 
         QADButton setDataButton = QADFACTORY.createButton("Apply", 2, 14, 60, null);
-        setDataButton.setAction(new Runnable() {
-            @Override
-            public void run() {
-                String commandString = ClientNetworkHandler.makeBlockDataMergeCommand(position);
-                NBTTagCompound commandData = new NBTTagCompound();
+        setDataButton.setAction(() -> {
+            String commandString = ClientNetworkHandler.makeBlockDataMergeCommand(position);
+            NBTTagCompound commandData = new NBTTagCompound();
 
-                // data?
-                commandData.setString("playerSelector", textField_selector.getText());
-                commandData.setString("message", textField_message.getText());
-                commandData.setBoolean("tellraw", tickBox_tellraw.getState());
+            // data?
+            commandData.setString("playerSelector", textField_selector.getText());
+            commandData.setString("message", textField_message.getText());
+            commandData.setBoolean("tellraw", tickBox_tellraw.getState());
 
-                TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
-                displayGuiScreen(null);
-            }
+            TaleCraft.network.sendToServer(new StringNBTCommandPacket(commandString, commandData));
+            displayGuiScreen(null);
         });
         setDataButton.setTooltip("There is no auto-save, ", "so don't forget to click this button!");
         addComponent(setDataButton);

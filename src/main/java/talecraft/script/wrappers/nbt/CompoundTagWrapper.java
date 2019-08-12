@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public class CompoundTagWrapper implements IObjectWrapper {
-    private NBTTagCompound comp;
+    private final NBTTagCompound comp;
 
     public CompoundTagWrapper() {
         comp = new NBTTagCompound();

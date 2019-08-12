@@ -21,6 +21,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import talecraft.TaleCraftItems;
 import talecraft.util.BombExplosion;
 
+@SuppressWarnings("ConstantConditions")
 public class EntityBomb extends EntityThrowable {
 
     private int explosion_delay = 60;
@@ -87,8 +88,8 @@ public class EntityBomb extends EntityThrowable {
             if (world.getBlockState(getPosition()).isFullBlock()) {
                 updateMovementLogic = false;
                 for (int i = 0; ; i++) {
-                    if (world.getBlockState(getPosition().add(0, i, 0)).isFullBlock()) continue;
-                    else {
+                    if (world.getBlockState(getPosition().add(0, i, 0)).isFullBlock()) {
+                    } else {
                         setPositionAndUpdate(posX, Math.round(posY + i) - 0.4, posZ);
                         break;
                     }

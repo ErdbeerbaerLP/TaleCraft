@@ -12,8 +12,8 @@ import talecraft.client.render.renderers.BoxRenderer;
 import talecraft.proxy.ClientProxy;
 
 public class BlockHighlight implements ITemporaryRenderable {
-    private BlockPos position;
-    private long dietime;
+    private final BlockPos position;
+    private final long dietime;
 
     public BlockHighlight(BlockPos pos, double duration) {
         position = pos;

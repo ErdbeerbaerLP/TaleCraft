@@ -28,12 +28,12 @@ public class PanelAI extends NPCPanel {
 
     private NPCType TYPE;
     private TextFormatting COLOR;
-    private QADNumberTextField DAMAGE_FIELD;
-    private QADNumberTextField SPEED_FIELD;
-    private QADNumberTextField YAW_FIELD;
-    private QADNumberTextField PITCH_FIELD;
-    private QADTickBox LOOK_AT_PLAYER;
-    private QADDropdownBox COLOR_SELECTOR;
+    private final QADNumberTextField DAMAGE_FIELD;
+    private final QADNumberTextField SPEED_FIELD;
+    private final QADNumberTextField YAW_FIELD;
+    private final QADNumberTextField PITCH_FIELD;
+    private final QADTickBox LOOK_AT_PLAYER;
+    private final QADDropdownBox COLOR_SELECTOR;
 
     public PanelAI(NPCData data, int width, int height) {
         super(data, width, height);
@@ -134,8 +134,8 @@ public class PanelAI extends NPCPanel {
 
     private class AggroListModel implements ListModel {
 
-        private List<ListModelItem> items = new ArrayList<ListModelItem>();
-        private List<ListModelItem> filtered = new ArrayList<ListModelItem>();
+        private final List<ListModelItem> items = new ArrayList<>();
+        private final List<ListModelItem> filtered = new ArrayList<>();
 
         public AggroListModel() {
             for (NPCType type : NPCType.values()) {
@@ -193,8 +193,8 @@ public class PanelAI extends NPCPanel {
 
     private class ColorListModel implements ListModel {
 
-        private List<ListModelItem> items = new ArrayList<ListModelItem>();
-        private List<ListModelItem> filtered = new ArrayList<ListModelItem>();
+        private final List<ListModelItem> items = new ArrayList<>();
+        private final List<ListModelItem> filtered = new ArrayList<>();
 
         public ColorListModel() {
             for (TextFormatting color : NAME_COLORS) {

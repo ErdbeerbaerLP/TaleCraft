@@ -14,7 +14,7 @@ public class GuiMapListEntry implements GuiListExtended.IGuiListEntry {
     private final GuiMapList worldSelScreen;
     private final GuiMapListSelection containingListSel;
     private long lastClickTime;
-    private DownloadableMap map;
+    private final DownloadableMap map;
 
     public GuiMapListEntry(GuiMapListSelection newGuiListWorldSelection, DownloadableMap map) {
         this.containingListSel = newGuiListWorldSelection;

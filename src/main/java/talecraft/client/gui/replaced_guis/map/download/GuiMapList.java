@@ -22,8 +22,8 @@ public class GuiMapList extends GuiScreen {
     /**
      * The screen to return to when this closes (always Main Menu).
      */
-    protected GuiScreen prevScreen;
-    protected String title = "Download Map";
+    protected final GuiScreen prevScreen;
+    protected final String title = "Download Map";
     /**
      * Tooltip displayed a world whose version is different from this client's
      */
@@ -79,12 +79,13 @@ public class GuiMapList extends GuiScreen {
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
      */
-    protected void actionPerformed(GuiButton button) throws IOException {
+    protected void actionPerformed(GuiButton button) {
         switch (button.id) {
             case 0:
                 this.mc.displayGuiScreen(prevScreen);
                 break;
             case 1:
+                //noinspection ConstantConditions
                 selectionList.getSelectedWorld().showWorldInfo();
                 break;//GuiMainMenu
             case 2:
@@ -157,12 +158,11 @@ public class GuiMapList extends GuiScreen {
     }
 
     public void selectWorld(@Nullable GuiMapListEntry newGuiListWorldSelectionEntry) {
-        boolean flag = newGuiListWorldSelectionEntry != null;
-        this.selectButton.enabled = flag;
+        this.selectButton.enabled = newGuiListWorldSelectionEntry != null;
     }
 
     @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    protected void keyTyped(char typedChar, int keyCode) {
         // TODO Auto-generated method stub
         final String txt = searchField.getText();
         this.searchField.textboxKeyTyped(typedChar, keyCode);

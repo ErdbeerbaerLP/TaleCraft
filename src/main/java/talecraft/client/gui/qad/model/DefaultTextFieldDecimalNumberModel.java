@@ -78,6 +78,7 @@ public final class DefaultTextFieldDecimalNumberModel implements TextFieldModel 
     }
 
     public void setValidatorPredicate(Predicate<Double> validator) {
+        //noinspection FunctionalExpressionCanBeFolded
         this.validatorPredicate = validator::test;
     }
 

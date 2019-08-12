@@ -30,6 +30,7 @@ import java.util.Map;
 /**
  * A total rewrite of the VoxelBrush: Voxelator.
  **/
+@SuppressWarnings("ConstantConditions")
 public class Voxelator {
 
     public static final Map<String, ShapeFactory> shapes = Maps.newHashMap();
@@ -75,25 +76,19 @@ public class Voxelator {
 
     public static List<String> getShapeNameList() {
         List<String> l = Lists.newArrayList();
-        for (String s : shapes.keySet()) {
-            l.add(s);
-        }
+        l.addAll(shapes.keySet());
         return l;
     }
 
     public static List<String> getActionNameList() {
         List<String> l = Lists.newArrayList();
-        for (String s : actions.keySet()) {
-            l.add(s);
-        }
+        l.addAll(actions.keySet());
         return l;
     }
 
     public static List<String> getFilterNameList() {
         List<String> l = Lists.newArrayList();
-        for (String s : filters.keySet()) {
-            l.add(s);
-        }
+        l.addAll(filters.keySet());
         return l;
     }
 

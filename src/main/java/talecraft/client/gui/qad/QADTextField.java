@@ -25,14 +25,14 @@ import java.util.function.Predicate;
 public class QADTextField extends QADRectangularComponent {
     //	private final int ID;
     private final FontRenderer fontRendererInstance;
-    public String[] autoCompleteOptions = null;
+    public final String[] autoCompleteOptions = null;
     public TextChangeListener textChangedListener;
     //  private GuiPageButtonList.GuiResponder field_175210_x;
     public int xPosition;
     public int yPosition;
     public int width;
     public int height;
-    private Predicate<String> field_175209_y = s -> true;
+    private final Predicate<String> field_175209_y = s -> true;
     private TextFieldModel model;
     private int maxStringLength = 64;
     private int cursorCounter;

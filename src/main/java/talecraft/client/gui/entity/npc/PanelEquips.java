@@ -19,12 +19,12 @@ import java.util.List;
 
 public class PanelEquips extends NPCPanel {
 
-    private QADDropdownBox HELMET;
-    private QADDropdownBox CHESTPLATE;
-    private QADDropdownBox LEGGINGS;
-    private QADDropdownBox BOOTS;
-    private QADDropdownBox RIGHT_HAND;
-    private QADDropdownBox LEFT_HAND;
+    private final QADDropdownBox HELMET;
+    private final QADDropdownBox CHESTPLATE;
+    private final QADDropdownBox LEGGINGS;
+    private final QADDropdownBox BOOTS;
+    private final QADDropdownBox RIGHT_HAND;
+    private final QADDropdownBox LEFT_HAND;
 
     public PanelEquips(NPCData data, int width, int height) {
         super(data, width, height);
@@ -65,17 +65,18 @@ public class PanelEquips extends NPCPanel {
     }
 
     class ListItemListModel implements ListModel {
-        private List<ListModelItem> items;
-        private List<ListModelItem> filtered;
+        private final List<ListModelItem> items;
+        private final List<ListModelItem> filtered;
         // private EntityEquipmentSlot slot;
 
         public ListItemListModel(EntityEquipmentSlot slot) {
             // this.slot = slot;
-            items = new ArrayList<ListModelItem>();
-            filtered = new ArrayList<ListModelItem>();
-            List<ItemStack> stacks = new ArrayList<ItemStack>();
+            items = new ArrayList<>();
+            filtered = new ArrayList<>();
+            List<ItemStack> stacks = new ArrayList<>();
             for (ResourceLocation rl : Item.REGISTRY.getKeys()) {
                 Item item = Item.REGISTRY.getObject(rl);
+                //noinspection ConstantConditions
                 stacks.add(new ItemStack(item));
             }
             items.add(new ItemItem(ItemStack.EMPTY));

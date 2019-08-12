@@ -19,15 +19,16 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"CollectionAddAllCanBeReplacedWithConstructor", "FieldCanBeLocal", "ConstantConditions"})
 public class GuiWorldInfo extends QADGuiScreen {
 
     private boolean requiresMoreMods = false;
     private boolean hasScripts = false;
-    private WorldSummary ws;
-    private GuiScreen worldSel;
-    private String pathName;
-    private String worldDescription;
-    private String mapAuthorStr;
+    private final WorldSummary ws;
+    private final GuiScreen worldSel;
+    private final String pathName;
+    private final String worldDescription;
+    private final String mapAuthorStr;
     private String mapUrlStr = "";
     private QADButton btnBack;
     private QADLabel mapName;
@@ -103,23 +104,15 @@ public class GuiWorldInfo extends QADGuiScreen {
         descPanel.setSize(width / 2, height / 2);
         descPanel.setPosition((width / 2) - (descPanel.getWidth() / 2), (height / 2) - (descPanel.getHeight() / 2));
 
-        mapURL.setAction(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                GuiConfirmOpenLink guiconfirmopenlink = new GuiConfirmOpenLink(GuiWorldInfo.this, mapUrlStr, 13, false);
-                guiconfirmopenlink.disableSecurityWarning();
-                mc.displayGuiScreen(guiconfirmopenlink);
-            }
+        mapURL.setAction(() -> {
+            // TODO Auto-generated method stub
+            GuiConfirmOpenLink guiconfirmopenlink = new GuiConfirmOpenLink(GuiWorldInfo.this, mapUrlStr, 13, false);
+            guiconfirmopenlink.disableSecurityWarning();
+            mc.displayGuiScreen(guiconfirmopenlink);
         });
-        btnBack.setAction(new Runnable() {
-
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                mc.displayGuiScreen(worldSel);
-            }
+        btnBack.setAction(() -> {
+            // TODO Auto-generated method stub
+            mc.displayGuiScreen(worldSel);
         });
 
 
@@ -142,7 +135,7 @@ public class GuiWorldInfo extends QADGuiScreen {
         String desc = this.worldDescription;
         desc = desc.replace("\\\\n", "\n");
         desc = desc.replace("\\n", "\n");
-        List<String> descLines1 = new ArrayList<String>();
+        List<String> descLines1 = new ArrayList<>();
         descLines1.addAll(this.fontRenderer.listFormattedStringToWidth(desc, descPanel.getContainerWidth() - 15));
         descPanel.removeAllComponents();
         int y = 10;

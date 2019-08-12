@@ -27,10 +27,11 @@ import talecraft.proxy.ClientProxy;
 import java.util.Arrays;
 
 public class InfoBar {
-    private StringBuilder builder = new StringBuilder(255);
+    private final StringBuilder builder = new StringBuilder(255);
     private boolean enabled = true;
     private int lastHeight = 0;
 
+    @SuppressWarnings("ConstantConditions")
     public void display(Minecraft mc, WorldClient theWorld, ClientProxy clientProxy) {
         if (!ClientProxy.settings.getBoolean("client.infobar.enabled")) {
             lastHeight = 0;
@@ -46,6 +47,7 @@ public class InfoBar {
         builder.setLength(0);
         writeModVersionInfo();
 
+        //noinspection ConstantConditions
         if (mc.player.inventory.getCurrentItem() != null && ClientProxy.settings.getBoolean("client.infobar.heldItemInfo")) {
             writeHeldItemInfo(mc.player.inventory.getCurrentItem());
         }

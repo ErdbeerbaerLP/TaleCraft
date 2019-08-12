@@ -21,6 +21,7 @@ import talecraft.items.world.KeyItem;
 import talecraft.tileentity.LockedDoorTileEntity;
 import talecraft.tileentity.LockedDoorTileEntity.DoorCorner;
 
+@SuppressWarnings({"deprecation", "unchecked", "ConstantConditions"})
 public class LockedDoorBlock extends TCWorldBlock implements ITileEntityProvider {
 
     @SuppressWarnings("rawtypes")

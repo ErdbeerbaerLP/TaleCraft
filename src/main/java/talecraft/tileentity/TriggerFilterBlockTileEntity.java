@@ -9,6 +9,7 @@ import talecraft.invoke.Invoke;
 
 import java.util.List;
 
+@SuppressWarnings("ConstantConditions")
 public class TriggerFilterBlockTileEntity extends TCTileEntity {
     private IInvoke triggerInvoke;
     private boolean filter_on;

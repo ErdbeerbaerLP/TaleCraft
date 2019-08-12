@@ -9,8 +9,8 @@ import talecraft.network.packets.StringNBTCommandPacket;
 
 
 public class PlayerMirror {
-    public EntityPlayerMP player;
-    public NBTTagCompound settings;
+    public final EntityPlayerMP player;
+    public final NBTTagCompound settings;
     public boolean trackInvokes;
 
     public PlayerMirror(EntityPlayerMP player) {

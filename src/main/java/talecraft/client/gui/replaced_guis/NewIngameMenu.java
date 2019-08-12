@@ -83,44 +83,32 @@ public class NewIngameMenu extends GuiIngameMenu {
                 this.mc.world.sendQuittingDisconnectingPacket();
                 this.mc.loadWorld(null);
 
-                Thread t = new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (currentWorld == null || (currentWorld != null && !currentWorld.getSaveHandler().getWorldDirectory().getName().equals("TC_TEST")))
-                                mc.displayGuiScreen(new GuiCopyingWorld("Saving...."));
-                            else
-                                mc.displayGuiScreen(new GuiCopyingWorld("Deleting Test..."));
-                            sleep(TimeUnit.SECONDS.toMillis(1));
-                            final String[] savesList = savesDir.list();
-                            //Save worlds back to thier folders!
-                            for (String s : savesList) {
-                                if (s.startsWith(".TC")) continue;
-                                if (s.equals("TC_TEST")) {
-                                    FileUtils.deleteDirectory(new File(savesDir, s));
-                                    continue;
-                                }
-                                boolean type = !s.contains("@SAV");
-                                FileUtils.copyDirectoryToDirectory(new File(savesDir, s), new File(savesDir, type ? ".TC_MAPS" : ".TC_SAVES"));
+                Thread t = new Thread(() -> {
+                    try {
+                        if (currentWorld == null || (currentWorld != null && !currentWorld.getSaveHandler().getWorldDirectory().getName().equals("TC_TEST")))
+                            mc.displayGuiScreen(new GuiCopyingWorld("Saving...."));
+                        else
+                            mc.displayGuiScreen(new GuiCopyingWorld("Deleting Test..."));
+                        Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+                        final String[] savesList = savesDir.list();
+                        //Save worlds back to thier folders!
+                        for (String s : savesList) {
+                            if (s.startsWith(".TC")) continue;
+                            if (s.equals("TC_TEST")) {
                                 FileUtils.deleteDirectory(new File(savesDir, s));
-
+                                continue;
                             }
-                            NewIngameMenu.this.mc.addScheduledTask(new Runnable() {
+                            boolean type = !s.contains("@SAV");
+                            FileUtils.copyDirectoryToDirectory(new File(savesDir, s), new File(savesDir, type ? ".TC_MAPS" : ".TC_SAVES"));
+                            FileUtils.deleteDirectory(new File(savesDir, s));
 
-                                @Override
-                                public void run() {
-                                    mc.displayGuiScreen(new CustomMainMenu());
-                                }
-                            });
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
                         }
+                        NewIngameMenu.this.mc.addScheduledTask(() -> mc.displayGuiScreen(new CustomMainMenu()));
+                    } catch (InterruptedException | IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
-                };
+                });
                 t.start();
 
                 return;
@@ -142,114 +130,102 @@ public class NewIngameMenu extends GuiIngameMenu {
         final WorldClient world = mc.world;
         this.mc.loadWorld(null);
 
-        Thread t2 = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    if (currentWorld != null && !currentWorld.getSaveHandler().getWorldDirectory().getName().equals("TC_TEST")) {
-                        mc.displayGuiScreen(new GuiCopyingWorld("Saving Map..."));
-                        sleep(TimeUnit.SECONDS.toMillis(1));
-                        //Save world back to thier folders!
-                        FileUtils.copyDirectory(new File(savesDir2, currentWorld.getSaveHandler().getWorldDirectory().getName()), new File(new File(mc.mcDataDir, "saves/.TC_MAPS"), currentWorld.getSaveHandler().getWorldDirectory().getName()));
-                        mc.displayGuiScreen(new GuiCopyingWorld("Creating Test-Save..."));
-                        sleep(TimeUnit.SECONDS.toMillis(1));
-                        final String[] savesList = savesDir2.list();
-                        for (String s : savesList) {
-                            if (s.startsWith(".TC")) continue;
-                            if (s.equals("TC_TEST")) {
-                                FileUtils.deleteDirectory(new File(savesDir2, s));
-                                continue;
-                            }
-                            boolean type = !s.contains("@SAV");
-                            FileUtils.copyDirectoryToDirectory(new File(savesDir2, s), new File(savesDir2, type ? ".TC_MAPS" : ".TC_SAVES"));
+        Thread t2 = new Thread(() -> {
+            try {
+                if (currentWorld != null && !currentWorld.getSaveHandler().getWorldDirectory().getName().equals("TC_TEST")) {
+                    mc.displayGuiScreen(new GuiCopyingWorld("Saving Map..."));
+                    Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+                    //Save world back to thier folders!
+                    FileUtils.copyDirectory(new File(savesDir2, currentWorld.getSaveHandler().getWorldDirectory().getName()), new File(new File(mc.mcDataDir, "saves/.TC_MAPS"), currentWorld.getSaveHandler().getWorldDirectory().getName()));
+                    mc.displayGuiScreen(new GuiCopyingWorld("Creating Test-Save..."));
+                    Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+                    final String[] savesList = savesDir2.list();
+                    //noinspection ConstantConditions
+                    for (String s : savesList) {
+                        if (s.startsWith(".TC")) continue;
+                        if (s.equals("TC_TEST")) {
                             FileUtils.deleteDirectory(new File(savesDir2, s));
+                            continue;
                         }
-                        FileUtils.copyDirectory(new File(new File(mc.mcDataDir, "saves/.TC_MAPS"), currentWorld.getSaveHandler().getWorldDirectory().getName()), new File(savesDir2, "TC_TEST"));
+                        boolean type = !s.contains("@SAV");
+                        FileUtils.copyDirectoryToDirectory(new File(savesDir2, s), new File(savesDir2, type ? ".TC_MAPS" : ".TC_SAVES"));
+                        FileUtils.deleteDirectory(new File(savesDir2, s));
+                    }
+                    FileUtils.copyDirectory(new File(new File(mc.mcDataDir, "saves/.TC_MAPS"), currentWorld.getSaveHandler().getWorldDirectory().getName()), new File(savesDir2, "TC_TEST"));
 
-                        final String s = "TC_TEST";
-                        FileInputStream inStream = new FileInputStream(new File(new File(savesDir2, s), "level.dat"));
-                        NBTTagCompound worldTag = CompressedStreamTools.readCompressed(inStream);
+                    final String s = "TC_TEST";
+                    FileInputStream inStream = new FileInputStream(new File(new File(savesDir2, s), "level.dat"));
+                    NBTTagCompound worldTag = CompressedStreamTools.readCompressed(inStream);
 
-                        NBTTagCompound worldDataTag = worldTag.getCompoundTag("Data");
-                        worldDataTag.setInteger("GameType", 2);
-                        worldDataTag.setBoolean("allowCommands", false);
-                        worldDataTag.setBoolean("DifficultyLocked", true);
-                        NBTTagCompound playerDataTag = worldDataTag.getCompoundTag("Player");
-                        playerDataTag.setInteger("playerGameType", 2);
-                        if (!currentPos) {
-                            NBTTagList l = new NBTTagList();
-                            System.out.println(playerDataTag.getTag("Pos"));
-                            l.appendTag(new NBTTagDouble(worldDataTag.getLong("SpawnX")));
-                            l.appendTag(new NBTTagDouble(worldDataTag.getLong("SpawnY")));
-                            l.appendTag(new NBTTagDouble(worldDataTag.getLong("SpawnZ")));
-                            playerDataTag.setTag("Pos", l);
-                            System.out.println(playerDataTag.getTag("Pos"));
+                    NBTTagCompound worldDataTag = worldTag.getCompoundTag("Data");
+                    worldDataTag.setInteger("GameType", 2);
+                    worldDataTag.setBoolean("allowCommands", false);
+                    worldDataTag.setBoolean("DifficultyLocked", true);
+                    NBTTagCompound playerDataTag = worldDataTag.getCompoundTag("Player");
+                    playerDataTag.setInteger("playerGameType", 2);
+                    if (!currentPos) {
+                        NBTTagList l = new NBTTagList();
+                        System.out.println(playerDataTag.getTag("Pos"));
+                        l.appendTag(new NBTTagDouble(worldDataTag.getLong("SpawnX")));
+                        l.appendTag(new NBTTagDouble(worldDataTag.getLong("SpawnY")));
+                        l.appendTag(new NBTTagDouble(worldDataTag.getLong("SpawnZ")));
+                        playerDataTag.setTag("Pos", l);
+                        System.out.println(playerDataTag.getTag("Pos"));
+                    }
+                    worldDataTag.setTag("Player", playerDataTag);
+                    worldTag.setTag("Data", worldDataTag);
+                    inStream.close();
+                    FileOutputStream outStream = new FileOutputStream(new File(new File(savesDir2, s), "level.dat"));
+                    CompressedStreamTools.writeCompressed(worldTag, outStream);
+                    outStream.close();
+                    FileOutputStream outStream2 = new FileOutputStream(new File(new File(savesDir2, s), "test.dat"));
+                    NBTTagCompound cin = new NBTTagCompound();
+                    cin.setString("OrigLevelName", worldDataTag.getString("LevelName"));
+                    cin.setString("OrigLevelFolder", currentWorld.getSaveHandler().getWorldDirectory().getName());
+                    CompressedStreamTools.writeCompressed(cin, outStream2);
+                    outStream2.close();
+
+                    mc.addScheduledTask(() -> tryLoadExistingWorld(new File(savesDir2, s), s, "TC_TEST"));
+                } else {
+                    mc.displayGuiScreen(new GuiCopyingWorld("Deleting Test Save..."));
+                    System.out.println(new File(new File(savesDir2, "TC_TEST"), "test.dat").exists());
+                    FileInputStream testinStream = new FileInputStream(new File(new File(savesDir2, "TC_TEST"), "test.dat"));
+                    NBTTagCompound c = CompressedStreamTools.readCompressed(testinStream);
+                    System.out.println(c);
+                    String worldFolder = c.getString("OrigLevelFolder");
+                    String worldName = c.getString("OrigLevelName");
+                    System.out.println(worldFolder);
+                    System.out.println(worldName);
+                    testinStream.close();
+                    Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+                    final String[] savesList = savesDir2.list();
+                    for (String s : savesList) {
+                        if (s.startsWith(".TC")) continue;
+                        if (s.equals("TC_TEST")) {
+                            FileUtils.deleteDirectory(new File(savesDir2, s));
+                            continue;
                         }
-                        worldDataTag.setTag("Player", playerDataTag);
-                        worldTag.setTag("Data", worldDataTag);
-                        inStream.close();
-                        FileOutputStream outStream = new FileOutputStream(new File(new File(savesDir2, s), "level.dat"));
-                        CompressedStreamTools.writeCompressed(worldTag, outStream);
-                        outStream.close();
-                        FileOutputStream outStream2 = new FileOutputStream(new File(new File(savesDir2, s), "test.dat"));
-                        NBTTagCompound cin = new NBTTagCompound();
-                        cin.setString("OrigLevelName", worldDataTag.getString("LevelName"));
-                        cin.setString("OrigLevelFolder", currentWorld.getSaveHandler().getWorldDirectory().getName());
-                        CompressedStreamTools.writeCompressed(cin, outStream2);
-                        outStream2.close();
+                        boolean type = !s.contains("@SAV");
+                        FileUtils.copyDirectoryToDirectory(new File(savesDir2, s), new File(savesDir2, type ? ".TC_MAPS" : ".TC_SAVES"));
+                        FileUtils.deleteDirectory(new File(savesDir2, s));
+                    }
+                    mc.displayGuiScreen(new GuiCopyingWorld("Re-Loading Map..."));
+                    Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+                    FileUtils.copyDirectory(new File(new File(mc.mcDataDir, "saves/.TC_MAPS"), worldFolder), new File(savesDir2, worldFolder));
 
-                        mc.addScheduledTask(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                tryLoadExistingWorld(new File(savesDir2, s), s, "TC_TEST");
-                            }
-                        });
-                    } else {
-                        mc.displayGuiScreen(new GuiCopyingWorld("Deleting Test Save..."));
-                        System.out.println(new File(new File(savesDir2, "TC_TEST"), "test.dat").exists());
-                        FileInputStream testinStream = new FileInputStream(new File(new File(savesDir2, "TC_TEST"), "test.dat"));
-                        NBTTagCompound c = CompressedStreamTools.readCompressed(testinStream);
-                        System.out.println(c);
-                        String worldFolder = c.getString("OrigLevelFolder");
-                        String worldName = c.getString("OrigLevelName");
+                    mc.addScheduledTask(() -> {
                         System.out.println(worldFolder);
                         System.out.println(worldName);
-                        testinStream.close();
-                        sleep(TimeUnit.SECONDS.toMillis(1));
-                        final String[] savesList = savesDir2.list();
-                        for (String s : savesList) {
-                            if (s.startsWith(".TC")) continue;
-                            if (s.equals("TC_TEST")) {
-                                FileUtils.deleteDirectory(new File(savesDir2, s));
-                                continue;
-                            }
-                            boolean type = !s.contains("@SAV");
-                            FileUtils.copyDirectoryToDirectory(new File(savesDir2, s), new File(savesDir2, type ? ".TC_MAPS" : ".TC_SAVES"));
-                            FileUtils.deleteDirectory(new File(savesDir2, s));
-                        }
-                        mc.displayGuiScreen(new GuiCopyingWorld("Re-Loading Map..."));
-                        sleep(TimeUnit.SECONDS.toMillis(1));
-                        FileUtils.copyDirectory(new File(new File(mc.mcDataDir, "saves/.TC_MAPS"), worldFolder), new File(savesDir2, worldFolder));
-
-                        mc.addScheduledTask(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                System.out.println(worldFolder);
-                                System.out.println(worldName);
-                                System.out.println(new File(savesDir2, worldFolder).getAbsolutePath());
-                                tryLoadExistingWorld(new File(savesDir2, worldFolder), worldFolder, worldName);
-                            }
-                        });
-                    }
-
-                } catch (InterruptedException | IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                        System.out.println(new File(savesDir2, worldFolder).getAbsolutePath());
+                        tryLoadExistingWorld(new File(savesDir2, worldFolder), worldFolder, worldName);
+                    });
                 }
+
+            } catch (InterruptedException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        };
+        });
         t2.start();
 
     }

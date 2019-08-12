@@ -14,7 +14,7 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.MemoryBlockTileEntity;
 
 public class GuiMemoryBlock extends QADGuiScreen {
-    MemoryBlockTileEntity tileEntity;
+    final MemoryBlockTileEntity tileEntity;
 
     public GuiMemoryBlock(MemoryBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 // TODO: Redo the findBlock methods to accept the new metadata parsing from MC 1.10.X!
+@SuppressWarnings("deprecation")
 public class GObjectTypeHelper {
 
     public static List<String> getParticleNameList() {

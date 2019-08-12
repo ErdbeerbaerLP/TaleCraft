@@ -4,6 +4,7 @@ import talecraft.voxelator.BrushParameter;
 import talecraft.voxelator.Voxelator;
 import talecraft.voxelator.Voxelator.ActionFactory;
 
+@SuppressWarnings("unused")
 public final class ActionBrushParameter extends BrushParameter {
 
     public ActionBrushParameter(String name) {

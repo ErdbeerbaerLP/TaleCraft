@@ -12,7 +12,7 @@ import talecraft.voxelator.Voxelator;
 import talecraft.voxelator.Voxelator.FilterFactory;
 
 public final class VXPredicateOR extends VXPredicate {
-    public static FilterFactory FACTORY = new FilterFactory() {
+    public static final FilterFactory FACTORY = new FilterFactory() {
         @Override
         public String getName() {
             return "or";

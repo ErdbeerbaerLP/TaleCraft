@@ -9,7 +9,7 @@ import talecraft.voxelator.VXPredicate;
 import talecraft.voxelator.Voxelator.FilterFactory;
 
 public final class VXPredicateHasAirAbove extends VXPredicate {
-    public static FilterFactory FACTORY = new FilterFactory() {
+    public static final FilterFactory FACTORY = new FilterFactory() {
         @Override
         public String getName() {
             return "has_air_above";

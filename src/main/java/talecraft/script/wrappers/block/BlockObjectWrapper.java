@@ -7,7 +7,7 @@ import talecraft.script.wrappers.IObjectWrapper;
 import java.util.List;
 
 public class BlockObjectWrapper implements IObjectWrapper {
-    private Block block;
+    private final Block block;
 
     public BlockObjectWrapper(Block block) {
         this.block = block;

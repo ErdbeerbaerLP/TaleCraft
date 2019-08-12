@@ -9,7 +9,7 @@ import net.minecraftforge.event.world.NoteBlockEvent.Instrument;
 
 public class TCInstrumentItem extends TCWorldItem {
 
-    private Instrument instrument;
+    private final Instrument instrument;
 
     public TCInstrumentItem(Instrument instrument) {
         setMaxStackSize(1);

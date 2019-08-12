@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 
 public class GuiUndo extends QADGuiScreen {
 
-    private NBTTagCompound tag;
+    private final NBTTagCompound tag;
 
     public GuiUndo(NBTTagCompound tag) {
         this.tag = tag;

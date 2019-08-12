@@ -38,6 +38,7 @@ import talecraft.util.ReflectionUtil;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+@SuppressWarnings("SameReturnValue")
 public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
     // All the singletons!
     public static final Minecraft mc = Minecraft.getMinecraft();
@@ -56,7 +57,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     private NPCShop lastOpened;
 
     /****/
-    public static final boolean isInBuildMode() {
+    public static boolean isInBuildMode() {
         if (proxy == null)
             proxy = TaleCraft.proxy.asClient();
 
@@ -81,7 +82,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         IReloadableResourceManager resManager = (IReloadableResourceManager) mc.getResourceManager();
         resManager.registerReloadListener(this);
 
-        clientTickQeue = new ConcurrentLinkedDeque<Runnable>();
+        clientTickQeue = new ConcurrentLinkedDeque<>();
         clientRenderer = new ClientRenderer(this);
         clientRenderer.preInit();
     }
@@ -162,11 +163,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         }
     }
 
-    /***********************************/
-    /**                               **/
-    /**                               **/
-    /**                               **/
-    /***********************************/
+    /********************************/
+    /*                               **/
+    /*                               **/
+    /*                               **/
+    /********************************/
 
     /**
      * @return TRUE, if the client is in build-mode (aka: creative-mode), FALSE if not.

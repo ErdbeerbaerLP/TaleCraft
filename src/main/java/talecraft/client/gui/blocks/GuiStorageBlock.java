@@ -12,7 +12,7 @@ import talecraft.network.packets.StringNBTCommandPacket;
 import talecraft.tileentity.StorageBlockTileEntity;
 
 public class GuiStorageBlock extends QADGuiScreen {
-    private StorageBlockTileEntity tileEntity;
+    private final StorageBlockTileEntity tileEntity;
 
     public GuiStorageBlock(StorageBlockTileEntity tileEntity) {
         this.tileEntity = tileEntity;
