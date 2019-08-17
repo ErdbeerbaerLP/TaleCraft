@@ -66,7 +66,7 @@ public class MapCreator extends QADGuiScreen {
      * Returns the name, possibly modified to avoid collisions.
      */
     public static String getUncollidingSaveDirName(ISaveFormat saveLoader, String name) {
-        name = name.replaceAll("[\\./\"]", "_");
+        name = name.replaceAll("[\\./@\"]", "_");
 
         for (String s : DISALLOWED_FILENAMES) {
             if (name.equalsIgnoreCase(s)) {
@@ -115,11 +115,9 @@ public class MapCreator extends QADGuiScreen {
         this.updateDisplayState();
 
         btnBack.setAction(() -> {
-            // TODO Auto-generated method stub
             mc.displayGuiScreen(new MapSelector(null));
         });
         btnCreate.setAction(() -> {
-            // TODO Auto-generated method stub
             mc.displayGuiScreen(null);
 
             if (alreadyGenerated) {
@@ -138,7 +136,7 @@ public class MapCreator extends QADGuiScreen {
                         i = j;
                     }
                 } catch (NumberFormatException var7) {
-                    i = (long) s.hashCode();
+                    i = s.hashCode();
                 }
             }
 
