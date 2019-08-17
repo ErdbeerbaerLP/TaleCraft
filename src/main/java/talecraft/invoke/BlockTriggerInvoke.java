@@ -9,11 +9,10 @@ public class BlockTriggerInvoke implements IInvoke {
     public static final BlockTriggerInvoke ZEROINSTANCE = new BlockTriggerInvoke();
     public static final String TYPE = "BlockTriggerInvoke";
     private static final int[] ZEROBOUNDS = new int[6];
-    int[] bounds;
+    int[] bounds = ZEROBOUNDS;
     EnumTriggerState triggerState;
 
     public BlockTriggerInvoke() {
-        bounds = ZEROBOUNDS;
         triggerState = EnumTriggerState.ON;
     }
 
@@ -39,7 +38,7 @@ public class BlockTriggerInvoke implements IInvoke {
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
-        compound.setIntArray("bounds", bounds);
+        compound.setIntArray("bounds", bounds == null ? new int[6] : bounds);
         compound.setInteger("state", triggerState.getIntValue());
     }
 
