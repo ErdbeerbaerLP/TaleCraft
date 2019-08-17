@@ -27,6 +27,7 @@ public class GuiURLBlock extends QADGuiScreen {
         textField_url = new QADTextField(fontRenderer, 3, 14 + 20 + 4, width - 6, 20);
         textField_url.setText(tileEntity.getURL());
         textField_url.setTooltip("The URL to open.");
+        textField_url.setMaxStringLength(2000);
         addComponent(textField_url);
 
         textField_selector = new QADTextField(fontRenderer, 3, 14 + 20 + 4 + 20 + 4, width - 6, 20);

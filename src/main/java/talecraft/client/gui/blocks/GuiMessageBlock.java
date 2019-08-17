@@ -27,6 +27,7 @@ public class GuiMessageBlock extends QADGuiScreen {
         textField_message = new QADTextField(fontRenderer, 3, 14 + 20 + 4, width - 6, 20);
         textField_message.setText(tileEntity.getMessage());
         textField_message.setTooltip("The message to send.");
+        textField_message.setMaxStringLength(5000);
         addComponent(textField_message);
 
         textField_selector = new QADTextField(fontRenderer, 3, 14 + 20 + 4 + 20 + 4, width - 6, 20);
