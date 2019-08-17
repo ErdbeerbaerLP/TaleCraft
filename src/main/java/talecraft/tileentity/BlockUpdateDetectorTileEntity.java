@@ -1,6 +1,7 @@
 package talecraft.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
+import talecraft.TaleCraft;
 import talecraft.blocks.TCTileEntity;
 import talecraft.invoke.BlockTriggerInvoke;
 import talecraft.invoke.EnumTriggerState;
@@ -54,14 +55,15 @@ public class BlockUpdateDetectorTileEntity extends TCTileEntity {
     public void triggerUpdateInvoke(EnumTriggerState triggerState) {
         if (this.world.isRemote)
             return;
-
+        if (!TaleCraft.proxy.isBuildMode())
         Invoke.invoke(detectorInvoke, this, null, triggerState);
     }
 
     @Override
     public void commandReceived(String command, NBTTagCompound data) {
         if (command.equals("trigger")) {
-            Invoke.invoke(detectorInvoke, this, null, EnumTriggerState.ON);
+            if (!TaleCraft.proxy.isBuildMode())
+                Invoke.invoke(detectorInvoke, this, null, EnumTriggerState.ON);
         }
 
         super.commandReceived(command, data);

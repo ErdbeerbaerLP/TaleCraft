@@ -45,9 +45,10 @@ public class BlockUpdateDetector extends TCBlockContainer implements TCITriggera
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from) {
         BlockUpdateDetectorTileEntity tEntity = (BlockUpdateDetectorTileEntity) worldIn.getTileEntity(pos);
-        if (tEntity != null) {
-            tEntity.triggerUpdateInvoke(EnumTriggerState.ON);
-        }
+        if (!TaleCraft.proxy.isBuildMode())
+            if (tEntity != null) {
+                tEntity.triggerUpdateInvoke(EnumTriggerState.ON);
+            }
     }
 
     @Override
@@ -58,7 +59,8 @@ public class BlockUpdateDetector extends TCBlockContainer implements TCITriggera
     @Override
     public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
         BlockUpdateDetectorTileEntity tEntity = (BlockUpdateDetectorTileEntity) world.getTileEntity(position);
-        if (tEntity != null) {
+        if (!TaleCraft.proxy.isBuildMode())
+            if (tEntity != null) {
             tEntity.triggerUpdateInvoke(triggerState);
         }
     }
