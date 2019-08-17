@@ -2,8 +2,11 @@ package talecraft.client.gui.replaced_guis.map.download;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.toasts.IToast;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import org.lwjgl.input.Keyboard;
 
@@ -29,7 +32,6 @@ public class GuiDownloading extends GuiScreen {
     }
 
     public GuiDownloading(GuiDLMapInfo guiDLMapInfo, URL url) {
-        // TODO Auto-generated constructor stub
         this.unzipOnly = true;
         this.parentGui = guiDLMapInfo;
         this.fileName = DownloadZip.getFileName(url);
@@ -150,7 +152,15 @@ public class GuiDownloading extends GuiScreen {
                         mc.displayGuiScreen(new GuiDLMapInfo((GuiMapList) parentGui.parent, parentGui.map));
                     } catch (IOException ex) {
                         ex.printStackTrace();
-
+                        mc.displayGuiScreen(new GuiDLMapInfo((GuiMapList) parentGui.parent, parentGui.map));
+                        mc.getToastGui().add((toastGui, delta) -> {
+                            toastGui.getMinecraft().getTextureManager().bindTexture(IToast.TEXTURE_TOASTS);
+                            GlStateManager.color(1.0F, 1.0F, 1.0F);
+                            toastGui.drawTexturedModalRect(0, 0, 0, 96, 160, 32);
+                            toastGui.getMinecraft().fontRenderer.drawString(TextFormatting.RED + "Error!", 5, 7, 0xff000000);
+                            toastGui.getMinecraft().fontRenderer.drawString(TextFormatting.DARK_RED + ex.toString(), 5, 18, 0xff500050);
+                            return delta <= 4000 ? IToast.Visibility.SHOW : IToast.Visibility.HIDE;
+                        });
                     }
                 }).start();
             }
