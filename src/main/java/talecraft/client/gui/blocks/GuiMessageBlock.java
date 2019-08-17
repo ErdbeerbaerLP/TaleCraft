@@ -11,7 +11,7 @@ import talecraft.tileentity.MessageBlockTileEntity;
 public class GuiMessageBlock extends QADGuiScreen {
     final MessageBlockTileEntity tileEntity;
 
-    QADTextField textField_message;
+    QADColorTextField textField_message;
     QADTextField textField_selector;
 
     public GuiMessageBlock(MessageBlockTileEntity tileEntity) {
@@ -24,7 +24,7 @@ public class GuiMessageBlock extends QADGuiScreen {
 
         addComponent(new QADLabel("Message Block @ " + position.getX() + " " + position.getY() + " " + position.getZ(), 2, 2));
 
-        textField_message = new QADTextField(fontRenderer, 3, 14 + 20 + 4, width - 6, 20);
+        textField_message = new QADColorTextField(fontRenderer, 3, 14 + 20 + 4, width - 6, 20);
         textField_message.setText(tileEntity.getMessage());
         textField_message.setTooltip("The message to send.");
         textField_message.setMaxStringLength(5000);
