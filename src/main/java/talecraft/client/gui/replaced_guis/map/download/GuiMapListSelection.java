@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.NoRouteToHostException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +59,7 @@ public class GuiMapListSelection extends GuiListExtended {
         List<DownloadableMap> list = new ArrayList<>();
         try {
             System.setProperty("http.agent", "");
-            HttpURLConnection connection = (HttpURLConnection) new URL("https://longor.net/talecraft/maps.php?start=" + start + "&length=" + length + "&search=" + search).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL("https://longor.net/talecraft/maps.php?start=" + start + "&length=" + length + "&search=" + URLEncoder.encode(search, "UTF-8")).openConnection();
             connection.setRequestProperty("User-Agent", "TaleCraft " + Reference.MOD_VERSION);
             try {
                 connection.connect();
