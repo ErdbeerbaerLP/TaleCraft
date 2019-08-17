@@ -19,11 +19,13 @@ import talecraft.invoke.IInvoke;
 import talecraft.invoke.IInvokeSource;
 import talecraft.proxy.ClientProxy;
 
+import java.util.Arrays;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GenericTileEntityRenderer<T extends TileEntity> extends TileEntitySpecialRenderer<T> {
     private static final List<IInvoke> invokes = Lists.newArrayList();
+    private static final int[] NULL_BOUNDS = new int[]{0, 0, 0, 0, 0, 0};
     private final ResourceLocation texture;
     private final IEXTTileEntityRenderer<T> extRenderer;
 
@@ -179,8 +181,7 @@ public class GenericTileEntityRenderer<T extends TileEntity> extends TileEntityS
                 for (IInvoke invoke : invokes) {
                     if (invoke instanceof BlockTriggerInvoke) {
                         int[] bounds = ((BlockTriggerInvoke) invoke).getBounds();
-
-                        if (bounds != null) {
+                        if (bounds != null && !Arrays.equals(bounds, NULL_BOUNDS)) {
                             minX = bounds[0] - error;
                             minY = bounds[1] - error;
                             minZ = bounds[2] - error;
