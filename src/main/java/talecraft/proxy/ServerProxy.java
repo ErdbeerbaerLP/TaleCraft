@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -22,7 +23,6 @@ public class ServerProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
-
     }
 
     @Override
@@ -32,7 +32,8 @@ public class ServerProxy extends CommonProxy {
 
     @Override
     public boolean isBuildMode() {
-        return super.isBuildMode();
+        //A bit inaccurate but it should work if player did not hack into creative
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getGameType().isCreative();
     }
 
     // XXX: THIS METHOD IS NEVER CALLED

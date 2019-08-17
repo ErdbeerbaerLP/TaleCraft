@@ -114,7 +114,7 @@ public class RedstoneTriggerBlock extends TCBlockContainer implements TCITrigger
     public void trigger(World world, BlockPos position, EnumTriggerState triggerState) {
         if (world.isRemote)
             return;
-
+        if (TaleCraft.proxy.isBuildMode()) return;
         TileEntity tileentity = world.getTileEntity(position);
 
         if (tileentity instanceof RedstoneTriggerBlockTileEntity) {

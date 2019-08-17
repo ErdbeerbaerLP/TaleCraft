@@ -1,6 +1,7 @@
 package talecraft.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
+import talecraft.TaleCraft;
 import talecraft.blocks.TCTileEntity;
 import talecraft.invoke.*;
 
@@ -41,7 +42,7 @@ public class RedstoneTriggerBlockTileEntity extends TCTileEntity {
     public void invokeFromUpdateTick(EnumTriggerState triggerState, boolean onOff) {
         if (this.world.isRemote)
             return;
-
+        if (!TaleCraft.proxy.isBuildMode())
         if (onOff)
             Invoke.invoke(triggerInvokeOn, this, null, triggerState);
         else
@@ -51,6 +52,7 @@ public class RedstoneTriggerBlockTileEntity extends TCTileEntity {
     @Override
     public void commandReceived(String command, NBTTagCompound data) {
         if (command.equals("trigger")) {
+
             Invoke.invoke(triggerInvokeOn, this, null, EnumTriggerState.ON);
             Invoke.invoke(triggerInvokeOff, this, null, EnumTriggerState.ON);
             return;
