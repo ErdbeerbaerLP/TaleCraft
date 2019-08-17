@@ -13,7 +13,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -298,5 +301,12 @@ public class TaleCraftEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public void onCommand(CommandEvent ev) {
+        if (ev.getCommand().getName().equals("gamemode")) {
+            ev.setCanceled(true);
+            ev.getSender().sendMessage(new TextComponentString(TextFormatting.RED + "The /gamemode command is disabled!"));
+        }
+    }
 
 }
